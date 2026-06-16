@@ -27,13 +27,24 @@ GIT_USER_NAME = "Mole FM"
 RAW_BASE = "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main"
 
 
-def run_git(args, cwd=REPO_DIR, capture=True):
-    """Run a git command in the repo directory."""
+def _git_env():
+    """Build env dict with git credentials and author info."""
     env = os.environ.copy()
     env["GIT_AUTHOR_NAME"] = GIT_USER_NAME
     env["GIT_AUTHOR_EMAIL"] = GIT_USER_EMAIL
     env["GIT_COMMITTER_NAME"] = GIT_USER_NAME
     env["GIT_COMMITTER_EMAIL"] = GIT_USER_EMAIL
+    # Ensure credential token is available in subprocess context
+    # The git helper uses $GH_ENTERPRISE_TOKEN — propagate it explicitly
+    token = os.environ.get("GH_ENTERPRISE_TOKEN", "")
+    if token:
+        env["GH_ENTERPRISE_TOKEN"] = token
+    return env
+
+
+def run_git(args, cwd=REPO_DIR, capture=True):
+    """Run a git command in the repo directory."""
+    env = _git_env()
     result = subprocess.run(
         ["git"] + args, cwd=cwd, capture_output=capture, text=True, env=env
     )
@@ -52,10 +63,12 @@ def ensure_repo():
             # If pull fails, re-clone
             print(f"  [GitHub] Pull failed ({e}), re-cloning...")
             shutil.rmtree(REPO_DIR, ignore_errors=True)
-            subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True)
+            subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True,
+                          env=_git_env())
     else:
         os.makedirs(os.path.dirname(REPO_DIR), exist_ok=True)
-        subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True)
+        subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True,
+                      env=_git_env())
 
     # Set git config
     run_git(["config", "user.email", GIT_USER_EMAIL])
