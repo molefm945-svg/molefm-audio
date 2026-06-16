@@ -645,6 +645,19 @@ def run(lang="fr", slot_label=None, slot_index=None):
                     capture_output=True, text=True
                 )
                 print(_submit_result.stdout.strip())
+
+                # Regenerate RSS feed with new episode
+                try:
+                    _rss_result = _sp.run(
+                        ["python3", "/home/user/workspace/molefm/scripts/generate_rss.py"],
+                        capture_output=True, text=True, timeout=120
+                    )
+                    if _rss_result.returncode == 0:
+                        print("  [RSS] ✓ Feed updated")
+                    else:
+                        print(f"  [RSS] Non-fatal: {_rss_result.stderr.strip()[:100]}")
+                except Exception as _re:
+                    print(f"  [RSS] Non-fatal: {_re}")
             else:
                 print(f"  [GitHub] Non-fatal upload error: {_upload_result.stderr.strip()[:200]}")
         except Exception as _e:
