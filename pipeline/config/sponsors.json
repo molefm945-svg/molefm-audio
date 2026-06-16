@@ -1,0 +1,29 @@
+{
+  "_comment": "Mole FM Sponsor Configuration — set 'active': true/false to toggle each sponsor on or off.",
+  "sponsors": [
+    {
+      "id": "mathurin_beach",
+      "name": "Mathurin Beach Resort",
+      "active": true,
+      "logo": "sponsors/mathurin_beach.jpg",
+      "audio_text": "Ce bulletin est présenté par Mathurin Beach Resort — la mer, le soleil, et l'hospitalité haïtienne à leur meilleur. Visitez Mathurin Beach Resort au Môle Saint-Nicolas.",
+      "display_text": "Mathurin Beach Resort — La mer, le soleil, et l'hospitalité haïtienne"
+    },
+    {
+      "id": "cecm",
+      "name": "CECM — Caisse d'Épargne et de Crédit du Môle Saint-Nicolas",
+      "active": false,
+      "logo": "sponsors/cecm.jpg",
+      "audio_text": "Ce bulletin vous est offert par la CECM — Caisse d'Épargne et de Crédit du Môle Saint-Nicolas. Ensemble, créons de la valeur pour notre communauté.",
+      "display_text": "CECM — Ensemble, créons de la valeur pour notre communauté"
+    },
+    {
+      "id": "aesthetic",
+      "name": "Aesthetic Clinique Bucco-Dentaire",
+      "active": false,
+      "logo": "sponsors/aesthetic.jpg",
+      "audio_text": "Ce bulletin est présenté par Aesthetic Clinique Bucco-Dentaire — pour un sourire sain et radieux. Prenez rendez-vous dès aujourd'hui.",
+      "display_text": "Aesthetic Clinique — Pour un sourire sain et radieux"
+    }
+  ]
+}

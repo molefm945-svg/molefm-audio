@@ -1,0 +1,16 @@
+{
+  "newscasts": [
+    {
+      "filename": "newscast_20260616_2204.mp3",
+      "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "uploaded_at": "2026-06-16T22:38:01.630912+00:00"
+    }
+  ],
+  "podcasts": [
+    {
+      "filename": "podcast_fr_20260616_2048.mp3",
+      "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2048.mp3",
+      "uploaded_at": "2026-06-16T22:38:05.658980+00:00"
+    }
+  ]
+}
