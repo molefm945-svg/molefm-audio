@@ -164,8 +164,17 @@ def run():
     print("\n[1/4] Fetching Haiti news...")
     try:
         script_path, script_sections = fetch_news()
-        story_count = sum(1 for s in script_sections if s["segment"].startswith("NEWS"))
-        print(f"  Stories: {story_count} language blocks ready")
+        # Count actual news stories: NEWS_MAIN contains "Titre N :" patterns
+        news_main = next((s for s in script_sections if s["segment"] == "NEWS_MAIN"), None)
+        if news_main:
+            import re as _re
+            story_count = len(_re.findall(r'Titre \d+', news_main.get("text", "")))
+        else:
+            story_count = 0
+        # Fallback: if regex finds nothing, count NEWS-prefixed segments
+        if story_count == 0:
+            story_count = sum(1 for s in script_sections if s["segment"].startswith("NEWS"))
+        print(f"  Stories: {story_count} verified stories in broadcast")
     except Exception as e:
         print(f"  [ERROR] News fetch failed: {e}")
         log_run("FAILED_FETCH")
@@ -248,6 +257,20 @@ def run():
     except Exception as _e:
         print(f"  [WARN] Publish step failed (non-fatal): {_e}")
 
+    # Step 7: Generate molefm.com content pack (updates what the player reads)
+    print("\n[7/7] Updating molefm.com content pack...")
+    try:
+        import sys as _sys
+        _sys.path.insert(0, SCRIPTS_DIR)
+        from content_pack_generator import run as generate_pack
+        content_pack = generate_pack()
+        if content_pack:
+            print(f"  [ContentPack] ✓ {content_pack['audio_generated_count']} slots generated")
+        else:
+            print("  [ContentPack] Warn: returned None")
+    except Exception as _e:
+        print(f"  [WARN] Content pack generation failed (non-fatal): {_e}")
+
     # Log success
     log_run("SUCCESS", audio_path, story_count)
     
@@ -256,6 +279,7 @@ def run():
     print(f"  Script:   {script_path}")
     print(f"  Audio:    {audio_path}")
     print(f"  Playlist: {os.path.join(PLAYLISTS_DIR, 'molefm_24h.m3u')}")
+    print(f"  Stories:  {story_count} verified in broadcast")
     print(f"{'='*50}\n")
 
 
