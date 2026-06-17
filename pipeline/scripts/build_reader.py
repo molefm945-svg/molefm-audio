@@ -1460,6 +1460,117 @@ function handleKey(e){{
 }}
 
 window.addEventListener('DOMContentLoaded',init);
+
+// ── BROADCAST AUTO-UPDATE POLLING ─────────────────────────────────────────────
+// Polls the GitHub audio registry every 60s to detect new newscasts.
+// When a new broadcast is available, shows a banner and optionally auto-plays.
+// Zero-cost: reads public GitHub raw URLs — no API keys, no CORS issues.
+
+const REGISTRY_URL = 'https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/registry.json';
+let _lastKnownUrl = AUDIO_URLS.fr;
+let _bcBannerTimer = null;
+let _bcPolling = false;
+
+function _showBcBanner(label, audioUrl, autoPlay) {{
+  let banner = document.getElementById('bcBanner');
+  if (!banner) {{
+    banner = document.createElement('div');
+    banner.id = 'bcBanner';
+    banner.style.cssText = [
+      'position:fixed','top:0','left:0','right:0','z-index:9999',
+      'background:rgba(15,15,20,0.92)','backdrop-filter:blur(16px)',
+      '-webkit-backdrop-filter:blur(16px)','color:#fff',
+      'padding:10px 16px','display:flex','align-items:center',
+      'gap:10px','font-size:13px','font-family:inherit',
+      'border-bottom:1.5px solid rgba(255,255,255,0.12)',
+      'box-shadow:0 2px 24px rgba(0,0,0,0.4)',
+      'transform:translateY(-100%)','transition:transform 0.35s cubic-bezier(0.4,0,0.2,1)'
+    ].join(';');
+    document.body.appendChild(banner);
+  }}
+  banner.innerHTML = (
+    '<span style="font-size:16px">📰</span>' +
+    '<span style="flex:1">' + label + '</span>' +
+    '<button onclick="_loadLatestBroadcast(true)" style="' +
+      'background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);' +
+      'color:#fff;padding:4px 12px;border-radius:20px;font-size:12px;cursor:pointer;' +
+      'backdrop-filter:blur(8px)">Écouter</button>' +
+    '<button onclick="_dismissBcBanner()" style="' +
+      'background:none;border:none;color:rgba(255,255,255,0.6);' +
+      'font-size:18px;cursor:pointer;padding:0 4px;line-height:1">×</button>'
+  );
+  // Slide in
+  requestAnimationFrame(() => {{ banner.style.transform = 'translateY(0)'; }});
+  // Auto-dismiss after 30s
+  if (_bcBannerTimer) clearTimeout(_bcBannerTimer);
+  _bcBannerTimer = setTimeout(_dismissBcBanner, 30000);
+  if (autoPlay) _loadLatestBroadcast(true);
+}}
+
+function _dismissBcBanner() {{
+  const banner = document.getElementById('bcBanner');
+  if (banner) {{ banner.style.transform = 'translateY(-100%)'; setTimeout(() => banner.remove(), 400); }}
+  if (_bcBannerTimer) {{ clearTimeout(_bcBannerTimer); _bcBannerTimer = null; }}
+}}
+
+function _loadLatestBroadcast(autoPlay) {{
+  _dismissBcBanner();
+  // Reload the audio elements to the latest broadcast
+  ['fr','en','es'].forEach(l => {{
+    const a = au(l);
+    const wasPlaying = !a.paused && l === lang;
+    a.pause();
+    a.currentTime = 0;
+    a.src = AUDIO_URLS[l] + '?t=' + Date.now(); // cache-bust
+    if (autoPlay && l === lang) {{
+      const p = a.play();
+      if (p !== undefined) {{ p.then(() => {{ showPause(); startLoop(); }}).catch(() => showPlay()); }}
+      else {{ showPause(); startLoop(); }}
+    }}
+  }});
+  buildBcastPicker();
+}}
+
+async function _checkBroadcastRegistry() {{
+  if (_bcPolling) return;
+  _bcPolling = true;
+  try {{
+    const r = await fetch(REGISTRY_URL + '?t=' + Date.now(), {{ cache: 'no-store' }});
+    if (!r.ok) return;
+    const reg = await r.json();
+    // Registry format: {{"latest_newscast": "https://raw.github.../audio/newscast_YYYYMMDD_HHMM.mp3", "latest_podcast": "..."}}
+    const latestUrl = reg.latest_newscast || '';
+    if (latestUrl && latestUrl !== _lastKnownUrl) {{
+      _lastKnownUrl = latestUrl;
+      // Update audio URLs to point to the new broadcast
+      AUDIO_URLS.fr = latestUrl;
+      // EN/ES: derive filename from FR filename pattern
+      const base = latestUrl.replace('/audio/', '/audio/').replace('.mp3', '');
+      // EN and ES are served from the webapp — only FR is on GitHub
+      // So just update FR and show banner for listener awareness
+      const fname = latestUrl.split('/').pop() || '';
+      const hr = fname.match(/(\\d{{4}})_(\\d{{2}})(\\d{{2}})_(\\d{{2}})(\\d{{2}})/);
+      let label = 'Nouveau journal disponible';
+      if (hr) {{
+        const h = parseInt(hr[4], 10);
+        const hHaiti = ((h - 4) + 24) % 24;
+        label = 'Journal ' + String(hHaiti).padStart(2,'0') + 'h' + hr[5] + ' disponible';
+      }}
+      _showBcBanner(label, latestUrl, false);
+    }}
+  }} catch(e) {{
+    // Silent fail — broadcast polling is non-critical
+  }} finally {{
+    _bcPolling = false;
+  }}
+}}
+
+// Start polling 30s after page load, then every 65s
+setTimeout(() => {{
+  _checkBroadcastRegistry();
+  setInterval(_checkBroadcastRegistry, 65000);
+}}, 30000);
+
 </script>
 </body>
 </html>"""
@@ -1469,20 +1580,30 @@ window.addEventListener('DOMContentLoaded',init);
 if __name__ == "__main__":
     import sys as _sys
     print("[build_reader] Standalone rebuild starting...")
-    # Locate latest script for word timings
     _scripts_dir = os.path.dirname(os.path.abspath(__file__))
-    _scripts_out = os.path.join(_scripts_dir, "..", "audio", "scripts")
     _script_file = None
     _audio_file = None
-    # Find most recent .json script and matching audio
-    if os.path.isdir(_scripts_out):
-        _jsons = sorted([f for f in os.listdir(_scripts_out) if f.endswith('.json')], reverse=True)
+    # If args provided use them directly
+    if len(_sys.argv) >= 3:
+        _script_file = _sys.argv[1]
+        _audio_file  = _sys.argv[2]
+    else:
+        # Find most recent newscast_*.json in the scripts directory
+        _jsons = sorted(
+            [f for f in os.listdir(_scripts_dir) if f.startswith('newscast_') and f.endswith('.json')],
+            reverse=True
+        )
         if _jsons:
-            _script_file = os.path.join(_scripts_out, _jsons[0])
-    _audio_dir = os.path.join(_scripts_dir, "..", "reader", "webapp")
-    _audio_fr = os.path.join(_audio_dir, "audio_fr.mp3")
-    if os.path.exists(_audio_fr):
-        _audio_file = _audio_fr
+            _script_file = os.path.join(_scripts_dir, _jsons[0])
+        # Find matching audio in audio dir
+        _audio_search_dir = os.path.join(_scripts_dir, "..", "audio")
+        if os.path.isdir(_audio_search_dir):
+            _mps = sorted(
+                [f for f in os.listdir(_audio_search_dir) if f.startswith('newscast_') and f.endswith('.mp3')],
+                reverse=True
+            )
+            if _mps:
+                _audio_file = os.path.join(_audio_search_dir, _mps[0])
     if _script_file and _audio_file:
         print(f"  Script: {_script_file}")
         print(f"  Audio:  {_audio_file}")
@@ -1493,5 +1614,5 @@ if __name__ == "__main__":
             print("[build_reader] Build returned None — check script/audio files")
     else:
         print(f"[build_reader] Missing script ({_script_file}) or audio ({_audio_file})")
-        print("  Run from pipeline: python3 run_pipeline.py")
+        print("  Run: python3 build_reader.py path/to/newscast.json path/to/newscast.mp3")
         _sys.exit(1)
