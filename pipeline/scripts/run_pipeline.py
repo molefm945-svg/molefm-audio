@@ -274,6 +274,16 @@ def run():
         content_pack = generate_pack()
         if content_pack:
             print(f"  [ContentPack] ✓ {content_pack['audio_generated_count']} slots generated")
+            # Also write to reader webapp so pplx CDN serves fresh content pack
+            _reader_pack_dir = os.path.join(
+                os.path.dirname(SCRIPTS_DIR), "reader", "webapp", "radio", "generated"
+            )
+            os.makedirs(_reader_pack_dir, exist_ok=True)
+            _reader_pack_path = os.path.join(_reader_pack_dir, "latest-content-pack.json")
+            import json as _json2
+            with open(_reader_pack_path, "w", encoding="utf-8") as _f:
+                _json2.dump(content_pack, _f, ensure_ascii=False, indent=2)
+            print(f"  [ContentPack] Written to reader webapp (pplx CDN path)")
         else:
             print("  [ContentPack] Warn: returned None")
     except Exception as _e:
