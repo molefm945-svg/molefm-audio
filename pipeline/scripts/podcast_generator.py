@@ -663,6 +663,37 @@ def run(lang="fr", slot_label=None, slot_index=None):
         except Exception as _e:
             print(f"  [WARN] Publish step failed (non-fatal): {_e}")
 
+        # Trigger broadcast automation — interrupt En Direct for this podcast
+        try:
+            import urllib.request as _urlreq, json as _bj
+            try:
+                _bc_pod_url = _github_url
+            except NameError:
+                _bc_pod_url = ""
+            try:
+                _bc_ep_title = _ep_title
+            except NameError:
+                _bc_ep_title = "Podcast Mole FM"
+            _pod_audio_url = _bc_pod_url or f"local:{os.path.basename(out_path)}"
+            _bpayload = _bj.dumps({
+                "type": "podcast",
+                "audioUrl": _pod_audio_url,
+                "githubUrl": _bc_pod_url,
+                "title": _bc_ep_title,
+                "slot": slot_label or "midi"
+            }).encode()
+            _breq = _urlreq.Request(
+                "http://localhost:5000/api/broadcast/trigger",
+                data=_bpayload,
+                headers={"Content-Type": "application/json"},
+                method="POST"
+            )
+            with _urlreq.urlopen(_breq, timeout=3) as _br:
+                _bres = _bj.loads(_br.read())
+                print(f"  [Broadcast] ✓ podcast triggered — id: {_bres.get('id','?')}")
+        except Exception as _be:
+            print(f"  [Broadcast] Non-fatal: {_be}")
+
         return out_path
 
     return None
