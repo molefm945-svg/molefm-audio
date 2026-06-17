@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Mole FM — GitHub Audio Uploader
-Pushes MP3 files to the molefm-audio GitHub repo as git objects.
+Mole FM — GitHub Audio Uploader (API-based, no git clone)
+Uploads MP3 files to molefm-audio via GitHub Contents API.
 Returns a permanent public raw.githubusercontent.com URL.
 
 URL format:
@@ -16,101 +16,78 @@ Usage:
 import os
 import sys
 import json
-import shutil
-import subprocess
+import base64
 import datetime
+import urllib.request
+import urllib.error
 
-REPO_URL = "https://git-agent-proxy.perplexity.ai/molefm945-svg/molefm-audio.git"
-REPO_DIR = "/tmp/molefm-audio-repo"
-GIT_USER_EMAIL = "molefm945@gmail.com"
-GIT_USER_NAME = "Mole FM"
-RAW_BASE = "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main"
-
-
-# Path to the git proxy config (written by pplx credential injector)
-GIT_PROXY_CONFIG = "/home/user/.gitconfig-proxy"
-
-
-def _git_env():
-    """Build env dict with git credentials and author info."""
-    env = os.environ.copy()
-    env["GIT_AUTHOR_NAME"] = GIT_USER_NAME
-    env["GIT_AUTHOR_EMAIL"] = GIT_USER_EMAIL
-    env["GIT_COMMITTER_NAME"] = GIT_USER_NAME
-    env["GIT_COMMITTER_EMAIL"] = GIT_USER_EMAIL
-    # Always force the proxy gitconfig so the credential helper is available
-    # (contains: credential helper using $GH_ENTERPRISE_TOKEN, and insteadOf rule)
-    if os.path.exists(GIT_PROXY_CONFIG):
-        env["GIT_CONFIG_GLOBAL"] = GIT_PROXY_CONFIG
-        env["GH_HOST"] = "git-agent-proxy.perplexity.ai"
-    # Propagate the enterprise token so the credential helper can read it
-    token = os.environ.get("GH_ENTERPRISE_TOKEN", "")
-    if token:
-        env["GH_ENTERPRISE_TOKEN"] = token
-    return env
+OWNER      = "molefm945-svg"
+REPO       = "molefm-audio"
+BRANCH     = "main"
+RAW_BASE   = f"https://raw.githubusercontent.com/{OWNER}/{REPO}/{BRANCH}"
+# Use the git-agent-proxy for API calls (token is a proxy token, not a raw GitHub PAT)
+API_HOST   = "https://git-agent-proxy.perplexity.ai/api/v3"
+API_BASE   = f"{API_HOST}/repos/{OWNER}/{REPO}/contents"
 
 
-def run_git(args, cwd=REPO_DIR, capture=True):
-    """Run a git command in the repo directory."""
-    env = _git_env()
-    result = subprocess.run(
-        ["git"] + args, cwd=cwd, capture_output=capture, text=True, env=env
-    )
-    if result.returncode != 0 and capture:
-        raise RuntimeError(f"git {' '.join(args)} failed: {result.stderr.strip()}")
-    return result.stdout.strip() if capture else None
-
-
-def _git_clone():
-    """Clone using the git-agent-proxy URL (no gh CLI needed)."""
-    result = subprocess.run(
-        ["git", "clone", "--depth=1", REPO_URL, REPO_DIR],
-        capture_output=True, text=True, env=_git_env()
-    )
-    if result.returncode != 0:
-        raise RuntimeError(f"git clone failed: {result.stderr.strip()[:400]}")
-
-
-def _is_valid_git_repo(path):
-    """Return True if path is a valid git repo (git rev-parse succeeds)."""
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--git-dir"],
-            cwd=path, capture_output=True, text=True, env=_git_env()
+def _token():
+    """Return GitHub token from environment (injected by api_credentials)."""
+    tok = os.environ.get("GH_ENTERPRISE_TOKEN", "") or os.environ.get("GITHUB_TOKEN", "")
+    if not tok:
+        raise RuntimeError(
+            "No GitHub token found. Run with api_credentials=['github'] or set GH_ENTERPRISE_TOKEN."
         )
-        return result.returncode == 0
-    except Exception:
-        return False
+    return tok
 
 
-def ensure_repo():
-    """Clone or pull the molefm-audio repo to /tmp."""
-    git_dir = os.path.join(REPO_DIR, ".git")
+def _api_headers():
+    return {
+        "Authorization": f"token {_token()}",
+        "Accept": "application/vnd.github+json",
+        "Content-Type": "application/json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
 
-    # Pre-flight: verify the repo is actually valid before attempting pull
-    if os.path.exists(git_dir) and _is_valid_git_repo(REPO_DIR):
-        # Valid repo — pull latest
-        try:
-            run_git(["pull", "origin", "main", "--rebase"])
-        except Exception as e:  # broad catch: RuntimeError, FileNotFoundError, OSError, etc.
-            # Pull failed for any reason — nuke and reclone
-            print(f"  [GitHub] Pull failed ({e}), re-cloning...")
-            shutil.rmtree(REPO_DIR, ignore_errors=True)
-            _git_clone()
-    else:
-        # .git missing, invalid, or partial directory structure (e.g. from
-        # content_pack_generator.py writing to /tmp/molefm-audio-repo/public/
-        # before a clone happens) — remove everything and clone fresh
-        if os.path.exists(REPO_DIR):
-            print(f"  [GitHub] Stale or corrupt repo dir detected, removing...")
-            shutil.rmtree(REPO_DIR, ignore_errors=True)
-        _git_clone()
 
-    # Always set git config after clone/pull
-    run_git(["config", "user.email", GIT_USER_EMAIL])
-    run_git(["config", "user.name", GIT_USER_NAME])
-    # Ensure push remote is using the proxy URL
-    run_git(["remote", "set-url", "origin", REPO_URL])
+def _get_file_sha(path_in_repo):
+    """Return the blob SHA of an existing file, or None if it doesn't exist."""
+    url = f"{API_BASE}/{path_in_repo}?ref={BRANCH}"
+    req = urllib.request.Request(url, headers=_api_headers())
+    try:
+        with urllib.request.urlopen(req, timeout=15) as r:
+            data = json.loads(r.read())
+            return data.get("sha")
+    except urllib.error.HTTPError as e:
+        if e.code == 404:
+            return None
+        raise
+
+
+def upload_file_api(path_in_repo, mp3_path, commit_msg):
+    """
+    Upload or update a file in the GitHub repo using the Contents API.
+    Returns the raw URL.
+    """
+    with open(mp3_path, "rb") as f:
+        content_b64 = base64.b64encode(f.read()).decode()
+
+    sha = _get_file_sha(path_in_repo)  # None if new file, string if update
+
+    payload = {
+        "message": commit_msg,
+        "content": content_b64,
+        "branch": BRANCH,
+    }
+    if sha:
+        payload["sha"] = sha  # required for updates
+
+    url = f"{API_BASE}/{path_in_repo}"
+    data = json.dumps(payload).encode()
+    req = urllib.request.Request(url, data=data, headers=_api_headers(), method="PUT")
+
+    with urllib.request.urlopen(req, timeout=60) as r:
+        resp = json.loads(r.read())
+        return resp["content"]["download_url"]
 
 
 def upload_audio(audio_type, mp3_path):
@@ -121,45 +98,29 @@ def upload_audio(audio_type, mp3_path):
     if not os.path.exists(mp3_path):
         raise FileNotFoundError(f"MP3 not found: {mp3_path}")
 
-    filename = os.path.basename(mp3_path)
-    size_kb = os.path.getsize(mp3_path) // 1024
-
-    # Determine subfolder
+    filename  = os.path.basename(mp3_path)
+    size_kb   = os.path.getsize(mp3_path) // 1024
     subfolder = "audio" if audio_type == "newscast" else "podcasts"
-    dest_dir = os.path.join(REPO_DIR, subfolder)
-    dest_path = os.path.join(dest_dir, filename)
+    path_in_repo = f"{subfolder}/{filename}"
 
-    print(f"  [GitHub] Syncing repo...")
-    ensure_repo()
+    print(f"  [GitHub API] Checking {path_in_repo}...")
+    sha = _get_file_sha(path_in_repo)
 
-    os.makedirs(dest_dir, exist_ok=True)
+    if sha:
+        # File already exists — check local size vs remote size to skip if identical
+        # (GitHub API doesn't give size easily without another call; just re-upload to be safe
+        #  unless the filename already exists — same filename = same content for Mole FM)
+        raw_url = f"{RAW_BASE}/{subfolder}/{filename}"
+        print(f"  [GitHub API] Already uploaded: {filename}")
+        print(f"  [GitHub API] ✓ URL: {raw_url}")
+        return raw_url
 
-    # Check if file already exists with same size (skip redundant push)
-    if os.path.exists(dest_path) and os.path.getsize(dest_path) == os.path.getsize(mp3_path):
-        print(f"  [GitHub] Already uploaded: {filename}")
-        url = f"{RAW_BASE}/{subfolder}/{filename}"
-        print(f"  [GitHub] ✓ URL: {url}")
-        return url
+    print(f"  [GitHub API] Uploading {filename} ({size_kb} KB)...")
+    commit_msg = f"Add {audio_type}: {filename} ({size_kb}KB)"
+    raw_url = upload_file_api(path_in_repo, mp3_path, commit_msg)
 
-    # Copy file into repo
-    shutil.copy2(mp3_path, dest_path)
-
-    # Commit and push
-    run_git(["add", os.path.join(subfolder, filename)])
-
-    # Check if there's anything to commit
-    status = run_git(["status", "--porcelain"])
-    if not status.strip():
-        print(f"  [GitHub] No changes to commit (already up to date)")
-    else:
-        commit_msg = f"Add {audio_type}: {filename} ({size_kb}KB)"
-        run_git(["commit", "-m", commit_msg])
-        print(f"  [GitHub] Pushing {filename} ({size_kb} KB)...")
-        run_git(["push", "origin", "main"])
-
-    url = f"{RAW_BASE}/{subfolder}/{filename}"
-    print(f"  [GitHub] ✓ URL: {url}")
-    return url
+    print(f"  [GitHub API] ✓ Uploaded → {raw_url}")
+    return raw_url
 
 
 def save_url_to_registry(audio_type, filename, url):
@@ -192,7 +153,7 @@ if __name__ == "__main__":
         sys.exit(1)
 
     audio_type = sys.argv[1]
-    mp3_path = sys.argv[2]
+    mp3_path   = sys.argv[2]
 
     if audio_type not in ("newscast", "podcast"):
         print(f"Unknown type: {audio_type}. Use 'newscast' or 'podcast'")
