@@ -289,6 +289,41 @@ def run():
     except Exception as _e:
         print(f"  [WARN] Content pack generation failed (non-fatal): {_e}")
 
+    # Step 8: Trigger broadcast interruption on the reader (seamless news → live resume)
+    print("\n[8/8] Triggering broadcast automation (interrupt En Direct)...")
+    try:
+        import urllib.request as _urlreq, json as _bj
+        # Use GitHub URL if available, otherwise fall back to local audio path
+        try:
+            _bc_github_url = _github_url
+        except NameError:
+            _bc_github_url = ""
+        try:
+            _bc_title = _title
+        except NameError:
+            _bc_title = "Journal de l'heure"
+        # audioUrl must be non-empty; use GitHub URL or a placeholder that the
+        # reader can ignore gracefully (local path signals server-side playback)
+        _audio_url = _bc_github_url or f"local:{os.path.basename(audio_path)}"
+        _bpayload = _bj.dumps({
+            "type": "news",
+            "audioUrl": _audio_url,
+            "githubUrl": _bc_github_url,
+            "title": _bc_title,
+            "stories": story_count
+        }).encode()
+        _breq = _urlreq.Request(
+            "http://localhost:5000/api/broadcast/trigger",
+            data=_bpayload,
+            headers={"Content-Type": "application/json"},
+            method="POST"
+        )
+        with _urlreq.urlopen(_breq, timeout=3) as _br:
+            _bres = _bj.loads(_br.read())
+            print(f"  [Broadcast] ✓ triggered — id: {_bres.get('id','?')}")
+    except Exception as _be:
+        print(f"  [Broadcast] Non-fatal (server may not be running): {_be}")
+
     # Log success
     log_run("SUCCESS", audio_path, story_count)
     
