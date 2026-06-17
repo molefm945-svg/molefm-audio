@@ -400,23 +400,54 @@ def build_html(wt_fr, wt_en, wt_es,
             _spcfg = json.load(_spf)
         _active_sponsors = [s for s in _spcfg["sponsors"] if s.get("active", False)]
     except Exception:
-        _active_sponsors = [{"name": "Mathurin Beach Resort", "logo": "sponsors/mathurin_beach.jpg", "display_text": ""}]
+        _active_sponsors = [{"id":"mathurin_beach","name": "Mathurin Beach Resort", "logo": "sponsors/mathurin_beach.jpg", "tagline":"L'escapade parfaite au nord d'Haïti","cta_label":"Réserver","cta_url":"https://wa.me/50938554309","video_url":""}]
     if not _active_sponsors:
-        _active_sponsors = [{"name": "Mathurin Beach Resort", "logo": "sponsors/mathurin_beach.jpg", "display_text": ""}]
-    _logo_html = ""
+        _active_sponsors = [{"id":"mathurin_beach","name": "Mathurin Beach Resort", "logo": "sponsors/mathurin_beach.jpg", "tagline":"L'escapade parfaite au nord d'Haïti","cta_label":"Réserver","cta_url":"https://wa.me/50938554309","video_url":""}]
+    _label = "PARTENAIRE OFFICIEL" if len(_active_sponsors) == 1 else "NOS PARTENAIRES"
+    _cards_html = ""
     for _s in _active_sponsors:
-        _sn = _s["name"]
-        _sl = _s["logo"]
-        _logo_html += (
-            '<a class="sponsor-logo-link" href="#" aria-label="' + _sn + '">'
-            '<img class="sponsor-logo" src="' + _sl + '" alt="' + _sn + '" /></a>'
+        _sn = _s.get("name","")
+        _sl = _s.get("logo","")
+        _st = _s.get("tagline","")
+        _sc = _s.get("cta_label","Visiter")
+        _su = _s.get("cta_url","#")
+        _sv = _s.get("video_url","")
+        _sid = _s.get("id","sp")
+        # Abbreviated initials fallback
+        _initials = "".join(w[0] for w in _sn.split()[:3]).upper()
+        _video_btn = (
+            f'<button class="sp-vid-btn" onclick="toggleSpVid(\'{_sid}\')" aria-label="Voir la vidéo">'
+            f'<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>'
+            f'</button>'
+        ) if _sv else ""
+        _video_embed = (
+            f'<div class="sp-vid" id="spvid-{_sid}" style="display:none">'
+            f'<video controls playsinline style="width:100%;border-radius:12px;margin-top:8px">'
+            f'<source src="{_sv}" type="video/mp4">'
+            f'</video></div>'
+        ) if _sv else ""
+        _cards_html += (
+            f'<div class="sponsor-card">'
+            f'<div class="sponsor-card-inner">'
+            f'<div class="sp-logo-wrap">'
+            f'<img class="sp-logo-img" src="{_sl}" alt="{_sn}" '
+            f'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'flex\'" />'
+            f'<div class="sp-logo-fallback" style="display:none">{_initials}</div>'
+            f'</div>'
+            f'<div class="sp-info">'
+            f'<p class="sp-badge">{_label}</p>'
+            f'<p class="sp-name">{_sn}</p>'
+            f'<p class="sp-tagline">{_st}</p>'
+            f'</div>'
+            f'<div class="sp-actions">'
+            f'{_video_btn}'
+            f'<a class="sp-cta" href="{_su}" target="_blank" rel="noreferrer">{_sc}</a>'
+            f'</div>'
+            f'</div>'
+            f'{_video_embed}'
+            f'</div>'
         )
-    _label = "Notre partenaire" if len(_active_sponsors) == 1 else "Nos partenaires"
-    sponsor_badge = (
-        f'<div class="sponsor-bar">'
-        f'<div class="sponsor-label">{_label}</div>'
-        f'<div class="sponsor-logos">{_logo_html}</div></div>'
-    )
+    sponsor_badge = f'<div class="sponsor-rail">{_cards_html}</div>'
 
 
     # Format broadcast date nicely
@@ -430,364 +461,353 @@ def build_html(wt_fr, wt_en, wt_es,
         bdate_fr = broadcast_hour.upper()
         btime_fr = ""
 
-    speed_btns = ''.join(
-        f'<button class="spd{"" if s != 1.0 else " on"}" data-speed="{s}" onclick="setSpeed({s})">{s}×</button>'
-        for s in [0.5, 0.75, 1, 1.25, 1.5, 2, 3]
-    )
     hspd_btns = ''.join(
-        f'<button class="hspd{"" if s != 1.0 else " on"}" data-speed="{s}" onclick="setSpeed({s})">{s}×</button>'
+        f'<button class="hspd{" on" if s == 1.0 else ""}" data-speed="{s}" onclick="setSpeed({s})">{s}×</button>'
         for s in [0.5, 0.75, 1, 1.25, 1.5, 2, 3]
     )
 
     return f"""<!DOCTYPE html>
-<html lang="fr" data-theme="light">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mole FM — Lecteur Trilingue</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{{
-  --cfr:#0e9b8a;--cen:#4f46e5;--ces:#dc2626;
-  --r-sm:6px;--r-md:10px;--r-lg:16px;--r-full:9999px;
+  --red:#dc2626;--red-d:#b91c1c;--red-glow:rgba(220,38,38,.15);
+  --navy:#020617;--s800:#1e293b;--s700:#334155;--s600:#475569;
+  --s500:#64748b;--s400:#94a3b8;--s300:#cbd5e1;--s200:#e2e8f0;
+  --s100:#f1f5f9;--white:#ffffff;
+  --cfr:#dc2626;--cen:#2563eb;--ces:#16a34a;--pod:#7c3aed;
   --sp1:4px;--sp2:8px;--sp3:12px;--sp4:16px;--sp5:20px;--sp6:24px;--sp8:32px;
-  --ease:0.18s ease;
-  --text-xs:11px;--text-sm:13px;--text-base:15px;--text-lg:18px;--text-xl:20px;
-  --font-b:'DM Sans',system-ui,sans-serif;
-  --font-d:'DM Serif Display',Georgia,serif;
-}}
-[data-theme=dark]{{
-  --bg:#0f1117;--surf:#181c24;--surf2:#1e2330;
-  --tx:#e8eaf0;--txm:#8b90a0;--txf:#555c70;
-  --bdr:#252b3b;--loop-on:rgba(14,155,138,.12);
-}}
-[data-theme=light]{{
-  --bg:#f7f8fc;--surf:#fff;--surf2:#f0f2f7;
-  --tx:#181c24;--txm:#525870;--txf:#9099b0;
-  --bdr:#e2e5ef;--loop-on:rgba(14,155,138,.08);
+  --r-sm:6px;--r-md:8px;--r-lg:12px;--r-xl:16px;--r-full:9999px;
+  --font:'Inter',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  --tx:11px;--ts:13px;--tb:15px;--tl:17px;--txl:20px;
+  --sh-card:0 1px 3px rgba(0,0,0,.08),0 1px 2px rgba(0,0,0,.06);
+  --sh-md:0 4px 12px rgba(0,0,0,.1),0 2px 4px rgba(0,0,0,.06);
+  --sh-lg:0 8px 24px rgba(0,0,0,.12);
+  --ease:.16s cubic-bezier(.4,0,.2,1);
 }}
 *{{box-sizing:border-box;margin:0;padding:0;border:none;outline:none;}}
 html{{height:100%;position:fixed;width:100%;top:0;left:0;}}
 body{{
   height:100%;width:100%;
-  font-family:var(--font-b);font-size:var(--text-base);
-  color:var(--tx);background:var(--bg);
+  font-family:var(--font);font-size:var(--tb);
+  color:var(--navy);background:var(--s100);
   display:flex;flex-direction:column;overflow:hidden;
+  -webkit-font-smoothing:antialiased;
 }}
-
-/* ── HEADER ─────────────────────────────────────────────────────────────── */
 .hdr{{
   display:flex;align-items:center;justify-content:space-between;
-  padding:10px var(--sp4);
-  border-bottom:1px solid var(--bdr);
-  background:var(--surf);
-  flex-shrink:0;
-  gap:var(--sp2);
-  flex-wrap:nowrap;
+  padding:0 var(--sp5);height:56px;
+  background:var(--white);box-shadow:0 1px 0 var(--s200);
+  flex-shrink:0;gap:var(--sp3);position:relative;z-index:30;
 }}
-.logo{{display:flex;align-items:center;gap:var(--sp2);flex-shrink:0;}}
-.logo-m{{
-  width:34px;height:34px;
-  background:linear-gradient(135deg,var(--cfr),var(--cen));
-  border-radius:var(--r-md);
-  display:flex;align-items:center;justify-content:center;
-  font-family:var(--font-d);font-size:1rem;color:#fff;flex-shrink:0;
-}}
-.logo-text .logo-n{{font-size:var(--text-sm);font-weight:700;color:var(--tx);line-height:1.1;}}
-.logo-text .logo-s{{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--txm);}}
-/* Header lang tabs */
-.hdr-langs{{display:flex;gap:3px;align-items:center;}}
+.logo{{display:flex;align-items:center;gap:var(--sp3);flex-shrink:0;text-decoration:none;}}
+.logo-mark{{width:36px;height:36px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}}
+.logo-mark svg{{fill:#fff;}}
+.logo-name{{font-size:var(--tl);font-weight:800;color:var(--navy);letter-spacing:-.02em;line-height:1;}}
+.logo-name span{{color:var(--red);}}
+.logo-sub{{font-size:10px;font-weight:600;color:var(--s500);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}}
+.hdr-langs{{display:flex;gap:var(--sp2);align-items:center;}}
 .hlt{{
-  padding:5px 9px;border-radius:var(--r-full);
-  border:1.5px solid var(--bdr);
-  font-size:11px;font-weight:700;color:var(--txm);
-  background:transparent;cursor:pointer;
-  transition:all var(--ease);white-space:nowrap;
-  min-height:30px;
+  padding:5px 11px;border-radius:var(--r-full);
+  border:1.5px solid var(--s200);font-size:12px;font-weight:700;color:var(--s500);
+  background:transparent;cursor:pointer;transition:all var(--ease);white-space:nowrap;min-height:32px;
 }}
+.hlt:hover{{border-color:var(--s400);color:var(--s700);}}
 .hlt:active{{transform:scale(.95);}}
 .hlt.afr{{background:var(--cfr);color:#fff;border-color:var(--cfr);}}
 .hlt.aen{{background:var(--cen);color:#fff;border-color:var(--cen);}}
 .hlt.aes{{background:var(--ces);color:#fff;border-color:var(--ces);}}
-/* Speed popover trigger */
+.hdr-r{{display:flex;align-items:center;gap:var(--sp2);flex-shrink:0;}}
 .hdr-speed{{position:relative;display:flex;align-items:center;}}
 .hspd-trigger{{
   display:flex;align-items:center;gap:4px;
   padding:5px 10px;border-radius:var(--r-full);
-  border:1.5px solid var(--bdr);
-  font-size:11px;font-weight:700;color:var(--tx);
-  background:var(--surf2);cursor:pointer;
-  transition:all var(--ease);min-height:30px;white-space:nowrap;
+  border:1.5px solid var(--s200);font-size:12px;font-weight:700;color:var(--s700);
+  background:var(--s100);cursor:pointer;transition:all var(--ease);min-height:32px;white-space:nowrap;
 }}
+.hspd-trigger:hover{{border-color:var(--s400);}}
 .hspd-trigger:active{{transform:scale(.95);}}
-.hspd-trigger .arrow{{font-size:8px;color:var(--txm);margin-left:1px;transition:transform var(--ease);}}
+.hspd-trigger .arrow{{font-size:8px;color:var(--s400);margin-left:2px;transition:transform var(--ease);}}
 .hspd-trigger.open .arrow{{transform:rotate(180deg);}}
 .hspd-popover{{
-  position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%);
-  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r-lg);
-  padding:var(--sp2);display:none;flex-direction:column;gap:4px;
-  z-index:200;min-width:80px;
-  box-shadow:0 8px 24px rgba(0,0,0,.18);
+  position:absolute;top:calc(100% + 6px);right:0;
+  background:var(--white);border:1px solid var(--s200);border-radius:var(--r-lg);
+  padding:var(--sp2);display:none;flex-direction:column;gap:3px;
+  z-index:200;min-width:76px;box-shadow:var(--sh-lg);
 }}
 .hspd-popover.open{{display:flex;}}
 .hspd{{
-  padding:7px 12px;border-radius:var(--r-md);
-  border:none;
-  font-size:var(--text-sm);font-weight:700;color:var(--txm);
-  background:transparent;cursor:pointer;
-  transition:all var(--ease);text-align:center;
-  min-height:36px;
+  padding:7px 12px;border-radius:var(--r-md);font-size:var(--ts);font-weight:700;color:var(--s500);
+  background:transparent;cursor:pointer;transition:all var(--ease);text-align:center;min-height:36px;
 }}
+.hspd:hover{{background:var(--s100);color:var(--navy);}}
 .hspd:active{{transform:scale(.95);}}
-.hspd.on{{background:var(--cfr);color:#fff;}}
-/* Header right */
-.hdr-r{{display:flex;align-items:center;gap:var(--sp2);flex-shrink:0;}}
+.hspd.on{{background:var(--red);color:#fff;}}
 .hplay{{
-  width:36px;height:36px;border-radius:var(--r-full);
-  background:var(--cfr);display:flex;align-items:center;justify-content:center;
-  color:#fff;flex-shrink:0;cursor:pointer;
-  transition:all var(--ease);
-  box-shadow:0 2px 10px rgba(14,155,138,.35);
+  display:flex;align-items:center;gap:6px;
+  padding:0 var(--sp4);height:36px;border-radius:var(--r-full);
+  background:var(--red);color:#fff;font-size:12px;font-weight:700;
+  cursor:pointer;transition:all var(--ease);box-shadow:0 2px 8px var(--red-glow);
+  flex-shrink:0;white-space:nowrap;
 }}
-.hplay:active{{transform:scale(.9);}}
-.hplay.cen{{background:var(--cen);box-shadow:0 2px 10px rgba(79,70,229,.3);}}
-.hplay.ces{{background:var(--ces);box-shadow:0 2px 10px rgba(220,38,38,.3);}}
+.hplay:hover{{background:var(--red-d);}}
+.hplay:active{{transform:scale(.95);}}
+.hplay.cen{{background:var(--cen);box-shadow:0 2px 8px rgba(37,99,235,.2);}}
+.hplay.ces{{background:var(--ces);box-shadow:0 2px 8px rgba(22,163,74,.2);}}
 .tbtn{{
-  width:32px;height:32px;border-radius:var(--r-full);
-  border:1px solid var(--bdr);
+  width:34px;height:34px;border-radius:50%;
+  border:1.5px solid var(--s200);background:transparent;
   display:flex;align-items:center;justify-content:center;
-  color:var(--txm);cursor:pointer;background:transparent;
-  transition:all var(--ease);
+  color:var(--s500);cursor:pointer;transition:all var(--ease);
 }}
-.tbtn:active{{background:var(--surf2);}}
-
-/* ── PLAYER BAR ─────────────────────────────────────────────────────────── */
-.player{{background:var(--surf);border-bottom:1px solid var(--bdr);padding:var(--sp3) var(--sp4);flex-shrink:0;}}
+.tbtn:hover{{background:var(--s100);border-color:var(--s300);}}
+.player{{background:var(--white);border-bottom:1px solid var(--s200);padding:var(--sp4) var(--sp5);flex-shrink:0;}}
 .pi{{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:var(--sp3);}}
 .ltabs{{display:flex;gap:var(--sp2);flex-wrap:wrap;}}
 .lt{{
-  padding:6px 14px;border-radius:var(--r-full);
-  border:1.5px solid var(--bdr);
-  font-size:var(--text-sm);font-weight:700;color:var(--txm);
+  padding:5px 14px;border-radius:var(--r-full);
+  border:1.5px solid var(--s200);font-size:var(--ts);font-weight:700;color:var(--s500);
   background:transparent;cursor:pointer;transition:all var(--ease);
 }}
+.lt:hover{{border-color:var(--s400);color:var(--s700);}}
 .lt.afr{{background:var(--cfr);color:#fff;border-color:var(--cfr);}}
 .lt.aen{{background:var(--cen);color:#fff;border-color:var(--cen);}}
 .lt.aes{{background:var(--ces);color:#fff;border-color:var(--ces);}}
-.ctrl{{display:flex;align-items:center;gap:var(--sp3);}}
+.ctrl{{display:flex;align-items:center;gap:var(--sp4);}}
 .pb{{
-  width:52px;height:52px;border-radius:var(--r-full);
-  background:var(--cfr);display:flex;align-items:center;justify-content:center;
-  color:#fff;flex-shrink:0;cursor:pointer;
-  transition:all var(--ease);
-  box-shadow:0 4px 18px rgba(14,155,138,.4);
+  width:48px;height:48px;border-radius:50%;background:var(--red);
+  display:flex;align-items:center;justify-content:center;color:#fff;
+  flex-shrink:0;cursor:pointer;transition:all var(--ease);box-shadow:0 4px 14px var(--red-glow);
 }}
+.pb:hover{{background:var(--red-d);transform:scale(1.04);}}
 .pb:active{{transform:scale(.92);}}
-.pb.cen{{background:var(--cen);box-shadow:0 4px 18px rgba(79,70,229,.35);}}
-.pb.ces{{background:var(--ces);box-shadow:0 4px 18px rgba(220,38,38,.35);}}
+.pb.cen{{background:var(--cen);box-shadow:0 4px 14px rgba(37,99,235,.2);}}
+.pb.ces{{background:var(--ces);box-shadow:0 4px 14px rgba(22,163,74,.2);}}
 .pw{{flex:1;display:flex;flex-direction:column;gap:6px;}}
-/* Progress bar — taller touch target */
-.pbar{{
-  height:8px;background:var(--surf2);border-radius:var(--r-full);
-  cursor:pointer;position:relative;
-  /* Expand touch target without visual change */
-  padding:8px 0;margin:-8px 0;
-}}
-.pfill{{
-  height:8px;border-radius:var(--r-full);background:var(--cfr);
-  width:0%;transition:width .1s linear;position:relative;
-  pointer-events:none;
-}}
+.pbar{{height:6px;background:var(--s200);border-radius:var(--r-full);cursor:pointer;position:relative;padding:8px 0;margin:-8px 0;}}
+.pfill{{height:6px;border-radius:var(--r-full);background:var(--red);width:0%;transition:width .1s linear;position:relative;pointer-events:none;}}
 .pfill.cen{{background:var(--cen);}}
 .pfill.ces{{background:var(--ces);}}
-.pthumb{{
-  width:16px;height:16px;border-radius:var(--r-full);
-  background:var(--cfr);position:absolute;
-  right:-8px;top:50%;transform:translateY(-50%);
-  box-shadow:0 1px 4px rgba(0,0,0,.3);
-}}
-.trow{{display:flex;justify-content:space-between;font-size:var(--text-xs);color:var(--txm);font-variant-numeric:tabular-nums;}}
+.pthumb{{width:14px;height:14px;border-radius:50%;background:var(--red);position:absolute;right:-7px;top:50%;transform:translateY(-50%);box-shadow:0 1px 4px rgba(0,0,0,.2);}}
+.trow{{display:flex;justify-content:space-between;font-size:var(--tx);color:var(--s400);font-variant-numeric:tabular-nums;}}
 .ctrl2{{display:flex;align-items:center;gap:var(--sp3);flex-wrap:wrap;}}
 .loop-btn{{
-  display:flex;align-items:center;gap:var(--sp2);
-  padding:6px 14px;border-radius:var(--r-full);
-  border:1.5px solid var(--bdr);
-  font-size:var(--text-xs);font-weight:700;color:var(--txm);
-  cursor:pointer;background:transparent;transition:all var(--ease);
-  white-space:nowrap;min-height:34px;
+  display:flex;align-items:center;gap:6px;padding:5px 12px;border-radius:var(--r-full);
+  border:1.5px solid var(--s200);font-size:var(--tx);font-weight:600;color:var(--s500);
+  cursor:pointer;background:transparent;transition:all var(--ease);white-space:nowrap;min-height:32px;
 }}
-.loop-btn.on{{border-color:var(--cfr);color:var(--cfr);background:var(--loop-on);}}
-.loop-dot{{width:7px;height:7px;border-radius:var(--r-full);background:var(--cfr);opacity:0;transition:opacity var(--ease);}}
-.loop-btn.on .loop-dot{{opacity:1;animation:pulse 1.5s ease-in-out infinite;}}
+.loop-btn:hover{{border-color:var(--s400);color:var(--s700);}}
+.loop-btn.on{{border-color:var(--red);color:var(--red);background:var(--red-glow);}}
+.loop-dot{{width:7px;height:7px;border-radius:50%;background:var(--red);opacity:0;transition:opacity var(--ease);}}
+.loop-btn.on .loop-dot{{opacity:1;animation:pulse 1.4s ease-in-out infinite;}}
 .vol{{display:flex;align-items:center;gap:var(--sp2);margin-left:auto;}}
-.vsl{{width:80px;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--surf2);cursor:pointer;}}
-.vsl::-webkit-slider-thumb{{-webkit-appearance:none;width:18px;height:18px;border-radius:50%;background:var(--cfr);}}
-.loop-banner{{display:none;align-items:center;justify-content:center;gap:var(--sp3);margin-top:var(--sp4);padding:var(--sp3) var(--sp6);border-radius:var(--r-lg);background:var(--loop-on);border:1px solid var(--cfr);color:var(--cfr);font-size:var(--text-sm);font-weight:700;}}
-.sponsor-bar{{display:flex;flex-direction:column;align-items:center;gap:var(--sp2);padding:var(--sp3) var(--sp4);border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0;}}
-.sponsor-label{{font-size:var(--text-xs);color:var(--txf);text-transform:uppercase;letter-spacing:.08em;font-weight:600;}}
-.sponsor-logos{{display:flex;align-items:center;justify-content:center;gap:var(--sp4);flex-wrap:wrap;}}
-.sponsor-logo-link{{display:flex;align-items:center;opacity:.85;transition:opacity .2s;}}
-.sponsor-logo-link:hover{{opacity:1;}}
-.sponsor-logo{{height:40px;max-width:110px;object-fit:contain;border-radius:var(--r-sm);background:#fff;padding:3px;}}
-.loop-banner.show{{display:flex;}}
-.loop-spin{{animation:spin 2s linear infinite;display:inline-block;}}
-
-/* ── ARTICLE PICKER ─────────────────────────────────────────────────────── */
-.bcast-picker{{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 var(--sp4);flex-shrink:0;position:relative;z-index:11;}}
-.bcast-hdr{{display:flex;align-items:center;justify-content:space-between;padding:var(--sp3) 0;cursor:pointer;user-select:none;}}
-.bcast-title{{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.07em;}}
-.bcast-toggle{{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--bdr);background:transparent;display:flex;align-items:center;justify-content:center;color:var(--txm);cursor:pointer;transition:transform .3s ease;}}
-.bcast-list{{display:flex;flex-direction:column;gap:var(--sp2);padding-bottom:var(--sp3);overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:45vh;transition:max-height .3s ease,padding .3s ease,opacity .2s ease;opacity:1;}}
-.bcast-list.collapsed{{max-height:0;padding-bottom:0;opacity:0;overflow:hidden;}}
-.bcast-card{{display:flex;align-items:center;justify-content:space-between;padding:var(--sp3) var(--sp4);border-radius:var(--r-md);border:1.5px solid var(--bdr);cursor:pointer;transition:all var(--ease);background:var(--bg);}}
-.bcast-card:active{{transform:scale(.98);}}
-.bcast-card.active{{border-color:var(--cfr);background:var(--loop-on);}}
-.bcast-label{{font-size:var(--text-sm);color:var(--tx);}}
-.bcast-badge{{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);background:var(--cfr);color:#fff;text-transform:uppercase;letter-spacing:.05em;}}
-.bcast-now-dot{{width:8px;height:8px;border-radius:50%;background:var(--cfr);display:inline-block;animation:blink 1s infinite;margin-right:6px;}}
-@keyframes blink{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
-.pod-section{{background:var(--surf);border-bottom:2px solid var(--bdr);padding:0 var(--sp4);flex-shrink:0;}}
-.pod-hdr{{display:flex;align-items:center;justify-content:space-between;padding:var(--sp3) 0;cursor:pointer;user-select:none;}}
-.pod-title{{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.07em;}}
-.pod-toggle{{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--bdr);background:transparent;display:flex;align-items:center;justify-content:center;color:var(--txm);cursor:pointer;}}
-.pod-list{{display:flex;flex-direction:column;gap:var(--sp2);padding-bottom:var(--sp3);overflow-y:auto;-webkit-overflow-scrolling:touch;max-height:45vh;transition:max-height .3s ease,padding .3s ease,opacity .2s ease;opacity:1;}}
-.pod-list.collapsed{{max-height:0;padding-bottom:0;opacity:0;overflow:hidden;}}
-.pod-card{{display:flex;align-items:center;justify-content:space-between;padding:var(--sp3) var(--sp4);border-radius:var(--r-md);border:1.5px solid var(--bdr);cursor:pointer;transition:all var(--ease);background:var(--bg);}}
-.pod-card:active{{transform:scale(.98);}}
-.pod-card.active{{border-color:#8b5cf6;background:rgba(139,92,246,.08);}}
-.pod-card-left{{display:flex;flex-direction:column;gap:2px;}}
-.pod-label{{font-size:var(--text-sm);color:var(--tx);font-weight:600;}}
-.pod-meta{{font-size:10px;color:var(--txm);}}
-.pod-play-btn{{width:36px;height:36px;border-radius:50%;background:#8b5cf6;border:none;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;flex-shrink:0;}}
-.pod-now-dot{{width:8px;height:8px;border-radius:50%;background:#8b5cf6;display:inline-block;animation:blink 1s infinite;margin-right:6px;}}
-.pod-mini-player{{display:none;align-items:center;gap:var(--sp3);padding:var(--sp3) var(--sp4);background:linear-gradient(135deg,rgba(139,92,246,.12),rgba(139,92,246,.04));border-top:1px solid rgba(139,92,246,.2);border-radius:0 0 var(--r-md) var(--r-md);}}
-.pod-mini-player.active{{display:flex;}}
-.pod-mini-title{{flex:1;font-size:var(--text-sm);color:var(--tx);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}}
-.pod-mini-time{{font-size:10px;color:var(--txm);white-space:nowrap;}}
-.pod-progress{{width:100%;height:3px;border-radius:2px;background:var(--bdr);cursor:pointer;margin-top:4px;}}
-.pod-progress-fill{{height:100%;border-radius:2px;background:#8b5cf6;width:0%;transition:width .5s linear;}}
-.apick{{background:var(--surf);border-bottom:1px solid var(--bdr);padding:0 var(--sp4);flex-shrink:0;position:relative;z-index:10;}}
-.apick-hdr{{display:flex;align-items:center;justify-content:space-between;padding:var(--sp3) 0;cursor:pointer;user-select:none;}}
-.apick-title{{display:flex;align-items:center;gap:var(--sp2);font-size:var(--text-xs);font-weight:700;color:var(--txm);text-transform:uppercase;letter-spacing:.07em;}}
-.apick-toggle{{width:28px;height:28px;border-radius:var(--r-full);border:1px solid var(--bdr);background:transparent;display:flex;align-items:center;justify-content:center;color:var(--txm);cursor:pointer;transition:transform .3s ease;}}
-.apick-list{{
-  display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:var(--sp2);padding-bottom:var(--sp3);
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  max-height:30vh;
-  position:relative;z-index:10;
-  transition:max-height .25s ease,padding .25s ease,opacity .2s ease;
-  opacity:1;
+.vsl{{width:72px;-webkit-appearance:none;height:4px;border-radius:2px;background:var(--s200);cursor:pointer;}}
+.vsl::-webkit-slider-thumb{{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--red);}}
+/* ── Sponsor Card (Liquid Glass) ─────────────────────────────── */
+.sponsor-rail{{padding:var(--sp3) 0 0;border-top:1px solid var(--s200);margin-top:var(--sp1);display:flex;flex-direction:column;gap:var(--sp2);}}
+.sponsor-card{{border-radius:16px;overflow:hidden;
+  background:linear-gradient(135deg,rgba(251,191,36,.15) 0%,rgba(245,158,11,.10) 100%);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border:1px solid rgba(251,191,36,.35);
+  box-shadow:0 4px 20px rgba(245,158,11,.10);
+  padding:var(--sp3) var(--sp4);
 }}
-.apick-list.collapsed{{max-height:0;padding-bottom:0;opacity:0;overflow:hidden;}}
+.sponsor-card-inner{{display:flex;align-items:center;gap:var(--sp3);}}
+.sp-logo-wrap{{width:52px;height:52px;border-radius:12px;overflow:hidden;flex-shrink:0;
+  background:#fff;border:1.5px solid rgba(245,158,11,.35);
+  display:flex;align-items:center;justify-content:center;}}
+.sp-logo-img{{width:100%;height:100%;object-fit:contain;display:block;}}
+.sp-logo-fallback{{width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+  font-size:14px;font-weight:900;color:#fff;
+  background:linear-gradient(135deg,#F59E0B,#EF8C0A);}}
+.sp-info{{flex:1;min-width:0;}}
+.sp-badge{{font-size:9px;font-weight:700;color:#B45309;text-transform:uppercase;letter-spacing:.08em;margin:0 0 2px;}}
+.sp-name{{font-size:13px;font-weight:800;color:var(--navy);margin:0 0 1px;line-height:1.2;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}}
+.sp-tagline{{font-size:11px;color:var(--s500);margin:0;line-height:1.3;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}}
+.sp-actions{{display:flex;align-items:center;gap:var(--sp2);flex-shrink:0;}}
+.sp-cta{{display:inline-flex;align-items:center;padding:7px 14px;border-radius:50px;
+  font-size:12px;font-weight:700;color:#fff;text-decoration:none;
+  background:linear-gradient(135deg,#F59E0B,#EF8C0A);
+  box-shadow:0 3px 12px rgba(245,158,11,.35);
+  transition:transform .15s ease,box-shadow .15s ease;}}
+.sp-cta:hover{{transform:scale(1.04);box-shadow:0 5px 18px rgba(245,158,11,.45);}}
+.sp-vid-btn{{width:30px;height:30px;border-radius:50%;border:1.5px solid rgba(245,158,11,.5);
+  background:rgba(245,158,11,.12);color:#B45309;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:background .15s;}}
+.sp-vid-btn:hover{{background:rgba(245,158,11,.22);}}
+.sp-vid{{margin-top:var(--sp2);}}
+/* Legacy sponsor-bar kept for compat */
+.sponsor-bar{{display:none;}}
+.section-strip{{background:var(--white);border-bottom:1px solid var(--s200);flex-shrink:0;}}
+.section-hdr{{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px var(--sp5);cursor:pointer;user-select:none;
+  max-width:960px;margin:0 auto;
+}}
+.section-title{{display:flex;align-items:center;gap:var(--sp2);font-size:12px;font-weight:700;color:var(--s500);text-transform:uppercase;letter-spacing:.06em;}}
+.section-chevron{{
+  width:26px;height:26px;border-radius:50%;border:1.5px solid var(--s200);background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--s400);cursor:pointer;transition:transform .25s ease;flex-shrink:0;
+}}
+.section-body{{
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  max-height:42vh;
+  transition:max-height .28s ease,opacity .2s ease,padding .28s ease;
+  opacity:1;padding:0 var(--sp5) var(--sp3);
+}}
+.section-body.collapsed{{max-height:0;padding-top:0;padding-bottom:0;opacity:0;overflow:hidden;}}
+.pod-mini-player{{
+  display:none;align-items:center;gap:var(--sp3);
+  padding:var(--sp3) var(--sp5);
+  background:rgba(124,58,237,.05);border-bottom:1px solid rgba(124,58,237,.12);
+}}
+.pod-mini-player.active{{display:flex;}}
+.pod-mini-title{{flex:1;font-size:var(--ts);font-weight:600;color:var(--navy);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}}
+.pod-mini-time{{font-size:10px;color:var(--s400);white-space:nowrap;}}
+.pod-progress-wrap{{flex:1;display:flex;flex-direction:column;gap:3px;min-width:0;}}
+.pod-progress-bar{{width:100%;height:4px;border-radius:2px;background:var(--s200);cursor:pointer;accent-color:var(--pod);}}
+.pod-play-btn{{
+  width:34px;height:34px;border-radius:50%;background:var(--pod);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;cursor:pointer;flex-shrink:0;transition:all var(--ease);
+}}
+.pod-play-btn:hover{{background:#6d28d9;}}
+.card-list{{display:flex;flex-direction:column;gap:var(--sp2);}}
+.item-card{{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:var(--sp3) var(--sp4);border-radius:var(--r-lg);
+  border:1.5px solid var(--s200);background:var(--white);
+  cursor:pointer;transition:all var(--ease);box-shadow:var(--sh-card);
+}}
+.item-card:hover{{border-color:var(--s300);box-shadow:var(--sh-md);}}
+.item-card:active{{transform:scale(.98);}}
+.item-card.active{{border-color:var(--red);background:rgba(220,38,38,.03);}}
+.item-card.active-pod{{border-color:var(--pod);background:rgba(124,58,237,.03);}}
+.item-card-info{{display:flex;flex-direction:column;gap:2px;}}
+.item-card-label{{font-size:var(--ts);color:var(--navy);font-weight:500;}}
+.item-card-sub{{font-size:10px;color:var(--s400);}}
+.live-dot{{width:8px;height:8px;border-radius:50%;background:var(--red);display:inline-block;animation:blink 1.2s infinite;margin-right:6px;vertical-align:middle;}}
+.item-badge{{font-size:10px;font-weight:700;padding:2px 8px;border-radius:var(--r-full);background:var(--red);color:#fff;text-transform:uppercase;}}
+.play-circle{{
+  width:32px;height:32px;border-radius:50%;background:var(--pod);
+  display:flex;align-items:center;justify-content:center;
+  color:#fff;flex-shrink:0;transition:all var(--ease);
+}}
+.play-circle:hover{{transform:scale(1.08);}}
+.article-grid{{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+  gap:var(--sp2);overflow-y:auto;-webkit-overflow-scrolling:touch;
+  max-height:38vh;
+  transition:max-height .28s ease,opacity .2s ease,padding .28s ease;
+  opacity:1;padding:0 var(--sp5) var(--sp3);
+}}
+.article-grid.collapsed{{max-height:0;padding-bottom:0;opacity:0;overflow:hidden;}}
 .acard{{
   display:flex;align-items:flex-start;gap:var(--sp3);
-  padding:var(--sp3) var(--sp4);border-radius:var(--r-md);
-  border:1.5px solid var(--bdr);cursor:pointer;
-  transition:all var(--ease);background:var(--bg);
-  min-height:52px;
+  padding:var(--sp3) var(--sp4);border-radius:var(--r-lg);
+  border:1.5px solid var(--s200);background:var(--white);
+  cursor:pointer;transition:all var(--ease);box-shadow:var(--sh-card);min-height:52px;
 }}
+.acard:hover{{border-color:var(--s300);box-shadow:var(--sh-md);}}
 .acard:active{{transform:scale(.98);}}
-.acard.playing{{border-color:var(--cfr);background:var(--loop-on);}}
-.acard.cen:active,.acard.cen.playing{{border-color:var(--cen);}}
-.acard.ces:active,.acard.ces.playing{{border-color:var(--ces);}}
-.acard-num{{width:26px;height:26px;border-radius:var(--r-full);background:var(--cfr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;}}
-.acard.cen .acard-num{{background:var(--cen);}}
-.acard.ces .acard-num{{background:var(--ces);}}
-.acard-text{{font-size:var(--text-sm);color:var(--tx);line-height:1.4;font-weight:500;}}
-.acard-ts{{font-size:10px;color:var(--txm);margin-top:3px;}}
-
-/* ── MAIN CONTENT (scrollable) ──────────────────────────────────────────── */
+.acard.playing{{border-color:var(--cfr);background:rgba(220,38,38,.03);}}
+.acard.aen.playing{{border-color:var(--cen);background:rgba(37,99,235,.03);}}
+.acard.aes.playing{{border-color:var(--ces);background:rgba(22,163,74,.03);}}
+.acard-num{{
+  width:26px;height:26px;border-radius:50%;background:var(--red);color:#fff;
+  font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}}
+.acard.aen .acard-num{{background:var(--cen);}}
+.acard.aes .acard-num{{background:var(--ces);}}
+.acard-text{{font-size:var(--ts);color:var(--navy);line-height:1.4;font-weight:500;}}
+.acard-ts{{font-size:10px;color:var(--s400);margin-top:3px;}}
 .scroll-wrap{{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  -webkit-overflow-scrolling:touch;
-  overscroll-behavior-y:contain;
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior-y:contain;touch-action:pan-y;background:var(--s100);
 }}
-.main{{
-  max-width:960px;margin:0 auto;
-  padding:var(--sp6) var(--sp5) var(--sp8);
-  width:100%;
+.main{{max-width:960px;margin:0 auto;padding:var(--sp5) var(--sp5) var(--sp8);width:100%;}}
+.transcript-card{{
+  background:var(--white);border-radius:var(--r-xl);
+  border:1px solid var(--s200);box-shadow:var(--sh-card);
+  padding:var(--sp6) var(--sp6) var(--sp8);margin-bottom:var(--sp5);
 }}
-.vbtns{{display:none;}}/* hidden — view auto-selected by screen width */
-.vb{{
-  padding:var(--sp2) var(--sp4);border-radius:var(--r-md);
-  font-size:var(--text-sm);font-weight:700;
-  border:1.5px solid var(--bdr);color:var(--txm);
-  cursor:pointer;background:transparent;
-  transition:all var(--ease);
-  display:flex;align-items:center;gap:var(--sp2);
-  min-height:36px;
-}}
-.vb:active{{transform:scale(.97);}}
-.vb.o{{background:var(--surf);border-color:var(--tx);color:var(--tx);}}
-/* Text panel */
-#sv{{display:block;}}
-.lp{{display:none;animation:fi .2s ease;line-height:2.4;font-size:var(--text-lg);}}
-.lp.on{{display:block;}}
-.ph{{display:flex;align-items:center;gap:var(--sp3);margin-bottom:var(--sp5);padding-bottom:var(--sp4);border-bottom:1px solid var(--bdr);}}
-.ph-flag{{font-size:1.4rem;}}
-.ph-lang{{font-family:var(--font-d);font-size:var(--text-xl);font-weight:400;}}
+.ph{{display:flex;align-items:center;gap:var(--sp3);margin-bottom:var(--sp5);padding-bottom:var(--sp4);border-bottom:1px solid var(--s200);}}
+.ph-flag{{font-size:1.3rem;line-height:1;}}
+.ph-lang{{font-size:var(--tl);font-weight:700;letter-spacing:-.01em;}}
 .ph-lang.fr{{color:var(--cfr);}}
 .ph-lang.en{{color:var(--cen);}}
 .ph-lang.es{{color:var(--ces);}}
-.pdate{{margin-left:auto;font-size:var(--text-xs);color:var(--txm);font-weight:700;text-transform:uppercase;letter-spacing:.07em;}}
+.pdate{{margin-left:auto;font-size:var(--tx);color:var(--s400);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}}
+.lp{{display:none;animation:fi .2s ease;line-height:2.5;font-size:var(--tl);color:var(--s700);text-align:left;}}
+.lp.on{{display:block;}}
 .w{{display:inline;border-radius:4px;padding:0 2px;cursor:pointer;transition:background var(--ease),color var(--ease);}}
+.w:hover{{background:var(--s200);}}
 .w.hl{{background:var(--cfr);color:#fff;border-radius:4px;padding:0 3px;}}
 .w.hl-en{{background:var(--cen);color:#fff;}}
 .w.hl-es{{background:var(--ces);color:#fff;}}
 .triple{{display:none;gap:var(--sp5);}}
 .triple.on{{display:grid;grid-template-columns:1fr 1fr 1fr;}}
 .tc{{flex:1;}}
-.tch{{display:flex;align-items:center;gap:var(--sp2);margin-bottom:var(--sp4);padding-bottom:var(--sp3);border-bottom:1px solid var(--bdr);}}
+.tch{{display:flex;align-items:center;gap:var(--sp2);margin-bottom:var(--sp4);padding-bottom:var(--sp3);border-bottom:1px solid var(--s200);}}
 .tch-f{{font-size:1.1rem;}}
-.tch-l{{font-size:var(--text-sm);font-weight:700;}}
+.tch-l{{font-size:var(--ts);font-weight:700;}}
 .tch-l.fr{{color:var(--cfr);}}
 .tch-l.en{{color:var(--cen);}}
 .tch-l.es{{color:var(--ces);}}
-.twp{{display:block;line-height:2.0;font-size:var(--text-sm);}}
+.twp{{display:block;line-height:2.0;font-size:var(--ts);}}
+.loop-banner{{
+  display:none;align-items:center;justify-content:center;gap:var(--sp3);
+  margin-bottom:var(--sp4);padding:var(--sp3) var(--sp5);
+  border-radius:var(--r-lg);background:var(--red-glow);
+  border:1px solid rgba(220,38,38,.22);color:var(--red);font-size:var(--ts);font-weight:700;
+}}
+.loop-banner.show{{display:flex;}}
+.loop-spin{{animation:spin 2s linear infinite;display:inline-block;}}
 .tip{{
-  margin-top:var(--sp8);background:var(--surf);
-  border:1px solid var(--bdr);border-radius:var(--r-lg);
-  padding:var(--sp4) var(--sp5);
-  display:flex;gap:var(--sp4);align-items:flex-start;position:relative;
+  background:var(--white);border:1px solid var(--s200);border-radius:var(--r-xl);
+  box-shadow:var(--sh-card);padding:var(--sp4) var(--sp5);
+  display:flex;gap:var(--sp4);align-items:flex-start;position:relative;margin-bottom:var(--sp5);
 }}
-.tip-close{{
-  position:absolute;top:var(--sp2);right:var(--sp3);
-  background:none;border:none;cursor:pointer;
-  color:var(--txm);font-size:14px;
-  padding:4px 8px;border-radius:4px;line-height:1;opacity:.5;
-  min-height:28px;
-}}
-.tip-close:active{{opacity:1;background:var(--bdr);}}
+.tip-close{{position:absolute;top:var(--sp2);right:var(--sp3);background:none;cursor:pointer;color:var(--s400);font-size:14px;padding:4px 8px;border-radius:4px;line-height:1;opacity:.6;min-height:28px;}}
+.tip-close:active{{opacity:1;background:var(--s100);}}
 .tip-ico{{font-size:1.3rem;flex-shrink:0;}}
-.tip-body{{font-size:var(--text-sm);color:var(--txm);line-height:1.6;}}
-.tip-title{{font-weight:700;color:var(--tx);margin-bottom:4px;}}
+.tip-body{{font-size:var(--ts);color:var(--s500);line-height:1.6;}}
+.tip-title{{font-weight:700;color:var(--navy);margin-bottom:4px;}}
 .kbd-hint{{display:flex;gap:var(--sp4);justify-content:center;flex-wrap:wrap;margin-top:var(--sp6);}}
-.kbd{{display:flex;align-items:center;gap:6px;font-size:var(--text-xs);color:var(--txf);}}
-.key{{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;padding:0 6px;border-radius:4px;background:var(--surf2);border:1px solid var(--bdr);font-size:11px;font-weight:700;color:var(--txm);}}
-footer{{text-align:center;padding:var(--sp4);font-size:var(--text-xs);color:var(--txf);border-top:1px solid var(--bdr);background:var(--surf);flex-shrink:0;}}
-
-/* ── ANIMATIONS ─────────────────────────────────────────────────────────── */
+.kbd{{display:flex;align-items:center;gap:6px;font-size:var(--tx);color:var(--s400);}}
+.key{{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:22px;padding:0 6px;border-radius:4px;background:var(--s100);border:1px solid var(--s200);font-size:11px;font-weight:700;color:var(--s500);}}
+footer{{text-align:center;padding:var(--sp3) var(--sp5);font-size:var(--tx);color:var(--s400);border-top:1px solid var(--s200);background:var(--white);flex-shrink:0;}}
 @keyframes fi{{from{{opacity:0;transform:translateY(4px)}}to{{opacity:1;transform:none}}}}
 @keyframes pulse{{0%,100%{{opacity:.4}}50%{{opacity:1}}}}
 @keyframes spin{{to{{transform:rotate(360deg)}}}}
-
-/* ── MOBILE ─────────────────────────────────────────────────────────────── */
+@keyframes blink{{0%,100%{{opacity:1}}50%{{opacity:.3}}}}
 @media(max-width:640px){{
-  .hdr{{padding:8px var(--sp3);gap:var(--sp2);}}
-  .logo-text{{display:none;}}
-  .player{{padding:var(--sp3);}}
+  .hdr{{padding:0 var(--sp4);height:52px;gap:var(--sp2);}}
+  .logo-sub{{display:none;}}
+  .player{{padding:var(--sp3) var(--sp4);}}
   .ltabs{{display:none;}}
   .vol{{display:none;}}
-  .main{{padding:var(--sp4) var(--sp3) var(--sp8);}}
+  .main{{padding:var(--sp4) var(--sp4) var(--sp8);}}
+  .transcript-card{{padding:var(--sp4) var(--sp4) var(--sp6);}}
   .kbd-hint{{display:none;}}
-  .apick{{padding:0 var(--sp3);}}
-  .lp{{font-size:var(--text-base);line-height:2.2;}}
-  .apick-list{{grid-template-columns:1fr;}}
+  .section-hdr{{padding:10px var(--sp4);}}
+  .section-body{{padding:0 var(--sp4) var(--sp3);}}
+  .article-grid{{padding:0 var(--sp4) var(--sp3);grid-template-columns:1fr;}}
+  .lp{{font-size:var(--tb);line-height:2.3;}}
+  .hlt{{padding:4px 9px;font-size:11px;}}
+  .hplay span{{display:none;}}
+  .hplay{{padding:0 var(--sp3);}}
 }}
 </style>
 </head>
@@ -798,28 +818,35 @@ footer{{text-align:center;padding:var(--sp4);font-size:var(--text-xs);color:var(
 <audio id="aes" preload="auto"></audio>
 
 <header class="hdr">
-  <div class="logo">
-    <div class="logo-m">M</div>
-    <div class="logo-text"><div class="logo-n">Mole FM</div><div class="logo-s">Lecteur Trilingue</div></div>
-  </div>
+  <a class="logo" href="#">
+    <div class="logo-mark">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 1C5.9 1 1 5.9 1 12s4.9 11 11 11 11-4.9 11-11S18.1 1 12 1zm0 3c.6 0 1 .4 1 1v5.6l3.4 3.4c.4.4.4 1 0 1.4-.4.4-1 .4-1.4 0l-3.7-3.7c-.2-.2-.3-.4-.3-.7V5c0-.6.4-1 1-1z"/></svg>
+    </div>
+    <div>
+      <div class="logo-name">Môle <span>FM</span></div>
+      <div class="logo-sub">Lecteur Trilingue</div>
+    </div>
+  </a>
   <div class="hdr-langs">
     <button class="hlt afr" id="hlt-fr" data-lang="fr" onclick="switchLang('fr')">🇫🇷 FR</button>
     <button class="hlt" id="hlt-en" data-lang="en" onclick="switchLang('en')">🇬🇧 EN</button>
     <button class="hlt" id="hlt-es" data-lang="es" onclick="switchLang('es')">🇪🇸 ES</button>
   </div>
-  <div class="hdr-speed" id="hdrSpeed">
-    <div class="hspd-trigger" id="hspdTrigger" onclick="toggleSpeedPopover()">
-      <span id="hspdLabel">1×</span>
-      <span class="arrow">▼</span>
-    </div>
-    <div class="hspd-popover" id="hspdPopover">{hspd_btns}</div>
-  </div>
   <div class="hdr-r">
+    <div class="hdr-speed" id="hdrSpeed">
+      <div class="hspd-trigger" id="hspdTrigger" onclick="toggleSpeedPopover()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span id="hspdLabel">1×</span>
+        <span class="arrow">▾</span>
+      </div>
+      <div class="hspd-popover" id="hspdPopover">{hspd_btns}</div>
+    </div>
     <button class="hplay" id="hplaybtn" onclick="togglePlay()" aria-label="Lecture / Pause">
-      <svg id="hpico" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg id="hpico" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+      <span id="hplayLabel">Écouter</span>
     </button>
-    <button class="tbtn" id="themeBtn" aria-label="Changer le thème">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+    <button class="tbtn" id="themeBtn" aria-label="Thème">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
     </button>
   </div>
 </header>
@@ -833,7 +860,7 @@ footer{{text-align:center;padding:var(--sp4);font-size:var(--text-xs);color:var(
     </div>
     <div class="ctrl">
       <button class="pb" id="pbtn" onclick="togglePlay()" aria-label="Lecture / Pause">
-        <svg id="pico" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        <svg id="pico" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
       </button>
       <div class="pw">
         <div class="pbar" id="pbar" onclick="seekClick(event)">
@@ -842,115 +869,115 @@ footer{{text-align:center;padding:var(--sp4);font-size:var(--text-xs);color:var(
         <div class="trow"><span id="tel">0:00</span><span id="tdur">0:00</span></div>
       </div>
       <div class="vol">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11,5 6,9 2,9 2,15 6,15 11,19"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <input type="range" class="vsl" id="vsl" min="0" max="1" step="0.05" value="1" oninput="setVol(this.value)">
       </div>
     </div>
     <div class="ctrl2">
       <button class="loop-btn" id="loopBtn" onclick="toggleLoop()">
         <span class="loop-dot"></span>
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-        Boucle
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+        Lecture continue
       </button>
     </div>
     {sponsor_badge}
   </div>
 </div>
 
-<!-- Article Picker (outside scroll-wrap so it doesn't fight scroll height) -->
-<div class="pod-section" id="podSection">
+<div class="section-strip" id="podSection">
   <div class="pod-mini-player" id="podMiniPlayer">
-    <div style="flex:1;min-width:0;">
+    <div class="pod-progress-wrap">
       <div class="pod-mini-title" id="podMiniTitle">Podcast en cours</div>
-      <progress class="pod-progress" id="podProgress" value="0" max="100" style="width:100%;height:3px;accent-color:#8b5cf6;"></progress>
+      <progress class="pod-progress-bar" id="podProgress" value="0" max="100"></progress>
     </div>
     <span class="pod-mini-time" id="podMiniTime">0:00</span>
-    <button class="pod-play-btn" onclick="togglePodPlay()" id="podPlayBtn" style="background:#8b5cf6;">
-      <svg id="podPlayIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+    <button class="pod-play-btn" onclick="togglePodPlay()" id="podPlayBtn">
+      <svg id="podPlayIcon" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
     </button>
   </div>
-  <div class="pod-hdr" onclick="togglePodPicker()">
-    <div class="pod-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg>
-      <span>Podcasts Mole FM</span>
+  <div class="section-hdr" onclick="togglePodPicker()">
+    <div class="section-title">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M6.3 6.3a8 8 0 0 0 0 11.4M17.7 6.3a8 8 0 0 1 0 11.4"/></svg>
+      Podcasts Mole FM
     </div>
-    <div class="pod-toggle" id="podToggle">
-      <svg id="podChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
-    </div>
-  </div>
-  <div class="pod-list collapsed" id="podList"></div>
-</div>
-<div class="bcast-picker" id="broadcastPicker">
-  <div class="bcast-hdr" onclick="toggleBcastPicker()">
-    <div class="bcast-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-      <span>Bulletins des 24 dernières heures</span>
-    </div>
-    <div class="bcast-toggle" id="bcastToggle">
-      <svg id="bcastChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <div class="section-chevron" id="podChevron">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </div>
-  <div class="bcast-list collapsed" id="bcastList"></div>
+  <div class="section-body collapsed" id="podList"><div class="card-list" id="podCardList"></div></div>
 </div>
-<div class="apick" id="articlePicker">
-  <div class="apick-hdr" onclick="togglePicker()">
-    <div class="apick-title">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 10h16M4 14h10"/></svg>
+
+<div class="section-strip" id="broadcastPicker">
+  <div class="section-hdr" onclick="toggleBcastPicker()">
+    <div class="section-title">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      Bulletins des 24 dernières heures
+    </div>
+    <div class="section-chevron" id="bcastChevron">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+  </div>
+  <div class="section-body collapsed" id="bcastList"><div class="card-list" id="bcastCardList"></div></div>
+</div>
+
+<div class="section-strip" id="articlePicker">
+  <div class="section-hdr" onclick="togglePicker()">
+    <div class="section-title">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 6h16M4 10h16M4 14h10"/></svg>
       <span id="apickLabel">Articles — Cliquez pour écouter</span>
     </div>
-    <div class="apick-toggle" id="apickToggle">
-      <svg id="apickChevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    <div class="section-chevron" id="apickChevron">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
     </div>
   </div>
-  <div class="apick-list collapsed" id="apickList"></div>
+  <div class="article-grid collapsed" id="apickList"></div>
 </div>
 
 <div class="scroll-wrap" id="scrollWrap">
 <main class="main">
 
-  <!-- Single view -->
-  <div id="sv">
-    <div class="ph">
-      <span class="ph-flag" id="phflag">🇫🇷</span>
-      <span class="ph-lang fr" id="phlang">Français</span>
-      <span class="pdate" id="bdate">{bdate_fr}</span>
-    </div>
-    {words_fr}
-    {words_en}
-    {words_es}
+  <div class="loop-banner" id="loopBanner">
+    <span class="loop-spin">↻</span> Mode boucle actif — lecture en continu
   </div>
 
-  <!-- Triple view -->
+  <div id="sv">
+    <div class="transcript-card">
+      <div class="ph">
+        <span class="ph-flag" id="phflag">🇫🇷</span>
+        <span class="ph-lang fr" id="phlang">Français</span>
+        <span class="pdate" id="bdate">{bdate_fr}</span>
+      </div>
+      {words_fr}
+      {words_en}
+      {words_es}
+    </div>
+  </div>
+
   <div class="triple" id="tv">
     <div class="tc"><div class="tch"><span class="tch-f">🇫🇷</span><span class="tch-l fr">Français</span></div>{tw_fr}</div>
     <div class="tc"><div class="tch"><span class="tch-f">🇬🇧</span><span class="tch-l en">English</span></div>{tw_en}</div>
     <div class="tc"><div class="tch"><span class="tch-f">🇪🇸</span><span class="tch-l es">Español</span></div>{tw_es}</div>
   </div>
 
-  <div class="loop-banner" id="loopBanner">
-    <span class="loop-spin">↻</span> Mode boucle actif — lecture en continu
-  </div>
-
   <div class="tip" id="tipBox">
     <div class="tip-ico">📖</div>
     <div class="tip-body">
-      <div class="tip-title">Lecteur de littératie</div>
-      Suivez le mot en surbrillance pour apprendre à lire tout en vous informant. · Follow the highlighted word to build reading skills while staying informed. · Sigue la palabra resaltada para aprender a leer.
+      <div class="tip-title">Lecteur de littératie Mole FM</div>
+      Suivez le mot en surbrillance pour apprendre à lire tout en restant informé(e). · Follow the highlighted word to build reading skills while staying informed. · Sigue la palabra resaltada para aprender a leer.
     </div>
     <button class="tip-close" onclick="document.getElementById('tipBox').style.display='none'" aria-label="Fermer">✕</button>
   </div>
 
   <div class="kbd-hint">
-    <div class="kbd"><span class="key">Space</span> Lecture/Pause</div>
+    <div class="kbd"><span class="key">Espace</span> Lecture/Pause</div>
     <div class="kbd"><span class="key">←</span><span class="key">→</span> ±5s</div>
     <div class="kbd"><span class="key">L</span> Boucle</div>
     <div class="kbd"><span class="key">+</span><span class="key">−</span> Vitesse</div>
   </div>
 </main>
+</div>
 
-</div><!-- /scroll-wrap -->
-<footer>Mole FM 94.5 — Mole-Saint-Nicolas · Bulletin généré automatiquement · JUNO RadioOS</footer>
-
+<footer>Mole FM 94.5 — Môle-Saint-Nicolas · Bulletin généré automatiquement · JUNO RadioOS</footer>
 <script>
 // ── AUDIO SOURCES (relative URLs — separate static .mp3 files) ──────────────
 // PERMANENT FIX: Audio is NOT embedded as base64 in this script.
@@ -1016,11 +1043,9 @@ function init(){{
 
   // Activate default language panel
   document.getElementById('wfr').classList.add('on');
-  // Auto-pick view: single on mobile (<900px), triple on wide desktop
-  setView(window.innerWidth>=900?'triple':'single');
-  // Keep picker collapsed on load; show chevron pointing right
-  const ch=document.getElementById('apickChevron');
-  if(ch)ch.style.transform='rotate(-90deg)';
+  // Always single view by default (user instruction: only selected language shown)
+  setView('single');
+  // Keep all pickers collapsed on load
   buildPicker();
   buildBcastPicker();
   buildPodPicker();
@@ -1031,11 +1056,13 @@ function showPause(){{
   const ico='<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
   document.getElementById('pico').innerHTML=ico;
   const h=document.getElementById('hpico');if(h)h.innerHTML=ico;
+  const hl=document.getElementById('hplayLabel');if(hl)hl.textContent='Pause';
 }}
 function showPlay(){{
   const ico='<polygon points="5,3 19,12 5,21"/>';
   document.getElementById('pico').innerHTML=ico;
   const h=document.getElementById('hpico');if(h)h.innerHTML=ico;
+  const hl=document.getElementById('hplayLabel');if(hl)hl.textContent='Écouter';
 }}
 function togglePlay(){{
   const a=au(lang);
@@ -1118,6 +1145,14 @@ function toggleSpeedPopover(){{
     }};
     setTimeout(()=>document.addEventListener('click',close,true),10);
   }}
+}}
+function toggleSpVid(id){{
+  const el=document.getElementById('spvid-'+id);
+  if(!el)return;
+  const isOpen=el.style.display!=='none';
+  el.style.display=isOpen?'none':'block';
+  const vid=el.querySelector('video');
+  if(vid){{if(isOpen)vid.pause();else vid.play().catch(()=>{{}});}}
 }}
 function setSpeed(s){{
   currentSpeed=s;
@@ -1240,21 +1275,21 @@ let _podPickerOpen = false;
 let _activePodFilename = null;
 
 function buildPodPicker(){{
-  const list = document.getElementById('podList'); if(!list) return;
+  const list = document.getElementById('podCardList'); if(!list) return;
   if(!PODCASTS||!PODCASTS.length){{
-    list.innerHTML='<div style="padding:var(--sp3);font-size:var(--text-sm);color:var(--txm);">Aucun podcast disponible pour le moment.</div>';
+    list.innerHTML='<div style="padding:var(--sp3);font-size:var(--ts);color:var(--s400);">Aucun podcast disponible pour le moment.</div>';
     return;
   }}
   list.innerHTML = PODCASTS.map((p,i) => {{
     const isActive = _activePodFilename === p.filename;
-    return `<div class="pod-card ${{isActive?'active':''}}" id="pd-${{i}}" onclick="loadPodcast('${{p.audio_url}}','${{p.filename}}','${{p.label}}','${{p.est_min}}')">
-      <div class="pod-card-left">
-        <div class="pod-label">${{isActive?'<span class="pod-now-dot"></span>':''}}<strong>${{p.label}}</strong></div>
-        <div class="pod-meta">~${{p.est_min}} min · Français</div>
+    return `<div class="item-card ${{isActive?'active-pod':''}}" id="pd-${{i}}" onclick="loadPodcast('${{p.audio_url}}','${{p.filename}}','${{p.label}}','${{p.est_min}}')">
+      <div class="item-card-info">
+        <div class="item-card-label">${{isActive?'<span class="live-dot"></span>':''}}<strong>${{p.label}}</strong></div>
+        <div class="item-card-sub">~${{p.est_min}} min · Français</div>
       </div>
-      <button class="pod-play-btn" style="background:${{isActive?'#7c3aed':'#8b5cf6'}};">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-      </button>
+      <div class="play-circle" style="background:${{isActive?'#6d28d9':'#7c3aed'}};">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+      </div>
     </div>`;
   }}).join('');
 }}
@@ -1305,7 +1340,7 @@ function togglePodPicker(){{
   _podPickerOpen = !_podPickerOpen;
   document.getElementById('podList').classList.toggle('collapsed', !_podPickerOpen);
   const ch = document.getElementById('podChevron');
-  if(ch) ch.style.transform = _podPickerOpen ? '' : 'rotate(-90deg)';
+  if(ch) ch.style.transform = _podPickerOpen ? 'rotate(180deg)' : '';
 }}
 
 // ── BROADCASTS ARCHIVE PICKER ─────────────────────────────────────────────────────
@@ -1313,19 +1348,20 @@ let _bcastPickerOpen=false;
 let _activeBcastFilename=null; // filename of currently loaded broadcast (null=current)
 
 function buildBcastPicker(){{
-  const list=document.getElementById('bcastList');if(!list)return;
+  const list=document.getElementById('bcastCardList');if(!list)return;
   if(!BROADCASTS||!BROADCASTS.length){{
-    list.innerHTML='<div style="padding:var(--sp3);font-size:var(--text-sm);color:var(--txm);">Aucun bulletin disponible</div>';
+    list.innerHTML='<div style="padding:var(--sp3);font-size:var(--ts);color:var(--s400);">Aucun bulletin disponible</div>';
     return;
   }}
   list.innerHTML=BROADCASTS.map((b,i)=>{{
     const isCurrent=b.is_current;
     const isActive=_activeBcastFilename===b.filename||(isCurrent&&!_activeBcastFilename);
-    return`<div class="bcast-card ${{isActive?'active':''}}" id="bc-${{i}}" onclick="loadBroadcastFromPicker('${{b.audio_url}}','${{b.filename}}','${{b.label}}')">
-      <div class="bcast-label">
-        ${{isActive?'<span class="bcast-now-dot"></span>':''}}<strong>${{b.label}}</strong>
+    return`<div class="item-card ${{isActive?'active':''}}" id="bc-${{i}}" onclick="loadBroadcastFromPicker('${{b.audio_url}}','${{b.filename}}','${{b.label}}')">
+      <div class="item-card-info">
+        <div class="item-card-label">${{isActive?'<span class="live-dot"></span>':''}}<strong>${{b.label}}</strong></div>
+        ${{isCurrent?'<div class="item-card-sub">🔴 En direct</div>':''}}
       </div>
-      ${{isCurrent?'<span class="bcast-badge">En direct</span>':'' }}
+      ${{isCurrent?'<span class="item-badge">Live</span>':''}}
     </div>`;
   }}).join('');
 }}
@@ -1361,14 +1397,14 @@ function toggleBcastPicker(){{
   _bcastPickerOpen=!_bcastPickerOpen;
   document.getElementById('bcastList').classList.toggle('collapsed',!_bcastPickerOpen);
   const ch=document.getElementById('bcastChevron');
-  if(ch)ch.style.transform=_bcastPickerOpen?'':' rotate(-90deg)';
+  if(ch)ch.style.transform=_bcastPickerOpen?'rotate(180deg)':'';
 }}
 
 // ── ARTICLE PICKER ────────────────────────────────────────────────────────────
 function buildPicker(){{
   const list=document.getElementById('apickList');if(!list)return;
   const items=(ARTICLES[lang]||[]);
-  const cc={{fr:'',en:'cen',es:'ces'}};
+  const cc={{fr:'',en:'aen',es:'aes'}};
   const labels={{fr:'Articles — Cliquez pour écouter',en:'Articles — Tap to listen',es:'Artículos — Pulsa para escuchar'}};
   const el=document.getElementById('apickLabel');
   if(el)el.textContent=labels[lang]||labels.fr;
@@ -1379,7 +1415,7 @@ function buildPicker(){{
       <div class="acard-num">${{a.num}}</div>
       <div><div class="acard-text">${{a.title}}</div><div class="acard-ts">${{mins}}m${{secs}}s</div></div>
     </div>`;
-  }}).join(''):'<div style="padding:var(--sp3);font-size:var(--text-sm);color:var(--txm);">Aucun article disponible</div>';
+  }}).join(''):'<div style="padding:var(--sp3);font-size:var(--ts);color:var(--s400);">Aucun article disponible</div>';
 }}
 function jumpArticle(num){{
   const items=(ARTICLES[lang]||[]);
@@ -1406,7 +1442,7 @@ function togglePicker(){{
   pickerOpen=!pickerOpen;
   document.getElementById('apickList').classList.toggle('collapsed',!pickerOpen);
   const ch=document.getElementById('apickChevron');
-  if(ch)ch.style.transform=pickerOpen?'':'rotate(-90deg)';
+  if(ch)ch.style.transform=pickerOpen?'rotate(180deg)':'';
 }}
 
 // ── KEYBOARD SHORTCUTS ────────────────────────────────────────────────────────
@@ -1428,3 +1464,34 @@ window.addEventListener('DOMContentLoaded',init);
 </body>
 </html>"""
 
+
+
+if __name__ == "__main__":
+    import sys as _sys
+    print("[build_reader] Standalone rebuild starting...")
+    # Locate latest script for word timings
+    _scripts_dir = os.path.dirname(os.path.abspath(__file__))
+    _scripts_out = os.path.join(_scripts_dir, "..", "audio", "scripts")
+    _script_file = None
+    _audio_file = None
+    # Find most recent .json script and matching audio
+    if os.path.isdir(_scripts_out):
+        _jsons = sorted([f for f in os.listdir(_scripts_out) if f.endswith('.json')], reverse=True)
+        if _jsons:
+            _script_file = os.path.join(_scripts_out, _jsons[0])
+    _audio_dir = os.path.join(_scripts_dir, "..", "reader", "webapp")
+    _audio_fr = os.path.join(_audio_dir, "audio_fr.mp3")
+    if os.path.exists(_audio_fr):
+        _audio_file = _audio_fr
+    if _script_file and _audio_file:
+        print(f"  Script: {_script_file}")
+        print(f"  Audio:  {_audio_file}")
+        result = build(_script_file, _audio_file)
+        if result:
+            print(f"[build_reader] Done → {result}")
+        else:
+            print("[build_reader] Build returned None — check script/audio files")
+    else:
+        print(f"[build_reader] Missing script ({_script_file}) or audio ({_audio_file})")
+        print("  Run from pipeline: python3 run_pipeline.py")
+        _sys.exit(1)
