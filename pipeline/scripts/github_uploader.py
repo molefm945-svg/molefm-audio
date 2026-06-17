@@ -147,6 +147,58 @@ def save_url_to_registry(audio_type, filename, url):
         json.dump(registry, f, indent=2, ensure_ascii=False)
 
 
+def update_github_registry(audio_type, url):
+    """
+    Update the public registry.json on GitHub so the reader can detect new broadcasts.
+    registry.json: {"latest_newscast": "...", "latest_podcast": "...", "updated_at": "..."}
+    """
+    import base64 as _b64
+    try:
+        # Fetch current registry from GitHub
+        reg_path = "registry.json"
+        sha = _get_file_sha(reg_path)
+        if sha:
+            reg_url = f"{API_BASE}/{reg_path}?ref={BRANCH}"
+            req = urllib.request.Request(reg_url, headers=_api_headers())
+            with urllib.request.urlopen(req, timeout=15) as r:
+                data = json.loads(r.read())
+                current = json.loads(
+                    _b64.b64decode(data["content"].replace("\n", "")).decode()
+                )
+        else:
+            current = {}
+
+        field = "latest_newscast" if audio_type == "newscast" else "latest_podcast"
+        current[field] = url
+        current["updated_at"] = datetime.datetime.now(
+            datetime.timezone.utc
+        ).isoformat().replace("+00:00", "Z")
+
+        content_b64 = _b64.b64encode(
+            json.dumps(current, indent=2).encode()
+        ).decode()
+        payload = {
+            "message": f"update: registry.json — {field}",
+            "content": content_b64,
+            "branch": BRANCH,
+        }
+        if sha:
+            payload["sha"] = sha
+
+        put_url = f"{API_BASE}/{reg_path}"
+        req2 = urllib.request.Request(
+            put_url,
+            data=json.dumps(payload).encode(),
+            headers=_api_headers(),
+            method="PUT",
+        )
+        with urllib.request.urlopen(req2, timeout=30) as r:
+            pass
+        print(f"  [GitHub Registry] \u2713 updated {field}")
+    except Exception as e:
+        print(f"  [GitHub Registry] non-fatal: {e}")
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: python github_uploader.py [newscast|podcast] /path/to/file.mp3")
@@ -163,5 +215,6 @@ if __name__ == "__main__":
     filename = os.path.basename(mp3_path)
     save_url_to_registry(audio_type, filename, url)
     print(f"  [Registry] Saved to audio_registry.json")
+    update_github_registry(audio_type, url)
     # Print URL as final line (parsed by run_pipeline.py)
     print(url)
