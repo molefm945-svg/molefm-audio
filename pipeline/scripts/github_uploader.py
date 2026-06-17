@@ -27,6 +27,10 @@ GIT_USER_NAME = "Mole FM"
 RAW_BASE = "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main"
 
 
+# Path to the git proxy config (written by pplx credential injector)
+GIT_PROXY_CONFIG = "/home/user/.gitconfig-proxy"
+
+
 def _git_env():
     """Build env dict with git credentials and author info."""
     env = os.environ.copy()
@@ -34,8 +38,12 @@ def _git_env():
     env["GIT_AUTHOR_EMAIL"] = GIT_USER_EMAIL
     env["GIT_COMMITTER_NAME"] = GIT_USER_NAME
     env["GIT_COMMITTER_EMAIL"] = GIT_USER_EMAIL
-    # Ensure credential token is available in subprocess context
-    # The git helper uses $GH_ENTERPRISE_TOKEN — propagate it explicitly
+    # Always force the proxy gitconfig so the credential helper is available
+    # (contains: credential helper using $GH_ENTERPRISE_TOKEN, and insteadOf rule)
+    if os.path.exists(GIT_PROXY_CONFIG):
+        env["GIT_CONFIG_GLOBAL"] = GIT_PROXY_CONFIG
+        env["GH_HOST"] = "git-agent-proxy.perplexity.ai"
+    # Propagate the enterprise token so the credential helper can read it
     token = os.environ.get("GH_ENTERPRISE_TOKEN", "")
     if token:
         env["GH_ENTERPRISE_TOKEN"] = token
@@ -53,26 +61,56 @@ def run_git(args, cwd=REPO_DIR, capture=True):
     return result.stdout.strip() if capture else None
 
 
+def _git_clone():
+    """Clone using the git-agent-proxy URL (no gh CLI needed)."""
+    result = subprocess.run(
+        ["git", "clone", "--depth=1", REPO_URL, REPO_DIR],
+        capture_output=True, text=True, env=_git_env()
+    )
+    if result.returncode != 0:
+        raise RuntimeError(f"git clone failed: {result.stderr.strip()[:400]}")
+
+
+def _is_valid_git_repo(path):
+    """Return True if path is a valid git repo (git rev-parse succeeds)."""
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "--git-dir"],
+            cwd=path, capture_output=True, text=True, env=_git_env()
+        )
+        return result.returncode == 0
+    except Exception:
+        return False
+
+
 def ensure_repo():
     """Clone or pull the molefm-audio repo to /tmp."""
-    if os.path.exists(os.path.join(REPO_DIR, ".git")):
-        # Already cloned — pull latest
+    git_dir = os.path.join(REPO_DIR, ".git")
+
+    # Pre-flight: verify the repo is actually valid before attempting pull
+    if os.path.exists(git_dir) and _is_valid_git_repo(REPO_DIR):
+        # Valid repo — pull latest
         try:
             run_git(["pull", "origin", "main", "--rebase"])
-        except RuntimeError as e:
-            # If pull fails, re-clone
+        except Exception as e:  # broad catch: RuntimeError, FileNotFoundError, OSError, etc.
+            # Pull failed for any reason — nuke and reclone
             print(f"  [GitHub] Pull failed ({e}), re-cloning...")
             shutil.rmtree(REPO_DIR, ignore_errors=True)
-            subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True,
-                          env=_git_env())
+            _git_clone()
     else:
-        os.makedirs(os.path.dirname(REPO_DIR), exist_ok=True)
-        subprocess.run(["git", "clone", REPO_URL, REPO_DIR], check=True,
-                      env=_git_env())
+        # .git missing, invalid, or partial directory structure (e.g. from
+        # content_pack_generator.py writing to /tmp/molefm-audio-repo/public/
+        # before a clone happens) — remove everything and clone fresh
+        if os.path.exists(REPO_DIR):
+            print(f"  [GitHub] Stale or corrupt repo dir detected, removing...")
+            shutil.rmtree(REPO_DIR, ignore_errors=True)
+        _git_clone()
 
-    # Set git config
+    # Always set git config after clone/pull
     run_git(["config", "user.email", GIT_USER_EMAIL])
     run_git(["config", "user.name", GIT_USER_NAME])
+    # Ensure push remote is using the proxy URL
+    run_git(["remote", "set-url", "origin", REPO_URL])
 
 
 def upload_audio(audio_type, mp3_path):

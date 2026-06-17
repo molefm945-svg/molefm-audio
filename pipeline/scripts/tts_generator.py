@@ -18,6 +18,7 @@ import glob
 import asyncio
 import datetime
 import subprocess
+import time
 import edge_tts
 
 SCRIPTS_DIR  = "/home/user/workspace/molefm/scripts"
@@ -64,17 +65,34 @@ async def synth_async(text, voice, rate, volume, output_path):
     print(f"    [OK] {os.path.basename(output_path)} — {voice} ({size//1024} KB)")
 
 
-def synth(text, segment_name, output_path):
-    """Synthesize one segment to MP3."""
+def synth(text, segment_name, output_path, max_retries=4):
+    """Synthesize one segment to MP3 with exponential-backoff retry.
+    edge-tts can return transient 503 / WebSocket errors — retry up to 4x
+    with 2s, 4s, 8s, 16s delays before giving up.
+    """
     voice  = VOICE_MAP.get(segment_name,  VOICE_MAP["default"])
     rate   = RATE_MAP.get(segment_name,   RATE_MAP["default"])
     volume = VOLUME_MAP.get(segment_name, VOLUME_MAP["default"])
-    try:
-        asyncio.run(synth_async(text, voice, rate, volume, output_path))
-        return True
-    except Exception as e:
-        print(f"    [ERROR] {segment_name}: {e}")
-        return False
+
+    for attempt in range(1, max_retries + 1):
+        try:
+            asyncio.run(synth_async(text, voice, rate, volume, output_path))
+            return True
+        except Exception as e:
+            err_str = str(e)
+            is_transient = any(x in err_str for x in ["503", "502", "500", "429",
+                                                        "ConnectionError", "TimeoutError",
+                                                        "Invalid response", "WebSocket",
+                                                        "wss://", "Connection"])
+            if is_transient and attempt < max_retries:
+                wait = 2 ** attempt  # 2, 4, 8, 16 seconds
+                print(f"    [RETRY {attempt}/{max_retries}] {segment_name}: {e} — retrying in {wait}s...")
+                time.sleep(wait)
+            else:
+                print(f"    [ERROR] {segment_name}: {e}")
+                return False
+
+    return False
 
 
 def add_silence(ms, output_path):

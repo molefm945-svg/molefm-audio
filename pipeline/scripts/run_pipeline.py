@@ -232,11 +232,19 @@ def run():
         _time_str = _parts[2] if len(_parts) > 2 else '0000'
         _title = f"Mole FM Nouvèl — {_date_str[:4]}-{_date_str[4:6]}-{_date_str[6:]} {_time_str[:2]}h{_time_str[2:]} UTC"
 
-        # Upload MP3 to GitHub Releases
+        # Build env that carries git proxy credentials into the subprocess
+        _git_env = os.environ.copy()
+        _proxy_cfg = "/home/user/.gitconfig-proxy"
+        if os.path.exists(_proxy_cfg):
+            _git_env["GIT_CONFIG_GLOBAL"] = _proxy_cfg
+            _git_env["GH_HOST"] = "git-agent-proxy.perplexity.ai"
+        # GH_ENTERPRISE_TOKEN is already in os.environ when cron runs with github creds
+
+        # Upload MP3 to GitHub
         _upload_result = _sp.run(
             ["python3", "/home/user/workspace/molefm/scripts/github_uploader.py",
              "newscast", audio_path],
-            capture_output=True, text=True
+            capture_output=True, text=True, env=_git_env
         )
         if _upload_result.returncode == 0:
             # Extract URL from last line of output
