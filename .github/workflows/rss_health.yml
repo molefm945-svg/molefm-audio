@@ -1,0 +1,77 @@
+name: RSS Feed Health
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  issues: write
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+
+      - run: pip install feedparser requests
+
+      - name: Probe feeds
+        id: probe
+        run: |
+          python3 - <<'PY' > report.md
+          import feedparser, requests, sys
+          FEEDS = {
+            "Le Nouvelliste":     "https://lenouvelliste.com/feed",
+            "Radio Métropole":    "https://metropole.ht/feed/",
+            "Juno7":              "https://juno7.ht/feed",
+            "Haiti24":            "https://haiti24.net/feed",
+            "Rezo Nodwes":        "https://rezonodwes.com/feed/",
+            "Haiti Liberté":      "https://haitiliberte.com/feed/",
+            "Haiti Press Network":"https://hpnhaiti.com/feed/",
+            "Haiti Express Sports":"https://www.haitiexpress.net/category/sports/feed/",
+            "Bonpounou Sports":   "https://www.bonpounou.com/news/rss/category/sports",
+            "Haitian Times":      "https://haitiantimes.com/feed/",
+            "RFI Haïti":          "https://www.rfi.fr/fr/tag/ha%C3%AFti/rss",
+            "BBC Afrique":        "https://feeds.bbci.co.uk/afrique/rss.xml",
+          }
+          bad = []
+          lines = ["| Source | Status | Items |", "|---|---|---|"]
+          for name, url in FEEDS.items():
+              try:
+                  r = requests.get(url, timeout=15, headers={"User-Agent":"molefm-bot/1.0"})
+                  d = feedparser.parse(r.content)
+                  n = len(d.entries)
+                  ok = r.status_code == 200 and n > 0
+                  status = f"{r.status_code}"
+              except Exception as e:
+                  ok, status, n = False, f"ERR {type(e).__name__}", 0
+              mark = "✅" if ok else "❌"
+              lines.append(f"| {name} | {mark} {status} | {n} |")
+              if not ok:
+                  bad.append(f"{name} ({url}) — {status}, {n} items")
+          print("\n".join(lines))
+          if bad:
+              print("\n---\n## Failures\n" + "\n".join(f"- {b}" for b in bad))
+          with open("bad.txt","w") as f: f.write("\n".join(bad))
+          PY
+
+      - name: Open issue on failure
+        if: always()
+        run: |
+          if [ -s bad.txt ]; then
+            gh issue create \
+              --title "RSS feed health failures — $(date +%Y-%m-%d)" \
+              --body-file report.md \
+              --label "ops,rss" || gh issue create \
+              --title "RSS feed health failures — $(date +%Y-%m-%d)" \
+              --body-file report.md
+          else
+            echo "All feeds healthy."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
