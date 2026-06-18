@@ -1,0 +1,60 @@
+name: Reader Guardrails
+
+on:
+  pull_request:
+    paths:
+      - 'reader/webapp/**'
+  push:
+    branches: [main]
+    paths:
+      - 'reader/webapp/**'
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: index.html size <1MB
+        run: |
+          size=$(stat -c%s reader/webapp/index.html)
+          echo "index.html: $size bytes"
+          if [ "$size" -ge 1048576 ]; then
+            echo "::error::index.html is $size bytes (>=1MB)"; exit 1
+          fi
+
+      - name: AUDIO_URLS present, no base64 patterns
+        run: |
+          grep -q 'AUDIO_URLS' reader/webapp/index.html || { echo "::error::AUDIO_URLS missing"; exit 1; }
+          if grep -qE 'mp3_to_b64|dataURItoBlob|const AB=' reader/webapp/index.html; then
+            echo "::error::base64 audio pattern detected"; exit 1
+          fi
+
+      - name: All 3 mp3 files present and valid
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          ok = True
+          for f in ['audio_fr.mp3','audio_en.mp3','audio_es.mp3']:
+              p = f'reader/webapp/{f}'
+              if not os.path.exists(p):
+                  print(f"::error::missing {p}"); ok = False; continue
+              with open(p,'rb') as fh: h = fh.read(3)
+              valid = h[:3]==b'ID3' or (len(h) >= 2 and h[0]==0xFF and (h[1]&0xE0)==0xE0)
+              if not valid:
+                  print(f"::error::invalid mp3 header: {p}"); ok = False
+              else:
+                  print(f"OK {p} ({os.path.getsize(p)//1024}KB)")
+          sys.exit(0 if ok else 1)
+          PY
+
+      - name: Speed control + setSpeed present
+        run: |
+          grep -qE 'setSpeed|speed-selector|speedVal' reader/webapp/index.html \
+            || { echo "::error::speed control missing"; exit 1; }
+
+      - name: _podAudio uses script-scope let (not window)
+        run: |
+          if grep -q 'window\._podAudio' reader/webapp/index.html; then
+            echo "::error::window._podAudio detected — must be 'let _podAudio'"; exit 1
+          fi
