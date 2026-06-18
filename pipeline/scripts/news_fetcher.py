@@ -402,6 +402,10 @@ def log_verification_run(stories, chosen, timestamp):
                     "all_sources":  s.get("all_sources", [s["source_name"]]),
                     "confidence":   s.get("confidence", 50),
                     "verification": s.get("verification", "SINGLE-SOURCE"),
+                    "link":         s.get("link", ""),
+                    "description":  s.get("description", "")[:200],
+                    "pub_date":     s.get("pub_date", ""),
+                    "source_url":   s.get("source_url", ""),
                 }
                 for s in chosen
             ]

@@ -44,6 +44,7 @@ SCRIPTS_DIR = os.path.join(WORKSPACE, "scripts")
 CONFIG_DIR = os.path.join(WORKSPACE, "config")
 REGISTRY_PATH = os.path.join(CONFIG_DIR, "audio_registry.json")
 OUTPUT_DIR = os.path.join(WORKSPACE, "research")
+VERIFICATION_LOG_FILE = os.path.join(OUTPUT_DIR, "news_verification_log.json")
 
 # GitHub raw audio base URL
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main"
@@ -71,6 +72,19 @@ STATION_IMAGING = {
 }
 
 # Imaging assets for station_imaging_sequence
+SOURCE_HOMEPAGES = {
+    "Le Nouvelliste": "https://lenouvelliste.com",
+    "Radio Métropole": "https://metropole.ht",
+    "Juno7": "https://juno7.ht",
+    "Haiti24": "https://haiti24.net",
+    "Rezo Nodwes": "https://rezonodwes.com",
+    "Haiti Liberté": "https://haitiliberte.com",
+    "Haiti Press Network": "https://hpnhaiti.com",
+    "Haitian Times": "https://haitiantimes.com",
+    "RFI Haïti": "https://www.rfi.fr/fr/tag/haïti",
+    "BBC Afrique": "https://www.bbc.com/afrique",
+}
+
 IMAGING_ASSETS = {
     "mole-fm-spot-long": {"id": "mole-fm-spot-long", "title": "Mole FM long station spot", "url": "/radio/imaging/mol-fm-spot-long.mp3"},
     "mol-short-id": {"id": "mol-short-id", "title": "Mole FM short ID", "url": "/radio/imaging/mol-short-id.mp3"},
@@ -257,6 +271,41 @@ def build_podcast_slot(podcast_url, station_hour, slot_index):
     }
 
 
+def get_trilingual_articles():
+    """Return recent verified article metadata for MoleFM.com cards."""
+    try:
+        with open(VERIFICATION_LOG_FILE, "r", encoding="utf-8") as f:
+            log = json.load(f)
+    except Exception:
+        return []
+
+    if not log:
+        return []
+
+    latest_run = log[-1] if isinstance(log, list) else log
+    stories = latest_run.get("stories", []) if isinstance(latest_run, dict) else []
+    articles = []
+
+    for s in stories[:8]:
+        title = s.get("title", "")
+        source = s.get("source", "")
+        articles.append({
+            "title_fr":    title,
+            "title_en":    title,
+            "title_es":    title,
+            "source":      source,
+            "verification": s.get("verification", ""),
+            "confidence":  s.get("confidence", 0),
+            "link":        s.get("link", ""),
+            "source_url":  s.get("source_url", "") or SOURCE_HOMEPAGES.get(source, ""),
+            "description": s.get("description", ""),
+            "pub_date":    s.get("pub_date", ""),
+            "all_sources": s.get("all_sources", [source] if source else []),
+        })
+
+    return articles
+
+
 def generate_content_pack():
     """
     Generate a full 24-slot content pack from available audio.
@@ -311,6 +360,7 @@ def generate_content_pack():
         "run_id": run_id,
         "generated_at": now.isoformat() + "Z",
         "content_language": "fr",
+        "articles": get_trilingual_articles(),
         "audio_generated_count": len(slots),
         "generator": "mole-fm-pipeline-v2",
         "pipeline_version": "2.0.0",
