@@ -1125,7 +1125,55 @@ document.addEventListener('touchend',()=>setTimeout(()=>userTouching=false,300),
 
 const au=l=>document.getElementById('a'+l);
 
-// ── INIT ──────────────────────────────────────────────────────────────────────
+// ── LISTENER PRESENCE (real-time geo-accurate) ──────────────────────────────
+// Reports this reader's listener-state to molefm.com every 20s while audio plays.
+// The server reads the listener's location from first-party edge geo headers,
+// so the audience map at molefm.com reflects exactly where the audience is.
+const HEARTBEAT_URL='https://www.molefm.com/api/radio/heartbeat';
+function _hbSid(){{
+  try{{
+    const K='molefm:listener:sid';
+    let s=sessionStorage.getItem(K);
+    if(!s){{
+      const c=(typeof crypto!=='undefined'&&crypto.getRandomValues)?crypto:null;
+      if(c){{
+        const b=new Uint8Array(16);c.getRandomValues(b);b[6]=(b[6]&15)|64;b[8]=(b[8]&63)|128;
+        const h=Array.from(b,x=>x.toString(16).padStart(2,'0')).join('');
+        s=h.slice(0,8)+'-'+h.slice(8,12)+'-'+h.slice(12,16)+'-'+h.slice(16,20)+'-'+h.slice(20);
+      }}else{{
+        s='sid_'+Date.now()+'_'+Math.random().toString(36).slice(2);
+      }}
+      sessionStorage.setItem(K,s);
+    }}
+    return s;
+  }}catch(e){{return 'sid_'+Date.now()+'_'+Math.random().toString(36).slice(2);}}
+}}
+const HB_SID=_hbSid();
+let _hbTimer=null,_hbInFlight=false;
+function _hbPing(){{
+  if(_hbInFlight)return;
+  _hbInFlight=true;
+  fetch(HEARTBEAT_URL,{{
+    method:'POST',
+    headers:{{'Content-Type':'application/json'}},
+    body:JSON.stringify({{sid:HB_SID,source:'reader'}}),
+    keepalive:true,
+    mode:'cors',
+  }}).catch(()=>{{}}).finally(()=>{{_hbInFlight=false;}});
+}}
+function startHeartbeat(){{
+  if(_hbTimer)return;
+  _hbPing();
+  _hbTimer=setInterval(_hbPing,20000);
+}}
+function stopHeartbeat(){{
+  if(_hbTimer){{clearInterval(_hbTimer);_hbTimer=null;}}
+}}
+document.addEventListener('visibilitychange',()=>{{
+  if(document.visibilityState==='hidden')stopHeartbeat();
+}});
+
+// ── INIT ─────────────────────────────────────────────────────────
 // Audio uses relative URL references to separate .mp3 files alongside index.html.
 // PERMANENT FIX: eliminates Mobile Safari silent failure from large inline scripts.
 function init(){{
@@ -1147,6 +1195,10 @@ function init(){{
     au(l).addEventListener('timeupdate',()=>{{if(lang===l){{upProg(l);updateActiveCard();}}}});
     au(l).addEventListener('ended',()=>{{if(lang===l)onEnd();}});
     au(l).addEventListener('loadedmetadata',()=>{{if(lang===l)upDur(l);}});
+    // Heartbeat — only ping while audio is actually playing
+    au(l).addEventListener('play',()=>{{if(lang===l)startHeartbeat();}});
+    au(l).addEventListener('playing',()=>{{if(lang===l)startHeartbeat();}});
+    au(l).addEventListener('pause',()=>{{if(lang===l)stopHeartbeat();}});
   }});
 
   // Theme
