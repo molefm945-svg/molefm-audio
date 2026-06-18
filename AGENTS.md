@@ -286,3 +286,23 @@ Deploy files at root level: `api.cjs` + `public/**` + `vercel.json`
 - `ShareSheet.tsx` — WhatsApp, Facebook, X, Telegram, SMS, Copy link
 - Commit: `23f582f` on main
 
+
+---
+
+## COMPUTER COST RULES — ABSOLUTE (2026-06-18, final)
+
+Computer (Perplexity) does ONLY these 3 things:
+1. Receive cron output → send in-app notification
+2. Answer owner's direct questions
+3. Deploy to Vercel if Codex cannot push (one script, no screenshots)
+
+Computer NEVER does:
+- Code edits of any kind
+- npm run build
+- Git commits or pushes
+- Screenshots / visual QA
+- Pipeline runs
+- File creation or editing
+- Multi-step browser tasks
+
+If a task involves touching any file → write a Codex prompt and give it to the owner. Do not do it yourself.
