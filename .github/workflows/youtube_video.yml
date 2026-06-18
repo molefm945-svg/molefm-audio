@@ -1,0 +1,67 @@
+name: Queue YouTube Video
+
+on:
+  push:
+    paths:
+      - "audio/*.mp3"
+
+permissions:
+  contents: write
+
+jobs:
+  youtube-video:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install video dependencies
+        run: pip install pillow numpy
+
+      - name: Find new MP3
+        id: mp3
+        shell: bash
+        run: |
+          python3 - <<'PY' > /tmp/new_mp3.txt
+          import json, os
+          event_path = os.environ.get("GITHUB_EVENT_PATH")
+          with open(event_path, "r", encoding="utf-8") as f:
+              event = json.load(f)
+          files = []
+          for key in ("added", "modified"):
+              files.extend(event.get("head_commit", {}).get(key, []) or [])
+          matches = [p for p in files if p.startswith("audio/") and p.endswith(".mp3")]
+          print(matches[0] if matches else "")
+          PY
+          mp3_file=$(cat /tmp/new_mp3.txt)
+          if [ -z "$mp3_file" ]; then
+            echo "No audio/*.mp3 file found in head commit; skipping."
+            echo "mp3_file=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          echo "mp3_file=$mp3_file" >> "$GITHUB_OUTPUT"
+
+      - name: Generate YouTube video
+        if: steps.mp3.outputs.mp3_file != ''
+        run: python3 pipeline/scripts/video_generator.py --file "${{ steps.mp3.outputs.mp3_file }}"
+
+      - name: Generate YouTube metadata
+        if: steps.mp3.outputs.mp3_file != ''
+        run: python3 pipeline/scripts/youtube_optimizer.py
+
+      - name: Commit video queue artifacts
+        if: steps.mp3.outputs.mp3_file != ''
+        shell: bash
+        run: |
+          git config user.name "Mole FM Bot"
+          git config user.email "molefm945@gmail.com"
+          git add videos/queue/
+          git commit -m "chore: queue YouTube video for ${{ steps.mp3.outputs.mp3_file }}" || exit 0
+          git push

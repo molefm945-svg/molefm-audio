@@ -90,6 +90,20 @@ def get_sponsor(slot_index=0):
     return sponsors[slot_index % len(sponsors)]
 
 
+
+SOURCE_URLS = {
+    "Le Nouvelliste": "https://lenouvelliste.com",
+    "Radio Métropole": "https://metropole.ht",
+    "Juno7": "https://juno7.ht",
+    "Haiti24": "https://haiti24.net",
+    "Rezo Nodwes": "https://rezonodwes.com",
+    "Haiti Liberté": "https://haitiliberte.com",
+    "Haiti Press Network": "https://hpnhaiti.com",
+    "Haitian Times": "https://haitiantimes.com",
+    "RFI Haïti": "https://www.rfi.fr/fr/tag/haïti",
+    "BBC Afrique": "https://www.bbc.com/afrique",
+}
+
 # ── Data loading ─────────────────────────────────────────────────────────────
 
 def load_recent_newscasts(n=6):
@@ -131,6 +145,20 @@ def extract_stories_from_scripts(script_paths):
         except Exception as e:
             print(f"  [WARN] Could not parse {path}: {e}")
     return stories[:12]
+
+
+def _podcast_source_names(stories):
+    """Extract unique source names from story attribution strings."""
+    names = []
+    for story in stories:
+        if not isinstance(story, dict):
+            continue
+        attr = story.get("source_attr", "")
+        for name in re.split(r"\s+et\s+|,|;|/", attr):
+            name = name.strip()
+            if name and name not in names:
+                names.append(name)
+    return names
 
 def extract_weather_from_scripts(script_paths):
     for path in reversed(script_paths):
@@ -624,11 +652,18 @@ def run(lang="fr", slot_label=None, slot_index=None):
         try:
             import subprocess as _sp
             _ep_title = f"Mole FM Podcast FR \u2014 {slot_label.capitalize()} \u2014 {now.strftime('%d %B %Y')}"
+            _source_names = _podcast_source_names(stories)
+            _source_lines = "\n".join(
+                f"  • {sn} ({SOURCE_URLS.get(sn, 'https://www.molefm.com')})"
+                for sn in _source_names
+            ) if _source_names else "  • Sources vérifiées (voir molefm.com)"
             _desc = (
-                f"Émission quotidienne Mole FM \u2014 {now.strftime('%d %B %Y')}.\n"
-                f"Analyse approfondie des actualit\u00e9s d'Ha\u00efti avec Denise et Henri.\n"
-                f"Format : The Daily \u00d7 BBC Global News \u00d7 Hugo D\u00e9crypte.\n"
-                f"Dur\u00e9e : {mins}m{secs:02d}s"
+                f"Émission quotidienne Mole FM — {now.strftime('%d %B %Y')}.\n"
+                f"Analyse approfondie des actualités d'Haïti avec Denise et Henri.\n"
+                f"Format : The Daily × BBC Global News × Hugo Décrypte.\n"
+                f"Durée : {mins}m{secs:02d}s\n\n"
+                f"Sources & Références :\n{_source_lines}\n\n"
+                f"Mole FM 94.5 — La radio haïtienne qui informe. molefm.com"
             )
             _upload_result = _sp.run(
                 ["python3", "/home/user/workspace/molefm/scripts/github_uploader.py",
