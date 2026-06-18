@@ -244,3 +244,45 @@ python3 pipeline/scripts/youtube_optimizer.py
 # AutoSearch new RSS sources
 python3 pipeline/scripts/autosearch.py
 ```
+
+---
+
+## COST RULES — READ FIRST (Updated 2026-06-18)
+
+**Computer (Perplexity) does ONLY:**
+- Live RSS fetching + notifications
+- Vercel deploys (when Codex can't)
+- User questions / strategy decisions
+
+**Codex does EVERYTHING else:**
+- All code edits (React, Python scripts, config)
+- All builds (`npm run build`)
+- All git commits and pushes
+- All pipeline script changes
+
+**Rule:** If it touches a file → Codex. Not Computer.
+
+---
+
+## DEPLOY — Correct Method (CRITICAL — learned 2026-06-18)
+
+The live site `www.molefm.com` is on Vercel project `prj_uxsmXdONT9JB2hXgwCWpo7nyjRjw` (name: **molefm**).
+
+**Fastest deploy = push to GitHub main.** Vercel auto-deploys from GitHub.
+```bash
+git add -A && git commit -m "..." && git push
+```
+
+**Manual API deploy** (only if git push fails):
+Deploy files at root level: `api.cjs` + `public/**` + `vercel.json`
+(NOT `src/api.cjs` — files go at root, not under src/)
+
+**NEVER deploy only `dist/public/`** — that causes 404. Must include `api.cjs`.
+
+---
+
+## SHARE BUTTON — Already Live (do not re-add)
+- `Music.tsx` — ZOLIMIX box has `showShare` state + `<ShareSheet>` component
+- `ShareSheet.tsx` — WhatsApp, Facebook, X, Telegram, SMS, Copy link
+- Commit: `23f582f` on main
+
