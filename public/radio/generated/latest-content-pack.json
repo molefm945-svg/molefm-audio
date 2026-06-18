@@ -1,6 +1,6 @@
 {
-  "run_id": "molefm-pipeline-20260616T232217Z",
-  "generated_at": "2026-06-16T23:22:17.939229Z",
+  "run_id": "molefm-pipeline-20260618T011007Z",
+  "generated_at": "2026-06-18T01:10:07.492340Z",
   "content_language": "fr",
   "audio_generated_count": 24,
   "generator": "mole-fm-pipeline-v2",
@@ -44,15 +44,15 @@
   },
   "slots": [
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "20260617_1321",
+      "title": "Mole FM Actualités — 17/06/2026 09h21 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -80,8 +80,8 @@
         "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
       },
       "estimated_duration_seconds": 180,
-      "station_hour": 23,
-      "starts_at": "2026-06-16T23:22:17.939389Z",
+      "station_hour": 1,
+      "starts_at": "2026-06-18T01:10:07.492593Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -102,9 +102,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
+            "id": "20260617_1321",
+            "title": "Mole FM Actualités — 17/06/2026 09h21 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -116,15 +116,15 @@
       }
     },
     {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
+      "id": "20260617_1208",
+      "title": "Mole FM Actualités — 17/06/2026 08h08 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -152,8 +152,8 @@
         "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
       },
       "estimated_duration_seconds": 180,
-      "station_hour": 0,
-      "starts_at": "2026-06-16T23:22:17.939423Z",
+      "station_hour": 2,
+      "starts_at": "2026-06-18T01:10:07.492626Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -174,9 +174,585 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
+            "id": "20260617_1208",
+            "title": "Mole FM Actualités — 17/06/2026 08h08 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "podcast-fr-20260617_1615",
+      "title": "Mole FM Journal du Matin — Analyse approfondie",
+      "kind": "podcast_replay",
+      "category": "analysis",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_1615.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_1615.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_1615.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 1200,
+      "station_hour": 3,
+      "starts_at": "2026-06-18T01:10:07.492634Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural + fr-FR-HenriNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot",
+            "title": "Mole FM station spot",
+            "url": "/radio/imaging/mole-fm-spot.mp3"
+          },
+          {
+            "role": "podcast_voice",
+            "id": "podcast-fr-20260617_1615",
+            "title": "Mole FM Journal du Matin",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_1615.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-fm-fille",
+            "title": "Mole FM female station ID",
+            "url": "/radio/imaging/mol-fm-fille.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_1107",
+      "title": "Mole FM Actualités — 17/06/2026 07h07 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 4,
+      "starts_at": "2026-06-18T01:10:07.492653Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_1107",
+            "title": "Mole FM Actualités — 17/06/2026 07h07 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_1001",
+      "title": "Mole FM Actualités — 17/06/2026 06h01 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1001.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1001.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1001.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 5,
+      "starts_at": "2026-06-18T01:10:07.492670Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_1001",
+            "title": "Mole FM Actualités — 17/06/2026 06h01 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1001.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_0908",
+      "title": "Mole FM Actualités — 17/06/2026 05h08 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0908.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0908.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0908.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 6,
+      "starts_at": "2026-06-18T01:10:07.492687Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_0908",
+            "title": "Mole FM Actualités — 17/06/2026 05h08 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0908.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "podcast-fr-20260617_0100",
+      "title": "Mole FM Journal du Matin — Analyse approfondie",
+      "kind": "podcast_replay",
+      "category": "analysis",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_0100.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_0100.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_0100.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 1200,
+      "station_hour": 7,
+      "starts_at": "2026-06-18T01:10:07.492692Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural + fr-FR-HenriNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot",
+            "title": "Mole FM station spot",
+            "url": "/radio/imaging/mole-fm-spot.mp3"
+          },
+          {
+            "role": "podcast_voice",
+            "id": "podcast-fr-20260617_0100",
+            "title": "Mole FM Journal du Matin",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_0100.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-fm-fille",
+            "title": "Mole FM female station ID",
+            "url": "/radio/imaging/mol-fm-fille.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_0801",
+      "title": "Mole FM Actualités — 17/06/2026 04h01 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0801.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0801.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0801.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 8,
+      "starts_at": "2026-06-18T01:10:07.492707Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_0801",
+            "title": "Mole FM Actualités — 17/06/2026 04h01 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0801.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_0627",
+      "title": "Mole FM Actualités — 17/06/2026 02h27 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0627.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0627.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0627.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 9,
+      "starts_at": "2026-06-18T01:10:07.492720Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_0627",
+            "title": "Mole FM Actualités — 17/06/2026 02h27 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0627.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_0506",
+      "title": "Mole FM Actualités — 17/06/2026 01h06 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0506.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0506.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0506.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 10,
+      "starts_at": "2026-06-18T01:10:07.492735Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_0506",
+            "title": "Mole FM Actualités — 17/06/2026 01h06 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0506.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -224,8 +800,8 @@
         "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
       },
       "estimated_duration_seconds": 1200,
-      "station_hour": 1,
-      "starts_at": "2026-06-16T23:22:17.939432Z",
+      "station_hour": 11,
+      "starts_at": "2026-06-18T01:10:07.492739Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -260,735 +836,15 @@
       }
     },
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "20260617_0401",
+      "title": "Mole FM Actualités — 17/06/2026 00h01 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 2,
-      "starts_at": "2026-06-16T23:22:17.939453Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 3,
-      "starts_at": "2026-06-16T23:22:17.939472Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 4,
-      "starts_at": "2026-06-16T23:22:17.939489Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 5,
-      "starts_at": "2026-06-16T23:22:17.939505Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 6,
-      "starts_at": "2026-06-16T23:22:17.939524Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 7,
-      "starts_at": "2026-06-16T23:22:17.939539Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 8,
-      "starts_at": "2026-06-16T23:22:17.939553Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 9,
-      "starts_at": "2026-06-16T23:22:17.939568Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 10,
-      "starts_at": "2026-06-16T23:22:17.939594Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 11,
-      "starts_at": "2026-06-16T23:22:17.939609Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0401.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0401.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0401.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1017,7 +873,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 12,
-      "starts_at": "2026-06-16T23:22:17.939624Z",
+      "starts_at": "2026-06-18T01:10:07.492753Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1038,9 +894,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
+            "id": "20260617_0401",
+            "title": "Mole FM Actualités — 17/06/2026 00h01 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0401.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1052,15 +908,15 @@
       }
     },
     {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
+      "id": "20260617_0333",
+      "title": "Mole FM Actualités — 16/06/2026 23h33 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0333.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0333.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0333.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1089,7 +945,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 13,
-      "starts_at": "2026-06-16T23:22:17.939638Z",
+      "starts_at": "2026-06-18T01:10:07.492767Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1110,9 +966,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
+            "id": "20260617_0333",
+            "title": "Mole FM Actualités — 16/06/2026 23h33 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0333.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1124,15 +980,15 @@
       }
     },
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "20260617_0327",
+      "title": "Mole FM Actualités — 16/06/2026 23h27 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0327.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0327.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0327.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1161,7 +1017,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 14,
-      "starts_at": "2026-06-16T23:22:17.939652Z",
+      "starts_at": "2026-06-18T01:10:07.492780Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1182,9 +1038,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
+            "id": "20260617_0327",
+            "title": "Mole FM Actualités — 16/06/2026 23h27 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0327.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1196,15 +1052,15 @@
       }
     },
     {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
+      "id": "podcast-fr-20260616_2026",
+      "title": "Mole FM Journal du Matin — Analyse approfondie",
+      "kind": "podcast_replay",
+      "category": "analysis",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2026.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2026.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2026.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1231,13 +1087,13 @@
         },
         "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
       },
-      "estimated_duration_seconds": 180,
+      "estimated_duration_seconds": 1200,
       "station_hour": 15,
-      "starts_at": "2026-06-16T23:22:17.939666Z",
+      "starts_at": "2026-06-18T01:10:07.492784Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_voice": "fr-FR-DeniseNeural + fr-FR-HenriNeural",
       "tts_rate_wpm": 170,
       "voice_quality": "neural_broadcast",
       "audio_delivery": {
@@ -1248,35 +1104,35 @@
         "station_imaging_sequence": [
           {
             "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+            "id": "mole-fm-spot",
+            "title": "Mole FM station spot",
+            "url": "/radio/imaging/mole-fm-spot.mp3"
           },
           {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
+            "role": "podcast_voice",
+            "id": "podcast-fr-20260616_2026",
+            "title": "Mole FM Journal du Matin",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2026.mp3"
           },
           {
             "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
+            "id": "mol-fm-fille",
+            "title": "Mole FM female station ID",
+            "url": "/radio/imaging/mol-fm-fille.mp3"
           }
         ]
       }
     },
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "20260617_0302",
+      "title": "Mole FM Actualités — 16/06/2026 23h02 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0302.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0302.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0302.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1305,7 +1161,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 16,
-      "starts_at": "2026-06-16T23:22:17.939681Z",
+      "starts_at": "2026-06-18T01:10:07.492798Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1326,9 +1182,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
+            "id": "20260617_0302",
+            "title": "Mole FM Actualités — 16/06/2026 23h02 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0302.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1340,15 +1196,15 @@
       }
     },
     {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
+      "id": "20260617_0105",
+      "title": "Mole FM Actualités — 16/06/2026 21h05 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0105.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0105.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0105.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1377,7 +1233,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 17,
-      "starts_at": "2026-06-16T23:22:17.939694Z",
+      "starts_at": "2026-06-18T01:10:07.492828Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1398,9 +1254,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
+            "id": "20260617_0105",
+            "title": "Mole FM Actualités — 16/06/2026 21h05 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_0105.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1449,7 +1305,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 18,
-      "starts_at": "2026-06-16T23:22:17.939708Z",
+      "starts_at": "2026-06-18T01:10:07.492848Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1484,15 +1340,15 @@
       }
     },
     {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
+      "id": "podcast-fr-20260616_2020",
+      "title": "Mole FM Journal du Matin — Analyse approfondie",
+      "kind": "podcast_replay",
+      "category": "analysis",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2020.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2020.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2020.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1519,13 +1375,13 @@
         },
         "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
       },
-      "estimated_duration_seconds": 180,
+      "estimated_duration_seconds": 1200,
       "station_hour": 19,
-      "starts_at": "2026-06-16T23:22:17.939722Z",
+      "starts_at": "2026-06-18T01:10:07.492853Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_voice": "fr-FR-DeniseNeural + fr-FR-HenriNeural",
       "tts_rate_wpm": 170,
       "voice_quality": "neural_broadcast",
       "audio_delivery": {
@@ -1536,35 +1392,35 @@
         "station_imaging_sequence": [
           {
             "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+            "id": "mole-fm-spot",
+            "title": "Mole FM station spot",
+            "url": "/radio/imaging/mole-fm-spot.mp3"
           },
           {
-            "role": "news_voice",
-            "id": "20260616_2204",
-            "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3"
+            "role": "podcast_voice",
+            "id": "podcast-fr-20260616_2020",
+            "title": "Mole FM Journal du Matin",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2020.mp3"
           },
           {
             "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
+            "id": "mol-fm-fille",
+            "title": "Mole FM female station ID",
+            "url": "/radio/imaging/mol-fm-fille.mp3"
           }
         ]
       }
     },
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "20260616_2204",
+      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1593,79 +1449,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 20,
-      "starts_at": "2026-06-16T23:22:17.939738Z",
-      "editorial_status": "review_supervisor_auto_approved_for_air",
-      "voice_provider": "edge-tts",
-      "voice_provider_status": "generated",
-      "tts_voice": "fr-FR-DeniseNeural",
-      "tts_rate_wpm": 170,
-      "voice_quality": "neural_broadcast",
-      "audio_delivery": {
-        "mode": "web_smooth_low_bandwidth",
-        "stream_bitrate": "64k",
-        "source_bitrate": "64k",
-        "station_imaging_included": true,
-        "station_imaging_sequence": [
-          {
-            "role": "pre_news_station_id",
-            "id": "mole-fm-spot-long",
-            "title": "Mole FM long station spot",
-            "url": "/radio/imaging/mol-fm-spot-long.mp3"
-          },
-          {
-            "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
-          },
-          {
-            "role": "post_news_station_id",
-            "id": "mol-short-id",
-            "title": "Mole FM short ID",
-            "url": "/radio/imaging/mol-short-id.mp3"
-          }
-        ]
-      }
-    },
-    {
-      "id": "20260616_2204",
-      "title": "Mole FM Actualités — 16/06/2026 18h04 (Haïti)",
-      "kind": "hourly_news",
-      "category": "news",
-      "language": "fr",
-      "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2204.mp3",
-      "station_imaging": {
-        "manifest_url": "/radio/imaging/imaging-manifest.json",
-        "pre_news_jingle": {
-          "id": "mole-fm-spot-long",
-          "title": "Mole FM long station spot",
-          "url": "/radio/imaging/mol-fm-spot-long.mp3",
-          "duration_seconds": 42,
-          "placement": [
-            "top_of_hour_intro",
-            "music_bridge"
-          ],
-          "license_status": "station_owned"
-        },
-        "post_news_jingle": {
-          "id": "mol-short-id",
-          "title": "Mole FM short ID",
-          "url": "/radio/imaging/mol-short-id.mp3",
-          "duration_seconds": 9,
-          "placement": [
-            "post_news",
-            "quick_id"
-          ],
-          "license_status": "station_owned"
-        },
-        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
-      },
-      "estimated_duration_seconds": 180,
-      "station_hour": 21,
-      "starts_at": "2026-06-16T23:22:17.939751Z",
+      "starts_at": "2026-06-18T01:10:07.492866Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1700,15 +1484,87 @@
       }
     },
     {
-      "id": "20260616_2302",
-      "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
+      "id": "podcast-fr-20260616_2012",
+      "title": "Mole FM Journal du Matin — Analyse approfondie",
+      "kind": "podcast_replay",
+      "category": "analysis",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2012.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2012.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2012.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 1200,
+      "station_hour": 21,
+      "starts_at": "2026-06-18T01:10:07.492871Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural + fr-FR-HenriNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot",
+            "title": "Mole FM station spot",
+            "url": "/radio/imaging/mole-fm-spot.mp3"
+          },
+          {
+            "role": "podcast_voice",
+            "id": "podcast-fr-20260616_2012",
+            "title": "Mole FM Journal du Matin",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2012.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-fm-fille",
+            "title": "Mole FM female station ID",
+            "url": "/radio/imaging/mol-fm-fille.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_1321",
+      "title": "Mole FM Actualités — 17/06/2026 09h21 (Haïti)",
       "kind": "hourly_news",
       "category": "news",
       "language": "fr",
       "spoken_language": "fr",
-      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
-      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3",
       "station_imaging": {
         "manifest_url": "/radio/imaging/imaging-manifest.json",
         "pre_news_jingle": {
@@ -1737,7 +1593,7 @@
       },
       "estimated_duration_seconds": 180,
       "station_hour": 22,
-      "starts_at": "2026-06-16T23:22:17.939764Z",
+      "starts_at": "2026-06-18T01:10:07.492886Z",
       "editorial_status": "review_supervisor_auto_approved_for_air",
       "voice_provider": "edge-tts",
       "voice_provider_status": "generated",
@@ -1758,9 +1614,9 @@
           },
           {
             "role": "news_voice",
-            "id": "20260616_2302",
-            "title": "Mole FM Actualités — 16/06/2026 19h02 (Haïti)",
-            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260616_2302.mp3"
+            "id": "20260617_1321",
+            "title": "Mole FM Actualités — 17/06/2026 09h21 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1321.mp3"
           },
           {
             "role": "post_news_station_id",
@@ -1770,6 +1626,242 @@
           }
         ]
       }
+    },
+    {
+      "id": "20260617_1208",
+      "title": "Mole FM Actualités — 17/06/2026 08h08 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 23,
+      "starts_at": "2026-06-18T01:10:07.492902Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_1208",
+            "title": "Mole FM Actualités — 17/06/2026 08h08 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1208.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    },
+    {
+      "id": "20260617_1107",
+      "title": "Mole FM Actualités — 17/06/2026 07h07 (Haïti)",
+      "kind": "hourly_news",
+      "category": "news",
+      "language": "fr",
+      "spoken_language": "fr",
+      "audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "stream_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "archive_audio_url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3",
+      "station_imaging": {
+        "manifest_url": "/radio/imaging/imaging-manifest.json",
+        "pre_news_jingle": {
+          "id": "mole-fm-spot-long",
+          "title": "Mole FM long station spot",
+          "url": "/radio/imaging/mol-fm-spot-long.mp3",
+          "duration_seconds": 42,
+          "placement": [
+            "top_of_hour_intro",
+            "music_bridge"
+          ],
+          "license_status": "station_owned"
+        },
+        "post_news_jingle": {
+          "id": "mol-short-id",
+          "title": "Mole FM short ID",
+          "url": "/radio/imaging/mol-short-id.mp3",
+          "duration_seconds": 9,
+          "placement": [
+            "post_news",
+            "quick_id"
+          ],
+          "license_status": "station_owned"
+        },
+        "policy": "Play a station-owned Mole FM ID before the station news intro and a short ID after the French news before returning to live radio."
+      },
+      "estimated_duration_seconds": 180,
+      "station_hour": 0,
+      "starts_at": "2026-06-18T01:10:07.492916Z",
+      "editorial_status": "review_supervisor_auto_approved_for_air",
+      "voice_provider": "edge-tts",
+      "voice_provider_status": "generated",
+      "tts_voice": "fr-FR-DeniseNeural",
+      "tts_rate_wpm": 170,
+      "voice_quality": "neural_broadcast",
+      "audio_delivery": {
+        "mode": "web_smooth_low_bandwidth",
+        "stream_bitrate": "64k",
+        "source_bitrate": "64k",
+        "station_imaging_included": true,
+        "station_imaging_sequence": [
+          {
+            "role": "pre_news_station_id",
+            "id": "mole-fm-spot-long",
+            "title": "Mole FM long station spot",
+            "url": "/radio/imaging/mol-fm-spot-long.mp3"
+          },
+          {
+            "role": "news_voice",
+            "id": "20260617_1107",
+            "title": "Mole FM Actualités — 17/06/2026 07h07 (Haïti)",
+            "url": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260617_1107.mp3"
+          },
+          {
+            "role": "post_news_station_id",
+            "id": "mol-short-id",
+            "title": "Mole FM short ID",
+            "url": "/radio/imaging/mol-short-id.mp3"
+          }
+        ]
+      }
+    }
+  ],
+  "articles": [
+    {
+      "title_fr": "Le décret électoral publié",
+      "title_en": "The electoral decree published",
+      "title_es": "El decreto electoral publicado",
+      "source": "Haiti Liberté",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://haitiliberte.com/le-decret-electoral-publie/",
+      "source_url": "https://haitiliberte.com/feed/",
+      "description": "Ce mardi 9 juin, le gouvernement de fait a conclu un accord avec le Conseil électoral provisoire (CEP) concernant un projet électoral. On savait quils finiraient par sentendre au détriment de la popul",
+      "pub_date": "Thu, 11 Jun 2026 00:50:38 +0000",
+      "all_sources": [
+        "Haiti Liberté"
+      ]
+    },
+    {
+      "title_fr": "Le pire gouvernement de ces vingt dernières années",
+      "title_en": "The worst government in the last twenty years",
+      "title_es": "El peor gobierno de los últimos veinte años",
+      "source": "Haiti Liberté",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://haitiliberte.com/le-pire-gouvernement-de-ces-vingt-dernieres-annees/",
+      "source_url": "https://haitiliberte.com/feed/",
+      "description": "Alors que tous les regards sont tournés vers la Coupe du monde de football, à laquelle Haïti participera, le pays continue de régresser. Cest le seul pays où il est évident pour tous quaucun progrès n",
+      "pub_date": "Thu, 11 Jun 2026 00:34:09 +0000",
+      "all_sources": [
+        "Haiti Liberté"
+      ]
+    },
+    {
+      "title_fr": "Qui dirigera réellement les préparatifs électoraux ? Le CEP ou le gouvernement ?",
+      "title_en": "Who will actually lead the election preparations? The CEP or the government?",
+      "title_es": "¿Quién dirigirá realmente los preparativos electorales? ¿El CEP o el gobierno?",
+      "source": "Haiti Liberté",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://haitiliberte.com/qui-dirigera-reellement-les-preparatifs-electoraux-le-cep-ou-le-gouvernement/",
+      "source_url": "https://haitiliberte.com/feed/",
+      "description": "À première vue, le communiqué publié le 7 juin 2026 par le Conseil électoral provisoire (CEP) ressemble à un banal compte-rendu de réunion entre le Premier ministre Alix Didier Fils-Aimé et les consei",
+      "pub_date": "Thu, 11 Jun 2026 00:23:32 +0000",
+      "all_sources": [
+        "Haiti Liberté"
+      ]
+    },
+    {
+      "title_fr": "D’un processus électoral à l’autre, la saga continue (36)",
+      "title_en": "From one electoral process to another, the saga continues (36)",
+      "title_es": "De un proceso electoral a otro, la saga continúa (36)",
+      "source": "Haiti Liberté",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://haitiliberte.com/dun-processus-electoral-a-lautre-la-saga-continue-32/",
+      "source_url": "https://haitiliberte.com/feed/",
+      "description": "Selon les articles 98 et 99 décrivant le processus pour être élu à la Chambre des députés, rien ne différencie les anciennes législatures des nouvelles ni par leur descriptif ni par leur libellé. Cont",
+      "pub_date": "Thu, 11 Jun 2026 00:07:32 +0000",
+      "all_sources": [
+        "Haiti Liberté"
+      ]
+    },
+    {
+      "title_fr": "20 Facts About Haiti – Haitian History, Culture, People & More",
+      "title_en": "20 Facts About Haiti – Haitian History, Culture, People & More",
+      "title_es": "20 datos sobre Haití: historia, cultura, gente y más de Haití",
+      "source": "Haiti Press Network",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://www.hpnhaiti.com/facts-about-haiti/",
+      "source_url": "https://hpnhaiti.com/feed/",
+      "description": "Haiti is a country that often finds itself in the headlines for its challenges, but there is so much more to this Caribbean nation than meets the eye. From its rich history to its vibrant culture, it ",
+      "pub_date": "Wed, 18 Oct 2023 01:44:21 +0000",
+      "all_sources": [
+        "Haiti Press Network"
+      ]
+    },
+    {
+      "title_fr": "From Legba to Erzulie: A Guide to the Haitian Vodou Pantheon",
+      "title_en": "From Legba to Erzulie: A Guide to the Haitian Vodou Pantheon",
+      "title_es": "De Legba a Erzulie: una guía del panteón vudú haitiano",
+      "source": "Haiti Press Network",
+      "verification": "SINGLE-SOURCE",
+      "confidence": 75,
+      "link": "https://www.hpnhaiti.com/a-guide-to-the-haitian-vodou-pantheon/",
+      "source_url": "https://hpnhaiti.com/feed/",
+      "description": "Haitian Vodou is a captivating spiritual tradition that has woven its threads deep into the fabric of Haitis history and culture. Its syncretic nature, a blend of African, Indigenous, and Catholic inf",
+      "pub_date": "Mon, 09 Oct 2023 09:59:38 +0000",
+      "all_sources": [
+        "Haiti Press Network"
+      ]
     }
   ]
 }

@@ -1,228 +1,246 @@
-# Mole FM 94.5 — Codex/AI Agent Mission File
+# AGENTS.md — Mole FM Mission Briefing for Codex
 
-> This file is read by any AI agent (Perplexity Computer, OpenAI Codex, or any future LLM agent)
-> working on the Mole FM pipeline. It defines purpose, rules, improvement targets, and safe boundaries.
+> Read this file at the start of every task. It is the single source of truth.
 
----
+## What is Mole FM?
 
-## Mission
+Mole FM 94.5 is an AI-powered Haitian radio station serving the Haitian diaspora.
+It runs 24/7 with hourly newscasts, 3x daily podcasts, and a live reader webapp.
 
-Mole FM 94.5 is an AI-powered Haitian news radio station serving the Haitian diaspora worldwide.
-It runs 24/7, fully automated, at zero variable cost.
-
-**Goal:** Become the #1 daily Haitian news podcast in French for the diaspora.
-**Revenue target:** $1,000/day by Year 2 via blended model (sponsors + subscriptions + programmatic).
-
----
-
-## The Pipeline (What You Are Running)
-
-All files live under `/home/user/workspace/molefm/` (Perplexity workspace) and are backed up to:
-`https://github.com/molefm945-svg/molefm-audio`
-
-| Script | Purpose | Runs |
-|--------|---------|------|
-| `scripts/run_pipeline.py` | Master orchestrator: fetch → TTS → playlist → reader → GitHub → molefm.com | Hourly |
-| `scripts/news_fetcher.py` | 12-source RSS fetcher with cross-source verification engine | Via pipeline |
-| `scripts/podcast_generator.py` | 2-voice FR podcast, 18-22 min, The Daily × BBC format | 3x daily |
-| `scripts/podcast_optimizer.py` | Daily quality analysis → patches for tomorrow | Daily 01:30 Haiti |
-| `scripts/build_reader.py` | Builds trilingual karaoke reader (FR/EN/ES) | Via pipeline |
-| `scripts/autosearch.py` | Karpathy RSS autodiscovery engine | Daily midnight Haiti |
-| `scripts/tts_generator.py` | edge-tts zero-cost TTS (never switch to paid TTS) | Via pipeline |
-| `scripts/github_uploader.py` | Pushes MP3s to GitHub for permanent public URLs | Via pipeline |
-| `scripts/molefm_submitter.py` | Submits URLs to molefm.com admin via browser | Via pipeline |
+**Owner:** molefm945@gmail.com
+**Live site:** https://www.molefm.com (Vercel)
+**Reader app:** https://molefm-reader.pplx.app
+**GitHub repos:** molefm945-svg/molefm-site | molefm945-svg/molefm-audio
 
 ---
 
-## What Any Agent Can Improve Autonomously
+## Repository Structure
 
-No human approval needed for these changes:
-
-1. **`news_fetcher.py`** — Add new verified RSS sources, improve dedup, tighten verification rules
-2. **`podcast_generator.py`** — Improve dialogue quality, hook writing, act transitions, turn variety
-3. **`podcast_optimizer.py`** — Add new quality metrics, improve patch generation logic
-4. **`autosearch.py`** — Improve candidate scoring, RSS discovery patterns
-5. **`tts_generator.py`** — Improve SSML prosody, pauses, emphasis (stay within edge-tts, no paid TTS)
-
-**After any autonomous change:**
-- Run the affected script with a test invocation to verify no errors
-- Commit to git with message: `Agent: <what improved> — <metric targeted>`
-- Log to `/home/user/workspace/molefm/research/codex_improvement_log.json`
-
----
-
-## What Requires Human Approval (Never Change Without Asking)
-
-- TTS voice assignments (brand identity — see Voice Table below)
-- Sponsor configuration (`config/sponsors.json`)
-- molefm.com admin credentials
-- GitHub repo name or structure
-- Any change to deploy_website or publish_website calls
-- Adding paid APIs or services (cost discipline is critical — near-zero cost is required)
-
----
-
-## Quality Standards (Non-Negotiable)
-
-### News Standards
-- All news in **French** (not Haitian Creole)
-- Cross-source verification: high-stakes stories require 2+ independent sources
-- Attribution in broadcast: "Selon Le Nouvelliste et Radio Métropole —"
-- Never broadcast unverified deaths, arrests, coups, or political crises
-
-### Podcast Standards (The Daily × BBC × Hugo Décrypte)
-- Duration: **18-22 minutes** (~3,400-3,800 words at 170 wpm)
-- Two voices: Denise (warm, curious) / Henri (analytical, contrarian)
-- No turn under 12 words
-- No filler responses: "parfait / absolument / exactement" are banned
-- Cold hook first — never open with "Bonjour" or welcome preamble
-- Quality flags that must be zero: MONOLOGUE_RISK, TOO_SHORT, TOO_LONG, ECHO_TURNS
-
-### Audio Architecture (NEVER REGRESS)
-- `index.html` must be under 1MB — audio is NEVER embedded as base64
-- Audio served as separate MP3 files: `audio_fr.mp3`, `audio_en.mp3`, `audio_es.mp3`
-- `const AUDIO_URLS={fr:"audio_fr.mp3",en:"audio_en.mp3",es:"audio_es.mp3"};` in index.html
-- Speed control (`setSpeed()`) applies to both news audio AND `_podAudio`
-
----
-
-## Voice Table (Never Change)
-
-| Segment | Voice |
-|---------|-------|
-| Podcast Denise | fr-FR-DeniseNeural |
-| Podcast Henri | fr-FR-HenriNeural |
-| Hourly STATION_ID | fr-CA-ThierryNeural |
-| Hourly NEWS/WEATHER/SPONSOR | fr-FR-DeniseNeural |
-| Hourly SPORTS | fr-FR-HenriNeural |
-| Hourly SIGN_OFF | fr-CA-SylvieNeural |
-
----
-
-## News Source Network (12 Live Sources)
-
-**Tier 1 (Primary Haitian Press):**
-- Le Nouvelliste: `https://lenouvelliste.com/feed`
-- Radio Métropole: `https://metropole.ht/feed/`
-- Juno7: `https://juno7.ht/feed`
-- Haiti24: `https://haiti24.net/feed`
-- Rezo Nodwes: `https://rezonodwes.com/feed/`
-- Haiti Liberté: `https://haitiliberte.com/feed/`
-- Haiti Press Network: `https://hpnhaiti.com/feed/`
-- Haiti Express Sports: `https://www.haitiexpress.net/category/sports/feed/`
-- Bonpounou Sports: `https://www.bonpounou.com/news/rss/category/sports`
-
-**Tier 2 (International/Diaspora):**
-- Haitian Times: `https://haitiantimes.com/feed/`
-- RFI Haïti: `https://www.rfi.fr/fr/tag/ha%C3%AFti/rss` ← Use this URL (old one is 404)
-- BBC Afrique: `https://feeds.bbci.co.uk/afrique/rss.xml`
-
-**Dead feeds (never re-add):** IciHaiti (404), AyiboPost (malformed XML), Haiti Libre (403)
-
----
-
-## Autoresearch Loop (Karpathy Pattern)
-
-The self-improvement loop runs weekly:
-
-1. Read `research/episode_quality_log.json` — find lowest-scoring metric over last 7 episodes
-2. Research best broadcast journalism practice for that metric (web search)
-3. Write a targeted patch to the relevant script
-4. Test: run `python3 scripts/podcast_generator.py fr test` — verify no errors
-5. Log to `research/codex_improvement_log.json`:
-   ```json
-   {"date": "...", "metric_improved": "...", "change": "...", "expected_impact": "..."}
-   ```
-6. Commit: `git commit -m "Agent: <metric> improvement — <one-line description>"`
-
-**Target metrics in priority order:**
-1. Episode engagement hook strength (cold hook quality score)
-2. Turn variety (word count variance across turns)
-3. Diaspora relevance score (% of stories with direct diaspora angle)
-4. Source diversity (% of broadcasts with multi-source confirmed stories)
-5. Weather accuracy (correct city forecasts)
-
----
-
-## Revenue Roadmap (Context for Decision-Making)
-
-| Timeline | Monthly Revenue | Key Actions |
-|----------|----------------|-------------|
-| Month 1-3 | $500-$2,500 | Land 2 more direct sponsors, launch WhatsApp digest |
-| Month 4-6 | $2,500-$8,000 | Spotify/Apple distribution live, grow to 5K listeners |
-| Month 7-12 | $8,000-$20,000 | Programmatic ads (Acast), WhatsApp subscription tier |
-| Year 2-3 | $30,000+/mo | $1K/day achievable |
-
-**Fastest path to first $1K/month:**
-1. Mathurin Beach Resort sponsor (active) — estimated $500-1,500/mo
-2. Second direct sponsor pitch (target: MonCash, CAM Transfer, or diaspora real estate)
-3. WhatsApp digest: 500 subscribers × $4/mo = $2,000/mo
-
-**WhatsApp economics (highest ROI at early scale):**
-- 40-70% open rates vs email's 20-30%
-- 2 sponsors × $500/send × 8 sends/month = $8,000/mo at 5K subscribers
-
----
-
-## Recovery Instructions (If Workspace Resets)
-
-If the Perplexity workspace is ever cleared, restore the full pipeline in 5 steps:
-
-```bash
-# 1. Clone the backup repo
-git clone https://github.com/molefm945-svg/molefm-audio.git
-cd molefm-audio
-
-# 2. Copy scripts to workspace
-cp -r pipeline/scripts /home/user/workspace/molefm/scripts
-cp -r pipeline/config  /home/user/workspace/molefm/config
-
-# 3. Install dependencies
-pip install edge-tts feedparser requests mutagen playwright -q
-python3 -m playwright install chromium --with-deps
-
-# 4. Test the pipeline
-python3 /home/user/workspace/molefm/scripts/run_pipeline.py
-
-# 5. Restore scheduled crons (see pipeline/CRONS.md for IDs and schedules)
+### molefm-site (the website — React + Vite + Vercel)
+```
+client/src/
+  pages/        Home.tsx, Local.tsx, Podcasts.tsx, Music.tsx, Reader.tsx
+  components/   GlobalDashbar.tsx, ShareSheet.tsx, MiniPlayer.tsx, ...
+  lib/          api.ts
+server/         Express API routes
+deploy_vercel.py  ← deploy script (uses Vercel API token in env)
 ```
 
-Full documentation: `pipeline/AGENTS.md` (this file)
-Cron reference: `pipeline/CRONS.md`
-Skill reference: Load `molefm-ops` in Perplexity Computer
+Build command: `npm run build` in repo root → produces `dist/public/` + `dist/api.cjs`
+Deploy: `python3 deploy_vercel.py` (needs CUSTOM_CRED_API_VERCEL_COM env var)
+Or: commit to GitHub and Vercel auto-deploys from main branch.
 
----
-
-## Codex CLI Integration (Optional Enhancement)
-
-If using OpenAI Codex CLI for code improvements:
-
-```bash
-# Install
-npm install -g @openai/codex
-
-# Run autonomous improvement (non-interactive, safe for cron)
-codex exec --approval-mode full-auto \
-  "Read /home/user/workspace/molefm/AGENTS.md and \
-   /home/user/workspace/molefm/research/episode_quality_log.json. \
-   Find the lowest quality metric. Improve the relevant script. \
-   Test it. Commit the change."
-
-# For Mole FM specifically — you need Codex for:
-# - Deep rewrites of 600+ line scripts (podcast_generator.py)
-# - Adding new dialogue patterns from broadcast research
-# - Refactoring build_reader.py for performance
+### molefm-audio (pipeline scripts + audio hosting)
+```
+pipeline/scripts/   All Python scripts (news_fetcher.py, podcast_generator.py, etc.)
+pipeline/config/    sponsors.json, audio_registry.json
+AGENTS.md           This file (copy kept here too)
+audio/              Newscast MP3s (raw.githubusercontent.com URLs)
+podcasts/           Podcast MP3s
+public/radio/generated/latest-content-pack.json  ← content pack served to website
 ```
 
-**Codex does NOT handle:** web search, deployments, browser automation, notifications, cron management.
-**Perplexity Computer handles all of those** — Codex is a specialist consultant, not the primary brain.
+---
+
+## Active Task Queue (check this before starting)
+
+### TASK 1 — Source Attribution (IN PROGRESS, highest priority)
+**Goal:** Every article card on molefm.com shows a link to the original article.
+
+**Files to edit:**
+
+**Step 1 — `pipeline/scripts/news_fetcher.py`**
+Find `log_verification_run()` function (~line 398-415).
+In the `"stories"` list dict, add these fields:
+```python
+"link":         s.get("link", ""),
+"description":  s.get("description", "")[:200],
+"pub_date":     s.get("pub_date", ""),
+"source_url":   s.get("source_url", ""),
+```
+The `s` dict already has these fields from `fetch_rss()` — they are just not being saved to the log.
+
+**Step 2 — `pipeline/scripts/content_pack_generator.py`**
+Find `get_trilingual_articles()` function (~line 260-322).
+In the `articles.append({...})` block, add:
+```python
+"link":        s.get("link", ""),
+"source_url":  SOURCE_HOMEPAGES.get(s.get("source",""), ""),
+"description": s.get("description", ""),
+"pub_date":    s.get("pub_date", ""),
+"all_sources": s.get("all_sources", [s.get("source","")]),
+```
+Add SOURCE_HOMEPAGES dict before the append block:
+```python
+SOURCE_HOMEPAGES = {
+    "Le Nouvelliste": "https://lenouvelliste.com",
+    "Radio Métropole": "https://metropole.ht",
+    "Juno7": "https://juno7.ht",
+    "Haiti24": "https://haiti24.net",
+    "Rezo Nodwes": "https://rezonodwes.com",
+    "Haiti Liberté": "https://haitiliberte.com",
+    "Haiti Press Network": "https://hpnhaiti.com",
+    "Haitian Times": "https://haitiantimes.com",
+    "RFI Haïti": "https://www.rfi.fr/fr/tag/haïti",
+    "BBC Afrique": "https://www.bbc.com/afrique",
+}
+```
+
+**Step 3 — `client/src/pages/Home.tsx`**
+- Add `link?: string; source_url?: string; description?: string;` to `TrilingualArticle` interface
+- Add `ExternalLink` to the lucide-react import
+- In `TrilingualArticleCard`, after the source name `<span>`, add:
+```tsx
+{(article.link || article.source_url) && (
+  <a
+    href={article.link || article.source_url || ""}
+    target="_blank"
+    rel="noopener noreferrer"
+    onClick={e => e.stopPropagation()}
+    style={{ display:"inline-flex", alignItems:"center", gap:3,
+             fontSize:11, color:"#2563EB", fontWeight:600,
+             textDecoration:"none", marginLeft:4 }}
+  >
+    <ExternalLink size={10} />
+    {article.link ? "Lire l'article" : article.source}
+  </a>
+)}
+```
+
+**Step 4 — `client/src/pages/Local.tsx`**
+Same pattern — add source link `<a>` tag to both featured card and article cards.
+Use `ExternalLink` from lucide-react (already imported).
+Use `a.link || a.source_url` as href.
+Label: `{a.link ? "Lire" : "Source"}`
+
+**Step 5 — Verify, build, commit**
+```bash
+cd molefm-site && npm run build
+# Check for TypeScript errors — fix any before committing
+git add -A && git commit -m "feat: source attribution — article links through pipeline to frontend"
+git push
+```
 
 ---
 
-## Contact / Owner
+### TASK 2 — YouTube Pipeline (after Task 1)
+Scripts already built at:
+- `pipeline/scripts/video_generator.py`  
+- `pipeline/scripts/youtube_optimizer.py`
 
-- **Email:** molefm945@gmail.com
-- **GitHub:** molefm945-svg
-- **Live reader:** https://molefm-reader.pplx.app
-- **molefm.com admin:** https://www.molefm.com/admin/radio (password: see config)
-- **Primary AI brain:** Perplexity Computer (scheduled crons, memory, deployments)
+Add a GitHub Actions workflow `.github/workflows/youtube_video.yml` that:
+1. Triggers on `push` to `audio/*.mp3`
+2. Runs `pip install pillow numpy` 
+3. Runs `python3 pipeline/scripts/video_generator.py --file <new_mp3>`
+4. Runs `python3 pipeline/scripts/youtube_optimizer.py`
+5. Commits the generated MP4 + metadata JSON to `videos/queue/`
+
+---
+
+### TASK 3 — Podcast source notes in description (after Task 1)
+In `pipeline/scripts/podcast_generator.py`, find the episode description string
+(~line 750-755). Add source attribution lines:
+```python
+_source_lines = "\n".join(
+    f"  • {sn} ({SOURCE_URLS.get(sn, 'https://www.molefm.com')})"
+    for sn in _source_names
+) if _source_names else "  • Sources vérifiées (voir molefm.com)"
+_desc = (
+    f"Émission quotidienne Mole FM — {now.strftime('%d %B %Y')}.\n"
+    f"Analyse approfondie des actualités d'Haïti avec Denise et Henri.\n"
+    f"Format : The Daily × BBC Global News × Hugo Décrypte.\n"
+    f"Durée : {mins}m{secs:02d}s\n\n"
+    f"Sources & Références :\n{_source_lines}\n\n"
+    f"Mole FM 94.5 — La radio haïtienne qui informe. molefm.com"
+)
+```
+
+---
+
+## Critical Rules — Never Break These
+
+1. **TTS voices are FIXED** — never change them:
+   - Podcast Denise: `fr-FR-DeniseNeural`
+   - Podcast Henri: `fr-FR-HenriNeural`  
+   - Station ID: `fr-CA-ThierryNeural`
+   - Sign-off: `fr-CA-SylvieNeural`
+
+2. **Audio is NEVER base64 in HTML** — always separate .mp3 files.
+   Index.html must stay under 1MB.
+
+3. **Only Mathurin Beach Resort** is active in `config/sponsors.json`.
+   Do not remove inactive sponsors from the JSON.
+
+4. **Lenordstar URL**: always `https://lenordstar.com` — never www.lenordstar.com
+
+5. **vercel.ts must never import `registerRoutes`** — causes setInterval crash.
+
+6. **edge-tts rate**: only `+X%` format — never `-X%`.
+
+7. **All news must be in French** — do not add Haitian Creole to the broadcast script.
+
+8. **Verification engine must not be bypassed** — never lower confidence thresholds.
+
+9. **Cost = zero or near-zero** — never add paid APIs (ElevenLabs, AWS Polly, etc.)
+   without explicit owner approval.
+
+10. **always commit after completing a task** — the pipeline reads from GitHub.
+
+---
+
+## Tech Stack
+
+| Layer | Tech |
+|-------|------|
+| Frontend | React + Vite + TypeScript + TailwindCSS + Wouter |
+| Backend | Express.js (Vercel serverless via api.cjs) |
+| TTS | edge-tts (Python, zero cost) |
+| Video | FFmpeg + Pillow + numpy (zero cost) |
+| Audio hosting | GitHub raw URLs (free) |
+| Deploy | Vercel (molefm-site) + pplx.app (reader) |
+| Pipeline | Python 3.11, runs on Perplexity Computer sandbox |
+
+---
+
+## Key URLs
+
+- Vercel Team: `team_M5rY0i0dRk5V1ybICaNgODFX`
+- Vercel Project: `prj_uxsmXdONT9JB2hXgwCWpo7nyjRjw`
+- Content pack: `https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/public/radio/generated/latest-content-pack.json`
+- Stream: `https://stream.zeno.fm/0r0xa792kwzuv`
+- Mathurin Beach Resort: `https://wa.me/50938554309?text=Bonjour+Mathurin+Beach+Resort`
+
+---
+
+## Completed Work (do not redo)
+
+- ✅ GlobalDashbar (ticker + category pills + Haiti live bar) — sticky on all pages
+- ✅ ShareSheet (WhatsApp/FB/X/Telegram/SMS/copy) — on MiniPlayer + article cards
+- ✅ Nouvèl Lokal page — category filter, featured card, confidence badges
+- ✅ Biography podcast (`biography_podcast.py`) — daily "Dans la Vie de..."
+- ✅ QA subagents (`qa_subagents.py`) — 4-agent quality orchestra
+- ✅ AutoSearch (`autosearch.py`) — Karpathy RSS discovery
+- ✅ Podcast optimizer (`podcast_optimizer.py`) — daily quality analysis
+- ✅ Video generator (`video_generator.py`) — YouTube MP4 from newscast
+- ✅ YouTube optimizer (`youtube_optimizer.py`) — SEO titles, descriptions, compliance
+
+---
+
+## How to Run the Pipeline Manually
+
+```bash
+# Full pipeline
+python3 pipeline/scripts/run_pipeline.py
+
+# Just generate a podcast
+python3 pipeline/scripts/podcast_generator.py fr midi
+
+# Generate a YouTube video from latest newscast
+python3 pipeline/scripts/video_generator.py
+
+# Generate YouTube metadata
+python3 pipeline/scripts/youtube_optimizer.py
+
+# AutoSearch new RSS sources
+python3 pipeline/scripts/autosearch.py
+```
