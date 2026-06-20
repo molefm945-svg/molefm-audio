@@ -25,6 +25,7 @@ import urllib.error
 import xml.etree.ElementTree as ET
 import re
 import os
+import email.utils
 
 # ── Source Registry (Tier 1 = primary Haitian press) ─────────────────────────
 # Tier 1: Major, established Haitian outlets — highest weight in corroboration
@@ -121,6 +122,24 @@ HIGH_STAKES_KEYWORDS = [
     "arrêté", "arrested", "condamné", "convicted",
 ]
 
+BROADCAST_EXCLUSION_PATTERNS = [
+    r"\bodds\b",
+    r"\bpicks?\b",
+    r"\bbest bets?\b",
+    r"\bbetting\b",
+    r"\bprediction\b",
+    r"\bpronostic\b",
+    r"\bparis sportifs\b",
+    r"\bcommercials\b",
+    r"\bpénis\b",
+]
+
+ENGLISH_HEADLINE_WORDS = {
+    "the", "and", "with", "after", "before", "from", "what", "why", "how",
+    "are", "is", "vs", "world", "cup", "roundup", "wins", "group", "match",
+    "preview", "time", "commercials", "breaks", "takeaways",
+}
+
 JOURS_FR = ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"]
 MOIS_FR  = ["janvier","février","mars","avril","mai","juin",
              "juillet","août","septembre","octobre","novembre","décembre"]
@@ -182,6 +201,29 @@ def needs_corroboration(title, description):
     """Return True if this story touches high-stakes claims requiring 2+ sources."""
     text = (title + " " + description).lower()
     return any(kw in text for kw in HIGH_STAKES_KEYWORDS)
+
+def is_unsuitable_for_broadcast(title, description):
+    """Exclude betting-adjacent and sensitive adult health headlines from general radio news."""
+    text = (title + " " + description).lower()
+    return any(re.search(pattern, text, re.IGNORECASE) for pattern in BROADCAST_EXCLUSION_PATTERNS)
+
+def looks_like_english_headline(title):
+    """Keep live news French-first when translation is unavailable or uncertain."""
+    words = re.findall(r"[a-zA-Z]+", title.lower())
+    if not words:
+        return False
+    english_hits = sum(1 for word in words if word in ENGLISH_HEADLINE_WORDS)
+    return english_hits >= 2
+
+def pub_date_timestamp(pub_date):
+    """Parse RSS pubDate to a sortable timestamp. Undated items sort last."""
+    if not pub_date:
+        return 0
+    try:
+        parsed = email.utils.parsedate_to_datetime(pub_date)
+        return parsed.timestamp() if parsed else 0
+    except Exception:
+        return 0
 
 def translate_title_to_french(title):
     """Translate title to French using deep-translator (free, Google Translate)."""
@@ -316,6 +358,14 @@ def cross_corroborate(all_items):
         verification = "CONFIRMED" if source_count >= 2 else "SINGLE-SOURCE"
         if needs_corr and source_count >= 2:
             verification = "CONFIRMED-HIGH-STAKES"
+
+        if is_unsuitable_for_broadcast(best["title"], best["description"]):
+            print(f"  [EXCLUDED-BROADCAST-SUITABILITY] {best['title'][:60]}")
+            continue
+
+        if looks_like_english_headline(best["title"]):
+            print(f"  [EXCLUDED-NON-FRENCH] {best['title'][:60]}")
+            continue
 
         verified.append({
             **best,
@@ -661,6 +711,11 @@ def run():
     # Cross-source verification
     print("  Running cross-source verification...")
     verified = cross_corroborate(all_items)
+    verified.sort(key=lambda s: (
+        -pub_date_timestamp(s.get("pub_date", "")),
+        -s.get("source_count", 1),
+        -s.get("confidence", 0),
+    ))
     confirmed = sum(1 for v in verified if "CONFIRMED" in v.get("verification",""))
     print(f"  Verified pool: {len(verified)} stories ({confirmed} multi-source confirmed)")
 
