@@ -1,0 +1,140 @@
+{
+  "station": "Mole FM",
+  "language": "fr",
+  "generated_at": "2026-06-23T17:41:57.500597",
+  "broadcast_hour": "2026-06-23 17:00",
+  "editorial_standard": "cross-source verification + attribution",
+  "total_segments": 7,
+  "source_backed": true,
+  "source_story_count": 6,
+  "source_backed_stories": [
+    {
+      "title": "Retrait de la CPI : le Niger passe aux actes",
+      "description": "Le Niger a officiellement déposé sa demande de retrait de la Cour pénale internationale (CPI), neuf mois après avoir annoncé son intention de la quitter.",
+      "source": "BBC Afrique",
+      "source_lang": "fr",
+      "all_sources": [
+        "BBC Afrique"
+      ],
+      "confidence": 40,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://www.bbc.com/afrique/articles/c892d7qpyylo?at_medium=RSS&at_campaign=rss",
+      "pub_date": "Tue, 23 Jun 2026 17:39:17 GMT",
+      "source_url": "https://feeds.bbci.co.uk/afrique/rss.xml"
+    },
+    {
+      "title": "Pour une révision participative du décret du 31 mars 2026 sur la TNT et les fréquences 700 MHz",
+      "description": "Par Marcelin Montaigne Sous la pression des secteurs concernés, le Premier ministre Alix Didier Fils-Aimé a convoqué le Conseil Électoral Provisoire (CEP) en vue d’une refonte du décret électoral élaboré de manière unilatérale le 2 juin 2026. Ce geste démontre une ouverture pragmatique face à la con",
+      "source": "Rezo Nodwes",
+      "source_lang": "fr",
+      "all_sources": [
+        "Rezo Nodwes"
+      ],
+      "confidence": 75,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://rezonodwes.com/2026/06/pour-une-revision-participative-du-decret-du-31-mars-2026-sur-la-tnt-et-les-frequences-700-mhz/?utm_source=rss&utm_medium=rss&utm_campaign=pour-une-revision-participative-du-decret-du-31-mars-2026-sur-la-tnt-et-les-frequences-700-mhz",
+      "pub_date": "Tue, 23 Jun 2026 17:39:10 +0000",
+      "source_url": "https://rezonodwes.com/feed/"
+    },
+    {
+      "title": "Gare aux acnés : Des dermatologues alertent sur un objet du quotidien que presque personne ne nettoie",
+      "description": "Vous nettoyez votre visage. Vous appliquez des crèmes. Vous évitez de toucher vos boutons. Pourtant, un objet que vous portez contre votre joue plusieurs fois par jour pourrait contribuer à lapparition dimperfections cutanées : votre téléphone portable. Il vous accompagne partout : dans la voiture, ",
+      "source": "Rezo Nodwes",
+      "source_lang": "fr",
+      "all_sources": [
+        "Rezo Nodwes"
+      ],
+      "confidence": 75,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://rezonodwes.com/2026/06/gare-aux-acnes-des-dermatologues-alertent-sur-un-objet-du-quotidien-que-presque-personne-ne-nettoie/?utm_source=rss&utm_medium=rss&utm_campaign=gare-aux-acnes-des-dermatologues-alertent-sur-un-objet-du-quotidien-que-presque-personne-ne-nettoie",
+      "pub_date": "Tue, 23 Jun 2026 02:27:31 +0000",
+      "source_url": "https://rezonodwes.com/feed/"
+    },
+    {
+      "title": "La ministre Sandra Paulemon représente Haïti à la Semaine de la consolidation de la paix de l’ONU",
+      "description": "La ministre de la Planification et de la Coopération externe (MPCE), Dre Sandra Paulemon, conduit une délégation haïtienne à New York dans le cadre de la première Semaine de la consolidation de la paix des Nations Unies, organisée du 22 au 26 juin au siège de l’ONU.",
+      "source": "Haiti24",
+      "source_lang": "fr",
+      "all_sources": [
+        "Haiti24"
+      ],
+      "confidence": 75,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://haiti24.net/la-ministre-sandra-paulemon-represente-haiti-a-la-semaine-de-la-consolidation-de-la-paix-de-lonu/",
+      "pub_date": "Tue, 23 Jun 2026 01:03:30 +0000",
+      "source_url": "https://haiti24.net/feed"
+    },
+    {
+      "title": "Haïti plaide à l’ONU pour un accompagnement international aligné sur ses priorités nationales",
+      "description": "En mission à New York, la ministre Sandra Paulemon veut renforcer le dialogue avec les partenaires internationaux afin de mieux arrimer l’aide extérieure aux besoins réels du pays. La ministre de la Planification et de la Coopération Externe, Sandra Paulemon, participe à la première édition de la Se",
+      "source": "Juno7",
+      "source_lang": "fr",
+      "all_sources": [
+        "Juno7"
+      ],
+      "confidence": 75,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://www.juno7.ht/haiti-onu-priorites-cooperation-internationale/",
+      "pub_date": "Tue, 23 Jun 2026 00:53:47 +0000",
+      "source_url": "https://juno7.ht/feed"
+    },
+    {
+      "title": "Coupe du monde 2026 : Johny Placide annonce sa retraite internationale après le match contre le Maroc",
+      "description": "Le gardien de but et capitaine de la sélection haïtienne, Johny Placide, a confirmé que la rencontre face au Maroc, prévue le 24 juin, sera son dernier match sous les couleurs nationales. À 38 ans, l’emblématique portier des Grenadiers a décidé de mettre un terme à sa carrière internationale au term",
+      "source": "Haiti24",
+      "source_lang": "fr",
+      "all_sources": [
+        "Haiti24"
+      ],
+      "confidence": 75,
+      "verification": "SINGLE-SOURCE",
+      "link": "https://haiti24.net/coupe-du-monde-2026-johny-placide-annonce-sa-retraite-internationale-apres-le-match-contre-le-maroc/",
+      "pub_date": "Tue, 23 Jun 2026 00:14:50 +0000",
+      "source_url": "https://haiti24.net/feed"
+    }
+  ],
+  "segments": [
+    {
+      "segment": "STATION_ID",
+      "lang": "fr",
+      "text": "Mole FM. Votre radio communautaire. Il est mardi 23 juin 2026 à 17h41.",
+      "voice_note": "Warm French-Canadian male, station ID"
+    },
+    {
+      "segment": "SPONSOR",
+      "lang": "fr",
+      "text": "Ce bulletin est présenté par Mathurin Beach Resort — la mer, le soleil, et l'hospitalité haïtienne à leur meilleur. Visitez Mathurin Beach Resort au Môle Saint-Nicolas.",
+      "voice_note": "Clear French female, sponsor read"
+    },
+    {
+      "segment": "INTRO",
+      "lang": "fr",
+      "text": "Bonjour et bienvenue sur Mole FM. Voici votre bulletin d'informations du mardi 23 juin 2026 à 17h41. Je vous présente les dernières nouvelles d'Haïti et de la Caraïbe. ",
+      "voice_note": "Professional French female broadcaster"
+    },
+    {
+      "segment": "NEWS_MAIN",
+      "lang": "fr",
+      "text": "Voici les titres de l'actualité. Titre 1 : Retrait de la CPI : le Niger passe aux actes. Selon BBC Afrique — Le Niger a officiellement déposé sa demande de retrait de la Cour pénale internationale (CPI), neuf mois après avoir annoncé son intention de la quitter. Titre 2 : Pour une révision participative du décret du 31 mars 2026 sur la TNT et les fréquences 700 MHz. Selon Rezo Nodwes — Par Marcelin Montaigne Sous la pression des secteurs concernés, le Premier ministre Alix Didier Fils-Aimé a convoqué le Conseil Électoral Provisoire (CEP) en vue d’une refonte du décret électoral élaboré de manière unila Titre 3 : Gare aux acnés : Des dermatologues alertent sur un objet du quotidien que presque personne ne nettoie. Selon Rezo Nodwes — Vous nettoyez votre visage. Vous appliquez des crèmes. Vous évitez de toucher vos boutons. Titre 4 : La ministre Sandra Paulemon représente Haïti à la Semaine de la consolidation de la paix de l’ONU. Selon Haiti24 — La ministre de la Planification et de la Coopération externe (MPCE), Dre Sandra Paulemon, conduit une délégation haïtienne à New York dans le cadre de la première Semaine de la consolidation de la paix des Nations Unies, Titre 5 : Haïti plaide à l’ONU pour un accompagnement international aligné sur ses priorités nationales. Selon Juno7 — En mission à New York, la ministre Sandra Paulemon veut renforcer le dialogue avec les partenaires internationaux afin de mieux arrimer l’aide extérieure aux besoins réels du pays. Titre 6 : Coupe du monde 2026 : Johny Placide annonce sa retraite internationale après le match contre le Maroc. Selon Haiti24 — Le gardien de but et capitaine de la sélection haïtienne, Johny Placide, a confirmé que la rencontre face au Maroc, prévue le 24 juin, sera son dernier match sous les couleurs nationales.",
+      "voice_note": "Clear, professional French female broadcaster"
+    },
+    {
+      "segment": "SPORTS",
+      "lang": "fr",
+      "text": "Et maintenant, le sport. Coupe du monde 2026 : Johny Placide annonce sa retraite internationale après le match contre le Maroc, selon Haiti24. Suivez tous les résultats sur Mole FM.",
+      "voice_note": "Energetic French male sports announcer"
+    },
+    {
+      "segment": "WEATHER",
+      "lang": "fr",
+      "text": "Et voici la météo pour Haïti. À Môle-Saint-Nicolas : 34 degrés, principalement dégagé. Vent : 13 km/h. Humidité : 54 pourcent. À Port-au-Prince : 37 degrés, ciel dégagé. Vent : 12 km/h. Humidité : 24 pourcent. À Cap-Haïtien : 29 degrés, ciel dégagé. Vent : 30 km/h. Humidité : 78 pourcent. Restez informés avec Mole FM.",
+      "voice_note": "Clear French female, weather forecast"
+    },
+    {
+      "segment": "SIGN_OFF",
+      "lang": "fr",
+      "text": "C'était votre bulletin d'informations sur Mole FM. Mole FM — votre source d'information vérifiée, au service de la communauté haïtienne. Nous vous retrouvons dans une heure.",
+      "voice_note": "Warm French female, soft close"
+    }
+  ]
+}

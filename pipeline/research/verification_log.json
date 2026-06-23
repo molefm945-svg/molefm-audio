@@ -85,5 +85,98 @@
         "source_url": "https://rezonodwes.com/feed/"
       }
     ]
+  },
+  {
+    "timestamp": "2026-06-23T17:41:57.500597",
+    "total_fetched": 50,
+    "after_verify": 6,
+    "confirmed": 0,
+    "single_source": 6,
+    "stories": [
+      {
+        "title": "Retrait de la CPI : le Niger passe aux actes",
+        "source": "BBC Afrique",
+        "source_lang": "fr",
+        "all_sources": [
+          "BBC Afrique"
+        ],
+        "confidence": 40,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://www.bbc.com/afrique/articles/c892d7qpyylo?at_medium=RSS&at_campaign=rss",
+        "description": "Le Niger a officiellement déposé sa demande de retrait de la Cour pénale internationale (CPI), neuf mois après avoir annoncé son intention de la quitter.",
+        "pub_date": "Tue, 23 Jun 2026 17:39:17 GMT",
+        "source_url": "https://feeds.bbci.co.uk/afrique/rss.xml"
+      },
+      {
+        "title": "Pour une révision participative du décret du 31 mars 2026 sur la TNT et les fréq",
+        "source": "Rezo Nodwes",
+        "source_lang": "fr",
+        "all_sources": [
+          "Rezo Nodwes"
+        ],
+        "confidence": 75,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://rezonodwes.com/2026/06/pour-une-revision-participative-du-decret-du-31-mars-2026-sur-la-tnt-et-les-frequences-700-mhz/?utm_source=rss&utm_medium=rss&utm_campaign=pour-une-revision-participative-du-decret-du-31-mars-2026-sur-la-tnt-et-les-frequences-700-mhz",
+        "description": "Par Marcelin Montaigne Sous la pression des secteurs concernés, le Premier ministre Alix Didier Fils-Aimé a convoqué le Conseil Électoral Provisoire (CEP) en vue d’une refonte du décret électoral élab",
+        "pub_date": "Tue, 23 Jun 2026 17:39:10 +0000",
+        "source_url": "https://rezonodwes.com/feed/"
+      },
+      {
+        "title": "Gare aux acnés : Des dermatologues alertent sur un objet du quotidien que presqu",
+        "source": "Rezo Nodwes",
+        "source_lang": "fr",
+        "all_sources": [
+          "Rezo Nodwes"
+        ],
+        "confidence": 75,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://rezonodwes.com/2026/06/gare-aux-acnes-des-dermatologues-alertent-sur-un-objet-du-quotidien-que-presque-personne-ne-nettoie/?utm_source=rss&utm_medium=rss&utm_campaign=gare-aux-acnes-des-dermatologues-alertent-sur-un-objet-du-quotidien-que-presque-personne-ne-nettoie",
+        "description": "Vous nettoyez votre visage. Vous appliquez des crèmes. Vous évitez de toucher vos boutons. Pourtant, un objet que vous portez contre votre joue plusieurs fois par jour pourrait contribuer à lapparitio",
+        "pub_date": "Tue, 23 Jun 2026 02:27:31 +0000",
+        "source_url": "https://rezonodwes.com/feed/"
+      },
+      {
+        "title": "La ministre Sandra Paulemon représente Haïti à la Semaine de la consolidation de",
+        "source": "Haiti24",
+        "source_lang": "fr",
+        "all_sources": [
+          "Haiti24"
+        ],
+        "confidence": 75,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://haiti24.net/la-ministre-sandra-paulemon-represente-haiti-a-la-semaine-de-la-consolidation-de-la-paix-de-lonu/",
+        "description": "La ministre de la Planification et de la Coopération externe (MPCE), Dre Sandra Paulemon, conduit une délégation haïtienne à New York dans le cadre de la première Semaine de la consolidation de la pai",
+        "pub_date": "Tue, 23 Jun 2026 01:03:30 +0000",
+        "source_url": "https://haiti24.net/feed"
+      },
+      {
+        "title": "Haïti plaide à l’ONU pour un accompagnement international aligné sur ses priorit",
+        "source": "Juno7",
+        "source_lang": "fr",
+        "all_sources": [
+          "Juno7"
+        ],
+        "confidence": 75,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://www.juno7.ht/haiti-onu-priorites-cooperation-internationale/",
+        "description": "En mission à New York, la ministre Sandra Paulemon veut renforcer le dialogue avec les partenaires internationaux afin de mieux arrimer l’aide extérieure aux besoins réels du pays. La ministre de la P",
+        "pub_date": "Tue, 23 Jun 2026 00:53:47 +0000",
+        "source_url": "https://juno7.ht/feed"
+      },
+      {
+        "title": "Coupe du monde 2026 : Johny Placide annonce sa retraite internationale après le ",
+        "source": "Haiti24",
+        "source_lang": "fr",
+        "all_sources": [
+          "Haiti24"
+        ],
+        "confidence": 75,
+        "verification": "SINGLE-SOURCE",
+        "link": "https://haiti24.net/coupe-du-monde-2026-johny-placide-annonce-sa-retraite-internationale-apres-le-match-contre-le-maroc/",
+        "description": "Le gardien de but et capitaine de la sélection haïtienne, Johny Placide, a confirmé que la rencontre face au Maroc, prévue le 24 juin, sera son dernier match sous les couleurs nationales. À 38 ans, l’",
+        "pub_date": "Tue, 23 Jun 2026 00:14:50 +0000",
+        "source_url": "https://haiti24.net/feed"
+      }
+    ]
   }
 ]

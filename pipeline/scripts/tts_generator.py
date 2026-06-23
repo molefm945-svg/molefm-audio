@@ -20,10 +20,16 @@ import datetime
 import subprocess
 import time
 import edge_tts
+from pathlib import Path
 
-SCRIPTS_DIR  = "/home/user/workspace/molefm/scripts"
-AUDIO_DIR    = "/home/user/workspace/molefm/audio"
-PLAYLISTS_DIR = "/home/user/workspace/molefm/playlists"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PIPELINE_DIR = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = os.environ.get(
+    "MOLEFM_NEWS_SCRIPTS_DIR",
+    str(PIPELINE_DIR / "runtime" / "scripts"),
+)
+AUDIO_DIR = os.environ.get("MOLEFM_AUDIO_DIR", str(REPO_ROOT / "audio"))
+PLAYLISTS_DIR = os.environ.get("MOLEFM_PLAYLISTS_DIR", str(REPO_ROOT / "playlists"))
 
 # ── Voice assignments ────────────────────────────────────────────────────────
 VOICE_MAP = {
@@ -39,13 +45,13 @@ VOICE_MAP = {
 
 # ── Speaking rate per segment ────────────────────────────────────────────────
 RATE_MAP = {
-    "STATION_ID": "-15%",   # Slower, punchy ID
-    "SPONSOR":    "-8%",    # Measured sponsor read
-    "INTRO":      "-5%",    # Slightly measured intro
+    "STATION_ID": "+0%",    # Clear station ID
+    "SPONSOR":    "+0%",    # Measured sponsor read
+    "INTRO":      "+0%",    # Clear intro
     "NEWS_MAIN":  "+0%",    # Normal broadcast pace
     "SPORTS":     "+5%",    # Slightly faster for energy
-    "WEATHER":    "-5%",    # Measured pace for clarity
-    "SIGN_OFF":   "-15%",   # Slow warm close
+    "WEATHER":    "+0%",    # Measured pace for clarity
+    "SIGN_OFF":   "+0%",    # Warm close
     "default":    "+0%",
 }
 

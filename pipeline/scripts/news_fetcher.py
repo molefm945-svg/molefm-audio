@@ -26,6 +26,7 @@ import xml.etree.ElementTree as ET
 import re
 import os
 import email.utils
+from pathlib import Path
 
 # ── Source Registry (Tier 1 = primary Haitian press) ─────────────────────────
 # Tier 1: Major, established Haitian outlets — highest weight in corroboration
@@ -89,10 +90,24 @@ NEWS_SOURCES = [
      "note": "Haitian sports portal."},
 ]
 
-SCRIPTS_DIR           = "/home/user/workspace/molefm/scripts"
-SEEN_TITLES_FILE      = "/home/user/workspace/molefm/scripts/seen_titles.json"
-AUTOSEARCH_SOURCES_FILE = "/home/user/workspace/molefm/scripts/autosearch_sources.json"
-VERIFICATION_LOG_FILE = "/home/user/workspace/molefm/research/verification_log.json"
+REPO_ROOT = Path(__file__).resolve().parents[2]
+PIPELINE_DIR = Path(__file__).resolve().parents[1]
+SCRIPTS_DIR = os.environ.get(
+    "MOLEFM_NEWS_SCRIPTS_DIR",
+    str(PIPELINE_DIR / "runtime" / "scripts"),
+)
+SEEN_TITLES_FILE = os.environ.get(
+    "MOLEFM_SEEN_TITLES_FILE",
+    str(PIPELINE_DIR / "runtime" / "seen_titles.json"),
+)
+AUTOSEARCH_SOURCES_FILE = os.environ.get(
+    "MOLEFM_AUTOSEARCH_SOURCES_FILE",
+    str(PIPELINE_DIR / "runtime" / "autosearch_sources.json"),
+)
+VERIFICATION_LOG_FILE = os.environ.get(
+    "MOLEFM_VERIFICATION_LOG_FILE",
+    str(PIPELINE_DIR / "research" / "verification_log.json"),
+)
 
 TARGET_ARTICLES = 6
 
@@ -137,7 +152,11 @@ BROADCAST_EXCLUSION_PATTERNS = [
 ENGLISH_HEADLINE_WORDS = {
     "the", "and", "with", "after", "before", "from", "what", "why", "how",
     "are", "is", "vs", "world", "cup", "roundup", "wins", "group", "match",
-    "preview", "time", "commercials", "breaks", "takeaways",
+    "preview", "time", "commercials", "breaks", "takeaways", "last", "night",
+    "baseball", "beat", "red", "sox", "rockies", "dodgers", "angels",
+    "maybe", "never", "seen", "fashion", "team", "teams", "first", "action",
+    "scotland", "miami", "mlb", "nba", "nfl", "nhl", "soccer", "live",
+    "scores", "highlights", "season", "league", "players", "player",
 }
 
 JOURS_FR = ["lundi","mardi","mercredi","jeudi","vendredi","samedi","dimanche"]
@@ -269,6 +288,7 @@ def fetch_rss(source, timeout=10):
                     "pub_date":    pub_date,
                     "source_name": name,
                     "source_tier": tier,
+                    "source_lang": source.get("lang", "fr"),
                     "source_url":  url,
                     "category":    source.get("category", "news"),
                 })
@@ -295,6 +315,7 @@ def fetch_rss(source, timeout=10):
                     items2.append({
                         "title": title, "description": description, "link": link,
                         "pub_date": "", "source_name": name, "source_tier": tier,
+                        "source_lang": source.get("lang", "fr"),
                         "source_url": url, "category": source.get("category","news"),
                     })
             print(f"  [OK-recovered] {name}: {len(items2)} items (entity-stripped)")
@@ -361,6 +382,10 @@ def cross_corroborate(all_items):
 
         if is_unsuitable_for_broadcast(best["title"], best["description"]):
             print(f"  [EXCLUDED-BROADCAST-SUITABILITY] {best['title'][:60]}")
+            continue
+
+        if best.get("source_lang", "fr") != "fr":
+            print(f"  [EXCLUDED-NON-FRENCH-SOURCE] {best['title'][:60]}")
             continue
 
         if looks_like_english_headline(best["title"]):
@@ -449,6 +474,7 @@ def log_verification_run(stories, chosen, timestamp):
                 {
                     "title":        s["title"][:80],
                     "source":       s["source_name"],
+                    "source_lang":  s.get("source_lang", ""),
                     "all_sources":  s.get("all_sources", [s["source_name"]]),
                     "confidence":   s.get("confidence", 50),
                     "verification": s.get("verification", "SINGLE-SOURCE"),
@@ -665,7 +691,7 @@ def build_french_script(verified_stories, timestamp, weather_data=None):
     return segments
 
 
-def save_script(segments, timestamp):
+def save_script(segments, timestamp, stories=None):
     os.makedirs(SCRIPTS_DIR, exist_ok=True)
     filename = timestamp.strftime("newscast_%Y%m%d_%H%M.json")
     filepath = os.path.join(SCRIPTS_DIR, filename)
@@ -676,6 +702,23 @@ def save_script(segments, timestamp):
         "broadcast_hour": timestamp.strftime("%Y-%m-%d %H:00"),
         "editorial_standard": "cross-source verification + attribution",
         "total_segments": len(segments),
+        "source_backed": bool(stories),
+        "source_story_count": len(stories or []),
+        "source_backed_stories": [
+            {
+                "title": s.get("title", ""),
+                "description": s.get("description", ""),
+                "source": s.get("source_name", ""),
+                "source_lang": s.get("source_lang", ""),
+                "all_sources": s.get("all_sources", [s.get("source_name", "")]),
+                "confidence": s.get("confidence", 0),
+                "verification": s.get("verification", ""),
+                "link": s.get("link", ""),
+                "pub_date": s.get("pub_date", ""),
+                "source_url": s.get("source_url", ""),
+            }
+            for s in (stories or [])
+        ],
         "segments":       segments
     }
     with open(filepath, "w", encoding="utf-8") as f:
@@ -770,7 +813,7 @@ def run():
     print("  Building professional broadcast script...")
     segments = build_french_script(chosen, timestamp, weather_data=weather_data)
 
-    path = save_script(segments, timestamp)
+    path = save_script(segments, timestamp, chosen)
     print(f"  Done. Segments: {len(segments)} | Verified stories: {len(chosen)}")
     return path, segments
 

@@ -1,5 +1,8 @@
 {
-  "latest_newscast": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260620_1427.mp3",
+  "latest_newscast": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3",
   "latest_podcast": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260617_1615.mp3",
-  "updated_at": "2026-06-20T14:27:57.798853Z"
+  "updated_at": "2026-06-23T17:42:34.402715Z",
+  "latest_source_backed_newscast": "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3",
+  "source_backed": true,
+  "source_story_count": 6
 }

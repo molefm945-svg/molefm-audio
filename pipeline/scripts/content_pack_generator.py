@@ -35,16 +35,24 @@ import json
 import glob
 import datetime
 import subprocess
+from pathlib import Path
 
 # Paths
-WORKSPACE = "/home/user/workspace/molefm"
-AUDIO_DIR = os.path.join(WORKSPACE, "audio")
-PODCAST_DIR = os.path.join(WORKSPACE, "audio/podcasts")
-SCRIPTS_DIR = os.path.join(WORKSPACE, "scripts")
-CONFIG_DIR = os.path.join(WORKSPACE, "config")
+REPO_ROOT = Path(__file__).resolve().parents[2]
+WORKSPACE = os.environ.get("MOLEFM_WORKSPACE", str(REPO_ROOT))
+AUDIO_DIR = os.environ.get("MOLEFM_AUDIO_DIR", os.path.join(WORKSPACE, "audio"))
+PODCAST_DIR = os.environ.get("MOLEFM_PODCAST_DIR", os.path.join(WORKSPACE, "podcasts"))
+SCRIPTS_DIR = os.environ.get(
+    "MOLEFM_NEWS_SCRIPTS_DIR",
+    os.path.join(WORKSPACE, "pipeline", "runtime", "scripts"),
+)
+CONFIG_DIR = os.environ.get("MOLEFM_CONFIG_DIR", os.path.join(WORKSPACE, "pipeline", "config"))
 REGISTRY_PATH = os.path.join(CONFIG_DIR, "audio_registry.json")
-OUTPUT_DIR = os.path.join(WORKSPACE, "research")
-VERIFICATION_LOG_FILE = os.path.join(OUTPUT_DIR, "news_verification_log.json")
+OUTPUT_DIR = os.environ.get("MOLEFM_OUTPUT_DIR", os.path.join(WORKSPACE, "pipeline", "research"))
+VERIFICATION_LOG_FILE = os.environ.get(
+    "MOLEFM_VERIFICATION_LOG_FILE",
+    os.path.join(OUTPUT_DIR, "verification_log.json"),
+)
 
 # GitHub raw audio base URL
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main"
@@ -139,14 +147,37 @@ def get_recent_newscast_urls(count=6):
     return [e["url"] for e in registry.get("newscasts", [])[:count]]
 
 
+def get_recent_newscasts(count=6):
+    """Get the N most recent newscast registry entries with metadata."""
+    registry = load_audio_registry()
+    entries = []
+    for entry in registry.get("newscasts", [])[:count]:
+        if isinstance(entry, dict) and entry.get("url"):
+            entries.append(entry)
+        elif isinstance(entry, str):
+            entries.append({"url": entry, "filename": entry.split("/")[-1]})
+    source_backed_entries = [
+        entry for entry in entries
+        if entry.get("source_backed") or entry.get("source_backed_stories")
+    ]
+    return source_backed_entries or entries
+
+
 def get_recent_podcast_urls(count=3):
     """Get URLs for the N most recent podcasts."""
     registry = load_audio_registry()
     return [e["url"] for e in registry.get("podcasts", [])[:count]]
 
 
-def get_newscast_title_from_script(newscast_url):
+def get_newscast_title_from_script(newscast_entry):
     """Try to extract a meaningful title from the newscast script JSON."""
+    if isinstance(newscast_entry, dict):
+        newscast_url = newscast_entry.get("url", "")
+        if newscast_entry.get("title"):
+            return newscast_entry["title"], int(newscast_entry.get("haiti_hour", 12))
+    else:
+        newscast_url = newscast_entry
+
     # Extract filename from URL
     filename = newscast_url.split("/")[-1].replace(".mp3", "")
     # Parse timestamp: newscast_YYYYMMDD_HHMM
@@ -164,11 +195,31 @@ def get_newscast_title_from_script(newscast_url):
 
 def build_news_slot(newscast_url, station_hour, slot_index):
     """Build a content pack slot for a newscast."""
-    title, hour = get_newscast_title_from_script(newscast_url)
+    if isinstance(newscast_url, dict):
+        newscast_entry = newscast_url
+        newscast_url = newscast_entry.get("url", "")
+    else:
+        newscast_entry = {"url": newscast_url, "filename": newscast_url.split("/")[-1]}
+
+    title, hour = get_newscast_title_from_script(newscast_entry)
     filename = newscast_url.split("/")[-1]
     # Unique ID based on filename
     slot_id = filename.replace(".mp3", "").replace("newscast_", "")
     now = datetime.datetime.utcnow()
+    source_stories = newscast_entry.get("source_backed_stories", [])
+    source_links = [
+        {
+            "title": story.get("title", ""),
+            "source": story.get("source", ""),
+            "url": story.get("link") or story.get("source_url", ""),
+            "pub_date": story.get("pub_date", ""),
+            "verification": story.get("verification", ""),
+            "confidence": story.get("confidence", 0),
+        }
+        for story in source_stories
+        if story.get("link") or story.get("source_url")
+    ]
+    source_backed = bool(source_stories) and len(source_links) == len(source_stories)
 
     # Try to get duration
     # Can't get duration of remote file easily — use estimate
@@ -189,6 +240,16 @@ def build_news_slot(newscast_url, station_hour, slot_index):
         "station_hour": station_hour,
         "starts_at": now.isoformat() + "Z",
         "editorial_status": "review_supervisor_auto_approved_for_air",
+        "editorial_standard": "source-backed actual news from live RSS fetch",
+        "source_backed": source_backed,
+        "actual_news": source_backed,
+        "news_generated_at": newscast_entry.get("generated_at", ""),
+        "uploaded_at": newscast_entry.get("uploaded_at", ""),
+        "script_path": newscast_entry.get("script_path", ""),
+        "source_story_count": len(source_stories),
+        "source_links": source_links,
+        "source_freshness": newscast_entry.get("source_freshness", {}),
+        "verification_summary": newscast_entry.get("verification_summary", {}),
         "voice_provider": "edge-tts",
         "voice_provider_status": "generated",
         "tts_voice": "fr-FR-DeniseNeural",
@@ -314,12 +375,12 @@ def generate_content_pack():
     now = datetime.datetime.utcnow()
     run_id = f"molefm-pipeline-{now.strftime('%Y%m%dT%H%M%SZ')}"
 
-    news_urls = get_recent_newscast_urls(count=18)
+    news_entries = get_recent_newscasts(count=18)
     podcast_urls = get_recent_podcast_urls(count=6)
 
-    if not news_urls:
+    if not news_entries:
         print("  [WARN] No newscast URLs in registry — content pack will be empty")
-        news_urls = []
+        news_entries = []
 
     slots = []
     news_idx = 0
@@ -335,16 +396,16 @@ def generate_content_pack():
         if use_podcast:
             slot = build_podcast_slot(podcast_urls[podcast_idx], station_hour, slot_num)
             podcast_idx += 1
-        elif news_idx < len(news_urls):
-            slot = build_news_slot(news_urls[news_idx], station_hour, slot_num)
+        elif news_idx < len(news_entries):
+            slot = build_news_slot(news_entries[news_idx], station_hour, slot_num)
             news_idx += 1
         elif podcast_urls and podcast_idx < len(podcast_urls):
             # Fall back to podcast if no more news
             slot = build_podcast_slot(podcast_urls[podcast_idx], station_hour, slot_num)
             podcast_idx += 1
-        elif news_urls:
+        elif news_entries:
             # Cycle back through news
-            slot = build_news_slot(news_urls[news_idx % len(news_urls)], station_hour, slot_num)
+            slot = build_news_slot(news_entries[news_idx % len(news_entries)], station_hour, slot_num)
             news_idx += 1
         else:
             # No audio at all — skip
@@ -406,7 +467,7 @@ def save_to_github_repo(content_pack, m3u_content):
     public/radio/generated/ so it's accessible via GitHub Pages.
     Returns True on success.
     """
-    repo_dir = "/tmp/molefm-audio-repo"
+    repo_dir = os.environ.get("MOLEFM_AUDIO_REPO_DIR", str(REPO_ROOT))
 
     # Ensure the output directories exist
     out_dir = os.path.join(repo_dir, "public", "radio", "generated")
