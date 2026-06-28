@@ -1,52 +1,212 @@
 #EXTM3U
-# Mole FM 24/7 generated program queue
-# Generated: 2026-06-23T17:42:34.404053Z
-# Source pack: https://www.molefm.com/radio/generated/latest-content-pack.json
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:1200,Mole FM Journal du Matin — Analyse approfondie
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/podcasts/podcast_fr_20260616_2048.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
-#EXTINF:180,Mole FM Actualités — 23/06/2026 13h41 (Haïti)
-https://raw.githubusercontent.com/molefm945-svg/molefm-audio/main/audio/newscast_20260623_1741.mp3
+# Mole FM approved Suno 24/7 live rotation
+#EXTINF:224,Ansanm Nan Ritm (1) - Mole FM Original
+/radio/generated/suno-live/web/00-ansanm-nan-ritm-1.mp3
+#EXTINF:217,Ansanm Nan Ritm - Mole FM Original
+/radio/generated/suno-live/web/01-ansanm-nan-ritm.mp3
+#EXTINF:214,Ansanm Nou Kanpe (1) - Mole FM Original
+/radio/generated/suno-live/web/02-ansanm-nou-kanpe-1.mp3
+#EXTINF:208,Ansanm Nou Kanpe - Mole FM Original
+/radio/generated/suno-live/web/03-ansanm-nou-kanpe.mp3
+#EXTINF:275,Apre Lapli (1) - Mole FM Original
+/radio/generated/suno-live/web/04-apre-lapli-1.mp3
+#EXTINF:255,Apre Lapli - Mole FM Original
+/radio/generated/suno-live/web/05-apre-lapli.mp3
+#EXTINF:202,Chèf Kè Mwen (1) - Mole FM Original
+/radio/generated/suno-live/web/06-chef-ke-mwen-1.mp3
+#EXTINF:200,Chèf Kè Mwen (2) - Mole FM Original
+/radio/generated/suno-live/web/07-chef-ke-mwen-2.mp3
+#EXTINF:219,Demen Peyi a (1) - Mole FM Original
+/radio/generated/suno-live/web/08-demen-peyi-a-1.mp3
+#EXTINF:227,Demen Peyi a - Mole FM Original
+/radio/generated/suno-live/web/09-demen-peyi-a.mp3
+#EXTINF:224,Dèyè Zetwal yo (1) - Mole FM Original
+/radio/generated/suno-live/web/10-deye-zetwal-yo-1.mp3
+#EXTINF:220,Dèyè Zetwal yo - Mole FM Original
+/radio/generated/suno-live/web/11-deye-zetwal-yo.mp3
+#EXTINF:205,Dousman Nan Kè (1) - Mole FM Original
+/radio/generated/suno-live/web/12-dousman-nan-ke-1.mp3
+#EXTINF:200,Dousman Nan Kè - Mole FM Original
+/radio/generated/suno-live/web/13-dousman-nan-ke.mp3
+#EXTINF:184,Gade M Klere (1) - Mole FM Original
+/radio/generated/suno-live/web/14-gade-m-klere-1.mp3
+#EXTINF:203,Gade M Klere - Mole FM Original
+/radio/generated/suno-live/web/15-gade-m-klere.mp3
+#EXTINF:225,Je M Te Fèmen - Mole FM Original
+/radio/generated/suno-live/web/16-je-m-te-femen.mp3
+#EXTINF:225,Je M Te Fèmen - Mole FM Original
+/radio/generated/suno-live/web/17-je-m-te-femen.mp3
+#EXTINF:232,Kanpe Fò (1) - Mole FM Original
+/radio/generated/suno-live/web/18-kanpe-fo-1.mp3
+#EXTINF:242,Kanpe Fò - Mole FM Original
+/radio/generated/suno-live/web/19-kanpe-fo.mp3
+#EXTINF:275,Kè an Repo (1) - Mole FM Original
+/radio/generated/suno-live/web/20-ke-an-repo-1.mp3
+#EXTINF:252,Kè an Repo - Mole FM Original
+/radio/generated/suno-live/web/21-ke-an-repo.mp3
+#EXTINF:221,Kè De Nwa (1) - Mole FM Original
+/radio/generated/suno-live/web/22-ke-de-nwa-1.mp3
+#EXTINF:225,Kè De Nwa - Mole FM Original
+/radio/generated/suno-live/web/23-ke-de-nwa.mp3
+#EXTINF:206,Lage Mennen (1) - Mole FM Original
+/radio/generated/suno-live/web/24-lage-mennen-1.mp3
+#EXTINF:201,Lage Mennen - Mole FM Original
+/radio/generated/suno-live/web/25-lage-mennen.mp3
+#EXTINF:228,Lakou An Fèt (1) - Mole FM Original
+/radio/generated/suno-live/web/26-lakou-an-fet-1.mp3
+#EXTINF:231,Lakou An Fèt - Mole FM Original
+/radio/generated/suno-live/web/27-lakou-an-fet.mp3
+#EXTINF:157,Lamou Sou Lanmè (1) - Mole FM Original
+/radio/generated/suno-live/web/28-lamou-sou-lanme-1.mp3
+#EXTINF:170,Lamou Sou Lanmè - Mole FM Original
+/radio/generated/suno-live/web/29-lamou-sou-lanme.mp3
+#EXTINF:255,Lanmè Apre Doulè (1) - Mole FM Original
+/radio/generated/suno-live/web/30-lanme-apre-doule-1.mp3
+#EXTINF:250,Lanmè Apre Doulè - Mole FM Original
+/radio/generated/suno-live/web/31-lanme-apre-doule.mp3
+#EXTINF:224,Lanmou Manman (1) - Mole FM Original
+/radio/generated/suno-live/web/32-lanmou-manman-1.mp3
+#EXTINF:233,Lanmou Manman - Mole FM Original
+/radio/generated/suno-live/web/33-lanmou-manman.mp3
+#EXTINF:275,Lannwit Dou (1) - Mole FM Original
+/radio/generated/suno-live/web/34-lannwit-dou-1.mp3
+#EXTINF:284,Lannwit Dou - Mole FM Original
+/radio/generated/suno-live/web/35-lannwit-dou.mp3
+#EXTINF:260,Lannwit Nou (1) - Mole FM Original
+/radio/generated/suno-live/web/36-lannwit-nou-1.mp3
+#EXTINF:233,Lannwit Nou - Mole FM Original
+/radio/generated/suno-live/web/37-lannwit-nou.mp3
+#EXTINF:215,Lannwit Vandredi (1) - Mole FM Original
+/radio/generated/suno-live/web/38-lannwit-vandredi-1.mp3
+#EXTINF:204,Lannwit Vandredi - Mole FM Original
+/radio/generated/suno-live/web/39-lannwit-vandredi.mp3
+#EXTINF:176,Leve Pa M (1) - Mole FM Original
+/radio/generated/suno-live/web/40-leve-pa-m-1.mp3
+#EXTINF:173,Leve Pa M - Mole FM Original
+/radio/generated/suno-live/web/41-leve-pa-m.mp3
+#EXTINF:168,Mache Vini (1) - Mole FM Original
+/radio/generated/suno-live/web/42-mache-vini-1.mp3
+#EXTINF:201,Mache Vini - Mole FM Original
+/radio/generated/suno-live/web/43-mache-vini.mp3
+#EXTINF:210,Mas Vil la (1) - Mole FM Original
+/radio/generated/suno-live/web/44-mas-vil-la-1.mp3
+#EXTINF:230,Mas Vil la (2) - Mole FM Original
+/radio/generated/suno-live/web/45-mas-vil-la-2.mp3
+#EXTINF:187,Men Mèsi Mwen (1) - Mole FM Original
+/radio/generated/suno-live/web/46-men-mesi-mwen-1.mp3
+#EXTINF:204,Men Mèsi Mwen - Mole FM Original
+/radio/generated/suno-live/web/47-men-mesi-mwen.mp3
+#EXTINF:268,Men Mwen La (1) - Mole FM Original
+/radio/generated/suno-live/web/48-men-mwen-la-1.mp3
+#EXTINF:239,Men Mwen La - Mole FM Original
+/radio/generated/suno-live/web/49-men-mwen-la.mp3
+#EXTINF:290,Menm Sou Dife (1) - Mole FM Original
+/radio/generated/suno-live/web/50-menm-sou-dife-1.mp3
+#EXTINF:290,Menm Sou Dife - Mole FM Original
+/radio/generated/suno-live/web/51-menm-sou-dife.mp3
+#EXTINF:237,Menm Ti Pen (1) - Mole FM Original
+/radio/generated/suno-live/web/52-menm-ti-pen-1.mp3
+#EXTINF:234,Menm Ti Pen (2) - Mole FM Original
+/radio/generated/suno-live/web/53-menm-ti-pen-2.mp3
+#EXTINF:158,Mwen Leve Pi Wo (1) - Mole FM Original
+/radio/generated/suno-live/web/54-mwen-leve-pi-wo-1.mp3
+#EXTINF:177,Mwen Leve Pi Wo - Mole FM Original
+/radio/generated/suno-live/web/55-mwen-leve-pi-wo.mp3
+#EXTINF:230,Mwen Vire Vire (1) - Mole FM Original
+/radio/generated/suno-live/web/56-mwen-vire-vire-1.mp3
+#EXTINF:192,Mwen Vire Vire - Mole FM Original
+/radio/generated/suno-live/web/57-mwen-vire-vire.mp3
+#EXTINF:199,Mwen Wè Mwen (1) - Mole FM Original
+/radio/generated/suno-live/web/58-mwen-we-mwen-1.mp3
+#EXTINF:222,Mwen Wè Mwen - Mole FM Original
+/radio/generated/suno-live/web/59-mwen-we-mwen.mp3
+#EXTINF:200,Nan Soley la (1) - Mole FM Original
+/radio/generated/suno-live/web/60-nan-soley-la-1.mp3
+#EXTINF:189,Nan Soley la - Mole FM Original
+/radio/generated/suno-live/web/61-nan-soley-la.mp3
+#EXTINF:199,Pa Janm Bese (1) - Mole FM Original
+/radio/generated/suno-live/web/62-pa-janm-bese-1.mp3
+#EXTINF:162,Pa Janm Bese - Mole FM Original
+/radio/generated/suno-live/web/63-pa-janm-bese.mp3
+#EXTINF:249,Pou Tout Tan (1) - Mole FM Original
+/radio/generated/suno-live/web/64-pou-tout-tan-1.mp3
+#EXTINF:253,Pou Tout Tan - Mole FM Original
+/radio/generated/suno-live/web/65-pou-tout-tan.mp3
+#EXTINF:252,Pou Toutan (1) - Mole FM Original
+/radio/generated/suno-live/web/66-pou-toutan-1.mp3
+#EXTINF:225,Pou Toutan - Mole FM Original
+/radio/generated/suno-live/web/67-pou-toutan.mp3
+#EXTINF:264,Pran Sa Jodi a (1) - Mole FM Original
+/radio/generated/suno-live/web/68-pran-sa-jodi-a-1.mp3
+#EXTINF:264,Pran Sa Jodi a - Mole FM Original
+/radio/generated/suno-live/web/69-pran-sa-jodi-a.mp3
+#EXTINF:223,Pwen Kè M (1) - Mole FM Original
+/radio/generated/suno-live/web/70-pwen-ke-m-1.mp3
+#EXTINF:236,Pwen Kè M - Mole FM Original
+/radio/generated/suno-live/web/71-pwen-ke-m.mp3
+#EXTINF:186,Rasin Mwen (1) - Mole FM Original
+/radio/generated/suno-live/web/72-rasin-mwen-1.mp3
+#EXTINF:190,Rasin Mwen - Mole FM Original
+/radio/generated/suno-live/web/73-rasin-mwen.mp3
+#EXTINF:207,Rasin Pa Bouje (1) - Mole FM Original
+/radio/generated/suno-live/web/74-rasin-pa-bouje-1.mp3
+#EXTINF:216,Rasin Pa Bouje - Mole FM Original
+/radio/generated/suno-live/web/75-rasin-pa-bouje.mp3
+#EXTINF:183,Rete Sou Pye (1) - Mole FM Original
+/radio/generated/suno-live/web/76-rete-sou-pye-1.mp3
+#EXTINF:180,Rete Sou Pye - Mole FM Original
+/radio/generated/suno-live/web/77-rete-sou-pye.mp3
+#EXTINF:217,Rivyè An Mwens (1) - Mole FM Original
+/radio/generated/suno-live/web/78-rivye-an-mwens-1.mp3
+#EXTINF:207,Rivyè An Mwens - Mole FM Original
+/radio/generated/suno-live/web/79-rivye-an-mwens.mp3
+#EXTINF:209,Solèy Anndan Mwen (1) - Mole FM Original
+/radio/generated/suno-live/web/80-soley-anndan-mwen-1.mp3
+#EXTINF:208,Solèy Anndan Mwen - Mole FM Original
+/radio/generated/suno-live/web/81-soley-anndan-mwen.mp3
+#EXTINF:224,Solèy Sou Do M (1) - Mole FM Original
+/radio/generated/suno-live/web/82-soley-sou-do-m-1.mp3
+#EXTINF:232,Solèy Sou Do M - Mole FM Original
+/radio/generated/suno-live/web/83-soley-sou-do-m.mp3
+#EXTINF:232,Solèy Sou Lanmè (1) - Mole FM Original
+/radio/generated/suno-live/web/84-soley-sou-lanme-1.mp3
+#EXTINF:222,Solèy Sou Lanmè (2) - Mole FM Original
+/radio/generated/suno-live/web/85-soley-sou-lanme-2.mp3
+#EXTINF:210,Solèy Sou Sab (1) - Mole FM Original
+/radio/generated/suno-live/web/86-soley-sou-sab-1.mp3
+#EXTINF:192,Solèy Sou Sab - Mole FM Original
+/radio/generated/suno-live/web/87-soley-sou-sab.mp3
+#EXTINF:178,Sote Ak Men (1) - Mole FM Original
+/radio/generated/suno-live/web/88-sote-ak-men-1.mp3
+#EXTINF:208,Sote Ak Men - Mole FM Original
+/radio/generated/suno-live/web/89-sote-ak-men.mp3
+#EXTINF:192,Sou Pati a (1) - Mole FM Original
+/radio/generated/suno-live/web/90-sou-pati-a-1.mp3
+#EXTINF:209,Sou Pati a - Mole FM Original
+/radio/generated/suno-live/web/91-sou-pati-a.mp3
+#EXTINF:225,Suis Rèv Ou - Mole FM Original
+/radio/generated/suno-live/web/92-suis-rev-ou.mp3
+#EXTINF:227,Tab Dlo Lakay (1) - Mole FM Original
+/radio/generated/suno-live/web/93-tab-dlo-lakay-1.mp3
+#EXTINF:220,Tab Dlo Lakay - Mole FM Original
+/radio/generated/suno-live/web/94-tab-dlo-lakay.mp3
+#EXTINF:219,Tanbou Nan Ri (1) - Mole FM Original
+/radio/generated/suno-live/web/95-tanbou-nan-ri-1.mp3
+#EXTINF:207,Tanbou Nan Ri - Mole FM Original
+/radio/generated/suno-live/web/96-tanbou-nan-ri.mp3
+#EXTINF:203,Tèt Mwen Sou Ou (1) - Mole FM Original
+/radio/generated/suno-live/web/97-tet-mwen-sou-ou-1.mp3
+#EXTINF:223,Tèt Mwen Sou Ou - Mole FM Original
+/radio/generated/suno-live/web/98-tet-mwen-sou-ou.mp3
+#EXTINF:236,Ti Vilaj Lan (1) - Mole FM Original
+/radio/generated/suno-live/web/99-ti-vilaj-lan-1.mp3
+#EXTINF:289,Ti Vilaj Lan - Mole FM Original
+/radio/generated/suno-live/web/100-ti-vilaj-lan.mp3
+#EXTINF:235,Tout Lannwit Danse (1) - Mole FM Original
+/radio/generated/suno-live/web/101-tout-lannwit-danse-1.mp3
+#EXTINF:243,Tout Lannwit Danse - Mole FM Original
+/radio/generated/suno-live/web/102-tout-lannwit-danse.mp3
+#EXTINF:201,Wout Nouvo (1) - Mole FM Original
+/radio/generated/suno-live/web/103-wout-nouvo-1.mp3
+#EXTINF:200,Wout Nouvo - Mole FM Original
+/radio/generated/suno-live/web/104-wout-nouvo.mp3
