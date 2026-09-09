@@ -20,6 +20,9 @@ import subprocess
 import glob
 from email.utils import formatdate
 import time
+import shutil
+from xml.sax.saxutils import escape, quoteattr
+from podcast_description import metadata_path, read_metadata
 
 # === CONFIG ===
 REPO = "molefm945-svg/molefm-audio"
@@ -28,13 +31,14 @@ GITHUB_PAGES = "https://molefm945-svg.github.io/molefm-audio"
 FEED_URL = f"{GITHUB_PAGES}/feed.xml"
 PODCAST_DIR = "/home/user/workspace/molefm/audio/podcasts"
 REGISTRY_PATH = "/home/user/workspace/molefm/config/audio_registry.json"
-OUTPUT_PATH = "/tmp/molefm-audio-repo/feed.xml"
+ARCHIVE_DIR = "/tmp/molefm-audio-repo"
+OUTPUT_PATH = os.path.join(ARCHIVE_DIR, "feed.xml")
 
 SHOW = {
     "title": "Mole FM 94.5 — Nouvèl Ayiti",
     "description": (
         "Le podcast quotidien de référence sur l'actualité haïtienne pour la diaspora. "
-        "Analyses approfondies, nouvelles vérifiées, voix de Haïti. "
+        "Analyses, actualités et voix de Haïti. "
         "Format The Daily × BBC Global News — en français. "
         "Mole FM 94.5, Môle-Saint-Nicolas, Haïti."
     ),
@@ -117,7 +121,7 @@ def slot_label_from_filename(filename):
         return "Édition"
 
 
-def build_episode_item(filename, url, file_size_bytes, duration_seconds, pubdate):
+def build_episode_item(filename, url, file_size_bytes, duration_seconds, pubdate, description=None):
     """Build an RSS <item> block for one episode."""
     slug = filename.replace(".mp3", "").replace("_", "-")
     slot = slot_label_from_filename(filename)
@@ -136,14 +140,20 @@ def build_episode_item(filename, url, file_size_bytes, duration_seconds, pubdate
         date_display = "2026"
 
     title = f"Mole FM — {slot} — {date_display}"
-    description = (
-        f"Émission quotidienne Mole FM 94.5 — {date_display}. "
-        f"Analyse approfondie des actualités d'Haïti avec Denise et Henri. "
-        f"Nouvelles vérifiées, météo, sports. "
-        f"Format The Daily × BBC Global News × Hugo Décrypte. "
-        f"Durée : {format_duration(duration_seconds)}."
-    )
+    if description is None:
+        description = (
+            f"Émission quotidienne Mole FM 94.5 — {date_display}. "
+            f"Analyse approfondie des actualités d'Haïti avec Denise et Henri. "
+            f"Actualités et contexte. "
+            f"Format The Daily × BBC Global News × Hugo Décrypte. "
+            f"Durée : {format_duration(duration_seconds)}. "
+            "Sources & Références : aucun lien source fourni pour cet épisode archivé."
+        )
     dur_fmt = format_duration(duration_seconds)
+    title = escape(title)
+    slug = escape(slug)
+    pubdate = escape(pubdate)
+    description = description.replace("]]>", "]]]]><![CDATA[>")
 
     return f"""    <item>
       <title>{title}</title>
@@ -151,13 +161,49 @@ def build_episode_item(filename, url, file_size_bytes, duration_seconds, pubdate
       <link>{SHOW['website']}/podcasts</link>
       <guid isPermaLink="false">molefm-{slug}</guid>
       <pubDate>{pubdate}</pubDate>
-      <enclosure url="{url}" length="{file_size_bytes}" type="audio/mpeg"/>
+      <enclosure url={quoteattr(url)} length="{int(file_size_bytes)}" type="audio/mpeg"/>
       <itunes:title>{title}</itunes:title>
       <itunes:summary><![CDATA[{description}]]></itunes:summary>
       <itunes:duration>{dur_fmt}</itunes:duration>
       <itunes:explicit>false</itunes:explicit>
       <itunes:episodeType>full</itunes:episodeType>
     </item>"""
+
+
+def episode_metadata_file(audio_path):
+    """Prefer runtime metadata, then its persisted copy in the same RSS archive."""
+    for candidate in [metadata_path(audio_path), os.path.join(ARCHIVE_DIR, "podcasts", os.path.basename(audio_path) + ".metadata.json")]:
+        if os.path.isfile(candidate):
+            return candidate
+    return None
+
+
+def episode_description(audio_path, registry_entry=None):
+    metadata = episode_metadata_file(audio_path)
+    if metadata:
+        # A mismatched sidecar must stop feed generation, not quietly drop sources.
+        return read_metadata(metadata, os.path.basename(audio_path), audio_path)["description"]
+    saved = (registry_entry or {}).get("description")
+    if isinstance(saved, str) and saved.strip() and len(saved) <= 100000:
+        return saved
+    return None
+
+
+def preserve_feed_metadata():
+    """Persist metadata with feed.xml using the existing explicit Git push path."""
+    retained = []
+    for audio_path in sorted(glob.glob(os.path.join(PODCAST_DIR, "podcast_fr_*.mp3")), reverse=True)[:30]:
+        source = episode_metadata_file(audio_path)
+        if not source:
+            continue
+        read_metadata(source, os.path.basename(audio_path), audio_path)
+        relative = os.path.join("podcasts", os.path.basename(audio_path) + ".metadata.json")
+        target = os.path.join(ARCHIVE_DIR, relative)
+        os.makedirs(os.path.dirname(target), exist_ok=True)
+        if os.path.abspath(source) != os.path.abspath(target):
+            shutil.copyfile(source, target)
+        retained.append(relative)
+    return retained
 
 
 def generate_feed():
@@ -180,22 +226,23 @@ def generate_feed():
         pass
 
     # Build registry lookup: filename -> url
-    registry_lookup = {e["filename"]: e["url"] for e in registry_podcasts}
+    registry_lookup = {e["filename"]: e for e in registry_podcasts if isinstance(e, dict) and e.get("filename")}
 
     items = []
     for mp3_path in podcast_files[:30]:  # max 30 episodes in feed
         filename = os.path.basename(mp3_path)
 
         # Get public URL (from registry or construct from GitHub raw)
-        url = registry_lookup.get(filename,
-              f"{GITHUB_RAW}/podcasts/{filename}")
+        entry = registry_lookup.get(filename, {})
+        url = entry.get("url") or f"{GITHUB_RAW}/podcasts/{filename}"
 
         # File metadata
         file_size = os.path.getsize(mp3_path)
         duration = get_mp3_duration_seconds(mp3_path)
         pubdate = format_pubdate(filename)
 
-        item = build_episode_item(filename, url, file_size, duration, pubdate)
+        description = episode_description(mp3_path, entry)
+        item = build_episode_item(filename, url, file_size, duration, pubdate, description=description)
         items.append(item)
         print(f"  [RSS] + {filename} ({duration//60}m{duration%60:02d}s)")
 
@@ -248,13 +295,16 @@ def save_and_push_feed(feed_xml):
 
     print(f"  [RSS] feed.xml written ({len(feed_xml)//1024}KB)")
 
+    # Keep the exact source notes durable alongside the published RSS.
+    metadata_files = preserve_feed_metadata()
+
     # Push to GitHub
-    repo_dir = "/tmp/molefm-audio-repo"
+    repo_dir = ARCHIVE_DIR
     env = os.environ.copy()
     env.update({"GIT_AUTHOR_NAME": "Mole FM", "GIT_AUTHOR_EMAIL": "molefm945@gmail.com",
                 "GIT_COMMITTER_NAME": "Mole FM", "GIT_COMMITTER_EMAIL": "molefm945@gmail.com"})
 
-    subprocess.run(["git", "add", "feed.xml"], cwd=repo_dir, env=env, check=True)
+    subprocess.run(["git", "add", "feed.xml", *metadata_files], cwd=repo_dir, env=env, check=True)
 
     status = subprocess.run(["git", "status", "--porcelain"], cwd=repo_dir,
                            capture_output=True, text=True, env=env).stdout.strip()

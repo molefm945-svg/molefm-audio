@@ -27,6 +27,8 @@ import subprocess
 import tempfile
 import shutil
 
+from reader_guardrails import write_reader_html
+
 READER_DIR   = "/home/user/workspace/molefm/reader"
 WEBAPP_DIR   = "/home/user/workspace/molefm/reader/webapp"
 SCRIPTS_DIR  = "/home/user/workspace/molefm/scripts"
@@ -353,11 +355,8 @@ def build(script_path, audio_fr_path, sponsor_text=None):
     )
 
     out_path = os.path.join(WEBAPP_DIR, "index.html")
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    size_mb = os.path.getsize(out_path) / 1024 / 1024
-    print(f"  [OK] index.html written — {size_mb:.1f}MB")
+    report = write_reader_html(out_path, html)
+    print(f"  [OK] index.html validated and written — {report['html_bytes']} bytes")
     return out_path
 
 
@@ -1103,7 +1102,7 @@ footer{{
 // Inline base64 audio in a large <script> block causes Mobile Safari to
 // silently fail to execute the script, producing no sound.
 // The .mp3 files are deployed alongside index.html and served directly.
-const AUDIO_URLS={{fr:"audio_fr.mp3",en:"audio_en.mp3",es:"audio_es.mp3"}};
+const AUDIO_URLS={json.dumps({'fr': 'audio_fr.mp3', 'en': 'audio_en.mp3', 'es': 'audio_es.mp3'})};
 const PLAYLIST={playlist_json};   // ordered list of past newscasts for auto-advance
 const BROADCASTS={broadcasts_json}; // full 24h archive manifest (newest first)
 const PODCASTS={podcasts_json}; // FR podcast episodes (newest first)

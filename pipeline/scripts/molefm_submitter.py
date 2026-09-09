@@ -31,31 +31,37 @@ import datetime
 import subprocess
 import os
 import tempfile
+import argparse
+from urllib.parse import urlsplit, unquote
+from podcast_description import read_metadata, source_url
 
 MOLEFM_ADMIN = "https://www.molefm.com/admin/radio/podcasts"
-ADMIN_USERNAME = "admin"
-ADMIN_PIN = "1804$Admin"
 
 SUBMISSION_LOG = "/home/user/workspace/molefm/logs/molefm_submissions.jsonl"
 
 
-def _log_submission(audio_type, url, title, success, error=None):
+def _log_submission(audio_type, url, title, success, error=None, description=None):
     """Log submission result."""
     os.makedirs(os.path.dirname(SUBMISSION_LOG), exist_ok=True)
     entry = {
-        "timestamp": datetime.datetime.utcnow().isoformat() + "Z",
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
         "type": audio_type,
         "url": url,
         "title": title,
         "success": success,
         "error": error,
+        "description": description,
     }
     with open(SUBMISSION_LOG, "a") as f:
         f.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
-def _build_playwright_script(audio_type, url, title, duration_seconds=None):
+def _build_playwright_script(audio_type, url, title, duration_seconds=None, description=None):
     """Build the Playwright submission script for the correct form fields."""
+
+    supplied_description = description
+    if supplied_description is not None and (not isinstance(supplied_description, str) or not supplied_description.strip() or len(supplied_description) > 100000):
+        raise ValueError("Podcast description invalid")
 
     # Map audio type to admin form values (from audit)
     if audio_type == "newscast":
@@ -83,16 +89,25 @@ def _build_playwright_script(audio_type, url, title, duration_seconds=None):
         description = (
             f"Émission quotidienne Mole FM avec Denise et Henri. "
             f"Durée : {dur_min}m{dur_sec:02d}s. "
-            f"Analyse, contexte diaspora, et actualité vérifiée."
+            f"Analyse et contexte diaspora.\n\nSources & Références : aucun lien source fourni."
         )
         show_notes = "Pipeline AI Mole FM — 2 voix neurales (Denise + Henri) — format 18-22 min"
 
+    if supplied_description is not None:
+        description = supplied_description
+        show_notes = supplied_description
+
     return f"""
-import asyncio, sys, json
+import asyncio, sys, json, os
+ADMIN_USERNAME = os.environ.get("MOLEFM_ADMIN_USERNAME", "")
+ADMIN_PIN = os.environ.get("MOLEFM_ADMIN_PIN", "")
+if not ADMIN_USERNAME or not ADMIN_PIN:
+    print(json.dumps({{"status": "error", "code": "admin_credentials_missing"}}))
+    sys.exit(2)
 from playwright.async_api import async_playwright
 
-AUDIO_TYPE = "{audio_type}"
-AUDIO_URL = "{url}"
+AUDIO_TYPE = {json.dumps(audio_type)}
+AUDIO_URL = {json.dumps(url)}
 TITLE = {json.dumps(title)}
 SERIES = {json.dumps(series)}
 CATEGORY = {json.dumps(category)}
@@ -141,7 +156,7 @@ async def submit():
                 try:
                     el = page.locator(sel).first
                     if await el.is_visible(timeout=2000):
-                        await el.fill("{ADMIN_USERNAME}")
+                        await el.fill(ADMIN_USERNAME)
                         username_filled = True
                         print(f"  [Browser] Filled username with selector: {{sel}}")
                         break
@@ -153,7 +168,7 @@ async def submit():
                 try:
                     el = page.locator(sel).first
                     if await el.is_visible(timeout=2000):
-                        await el.fill("{ADMIN_PIN}")
+                        await el.fill(ADMIN_PIN)
                         password_filled = True
                         print(f"  [Browser] Filled password with selector: {{sel}}")
                         break
@@ -202,6 +217,8 @@ async def submit():
                             el = els.nth(i)
                             if await el.is_visible(timeout=1000):
                                 await el.fill(value)
+                                if await el.input_value() != value:
+                                    continue
                                 print(f"    [OK] {{field_name}} filled")
                                 return True
                     except Exception:
@@ -295,8 +312,8 @@ async def submit():
                 TOPIC, "Topic"
             )
 
-            # Description
-            await fill_field(
+            # Description must survive intact before a publish click.
+            description_filled = await fill_field(
                 ['textarea[placeholder*="description" i]', 'textarea[name*="description" i]',
                  'textarea[id*="description" i]',
                  'label:has-text("DESCRIPTION") + textarea',
@@ -312,23 +329,9 @@ async def submit():
                 SHOW_NOTES, "Show Notes"
             )
 
-            if not audio_url_filled:
-                print("  [WARN] Audio URL field not found — submission may be incomplete")
-                # Try once more with any remaining input that could be URL
-                inputs = page.locator('input[type="text"], input[type="url"]')
-                count = await inputs.count()
-                print(f"  [Debug] Total text/url inputs on page: {{count}}")
-                for i in range(count):
-                    el = inputs.nth(i)
-                    try:
-                        placeholder = await el.get_attribute("placeholder") or ""
-                        name = await el.get_attribute("name") or ""
-                        id_ = await el.get_attribute("id") or ""
-                        visible = await el.is_visible(timeout=500)
-                        val = await el.input_value()
-                        print(f"    input[{{i}}]: placeholder='{{placeholder}}' name='{{name}}' id='{{id_}}' visible={{visible}} value='{{val[:30]}}'")
-                    except Exception:
-                        pass
+            if not audio_url_filled or not description_filled:
+                print(json.dumps({{"status": "error", "code": "required_episode_fields_unconfirmed"}}))
+                return
 
             # Step 5: Submit
             print(f"  [Browser] Looking for submit/save button...")
@@ -365,7 +368,7 @@ async def submit():
             success = any(sig in page_text.lower() for sig in success_signals)
             error = any(sig in page_text.lower() for sig in error_signals)
 
-            if success:
+            if submitted and success and not error:
                 print(f"  [Browser] ✓ Submission successful!")
                 print(json.dumps({{"status": "success", "url": AUDIO_URL, "title": TITLE}}))
             elif error:
@@ -376,22 +379,34 @@ async def submit():
                 print(json.dumps({{"status": "completed", "url": AUDIO_URL}}))
 
         except Exception as e:
-            print(f"  [Browser] Error: {{e}}")
+            print("  [Browser] Submission failed")
             # Fallback: print the URL so it can be submitted manually
-            print(json.dumps({{"status": "error", "error": str(e), "url": AUDIO_URL, "manual_url": "https://www.molefm.com/admin/radio/podcasts"}}))
+            print(json.dumps({{"status": "error", "error": "browser_submission_failed", "url": AUDIO_URL, "manual_url": "https://www.molefm.com/admin/radio/podcasts"}}))
         finally:
             await browser.close()
 
 asyncio.run(submit())
-""".replace("{ADMIN_USERNAME}", ADMIN_USERNAME).replace("{ADMIN_PIN}", ADMIN_PIN)
+"""
 
 
-def submit_via_playwright(audio_type, url, title, duration_seconds=None):
+def _redact_output(value):
+    for name in ("MOLEFM_ADMIN_USERNAME", "MOLEFM_ADMIN_PIN"):
+        secret = os.environ.get(name, "")
+        if secret:
+            value = value.replace(secret, "[redacted]")
+    return value
+
+
+def submit_via_playwright(audio_type, url, title, duration_seconds=None, description=None):
     """
     Submit a new episode to molefm.com via Playwright headless browser.
     Returns True on success, False on failure.
     """
-    script = _build_playwright_script(audio_type, url, title, duration_seconds)
+    missing = [name for name in ("MOLEFM_ADMIN_USERNAME", "MOLEFM_ADMIN_PIN") if not os.environ.get(name, "").strip()]
+    if missing:
+        print("  [molefm.com] Required environment credentials missing: " + ", ".join(missing))
+        return False
+    script = _build_playwright_script(audio_type, url, title, duration_seconds, description)
 
     # Write script to temp file
     with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
@@ -403,31 +418,31 @@ def submit_via_playwright(audio_type, url, title, duration_seconds=None):
             ["python3", script_path],
             capture_output=True, text=True, timeout=90
         )
-        print(result.stdout)
+        print(_redact_output(result.stdout))
         if result.returncode == 0:
             # Parse last JSON line for status
             lines = [l for l in result.stdout.strip().splitlines() if l.startswith("{")]
             if lines:
                 try:
                     data = json.loads(lines[-1])
-                    success = data.get("status") in ("success", "completed")
-                    _log_submission(audio_type, url, title, success)
+                    success = data.get("status") == "success"
+                    _log_submission(audio_type, url, title, success, description=description)
                     return success
                 except Exception:
                     pass
-            _log_submission(audio_type, url, title, True)
-            return True
+            _log_submission(audio_type, url, title, False, "unconfirmed", description=description)
+            return False
         else:
-            print(f"  [molefm.com] stderr: {result.stderr.strip()[:300]}")
-            _log_submission(audio_type, url, title, False, result.stderr.strip()[:200])
+            print("  [molefm.com] Browser process unsuccessful")
+            _log_submission(audio_type, url, title, False, "browser_process_failed", description=description)
             return False
     except subprocess.TimeoutExpired:
         print("  [molefm.com] Playwright timeout (90s)")
-        _log_submission(audio_type, url, title, False, "timeout")
+        _log_submission(audio_type, url, title, False, "timeout", description=description)
         return False
     except Exception as e:
-        print(f"  [molefm.com] Exception: {e}")
-        _log_submission(audio_type, url, title, False, str(e))
+        print("  [molefm.com] Submission interrupted")
+        _log_submission(audio_type, url, title, False, "submission_interrupted", description=description)
         return False
     finally:
         try:
@@ -436,14 +451,17 @@ def submit_via_playwright(audio_type, url, title, duration_seconds=None):
             pass
 
 
-def submit_episode(audio_type, url, title, duration_seconds=None):
+def submit_episode(audio_type, url, title, duration_seconds=None, description=None):
     """
     Public entry point. Try browser submission; always log the URL as fallback.
     """
+    if not source_url(url):
+        print("  [molefm.com] Invalid public audio URL")
+        return False
     print(f"\n  [molefm.com] Submitting {audio_type}: {title[:60]}")
     print(f"  [molefm.com] URL: {url}")
 
-    success = submit_via_playwright(audio_type, url, title, duration_seconds)
+    success = submit_via_playwright(audio_type, url, title, duration_seconds, description)
 
     if not success:
         print(f"  [molefm.com] Browser submission unsuccessful.")
@@ -453,19 +471,24 @@ def submit_episode(audio_type, url, title, duration_seconds=None):
     return success
 
 
+def main(argv=None):
+    parser = argparse.ArgumentParser(description="Submit an episode with retained podcast source notes")
+    parser.add_argument("audio_type", choices=("newscast", "podcast"))
+    parser.add_argument("audio_url")
+    parser.add_argument("title")
+    parser.add_argument("duration_seconds", nargs="?", type=int)
+    parser.add_argument("--metadata-file")
+    args = parser.parse_args(argv)
+    description = None
+    if args.metadata_file:
+        try:
+            filename = os.path.basename(unquote(urlsplit(args.audio_url).path))
+            description = read_metadata(args.metadata_file, filename)["description"]
+        except (OSError, ValueError, TypeError):
+            print("  [molefm.com] Podcast metadata invalid or does not match the audio filename")
+            return 1
+    return 0 if submit_episode(args.audio_type, args.audio_url, args.title, args.duration_seconds, description) else 1
+
+
 if __name__ == "__main__":
-    if len(sys.argv) < 4:
-        print("Usage: python molefm_submitter.py [newscast|podcast] <audio_url> <title> [duration_seconds]")
-        sys.exit(1)
-
-    audio_type = sys.argv[1]
-    audio_url = sys.argv[2]
-    title = sys.argv[3]
-    duration = int(sys.argv[4]) if len(sys.argv) > 4 else None
-
-    if audio_type not in ("newscast", "podcast"):
-        print(f"Unknown type: {audio_type}. Use 'newscast' or 'podcast'")
-        sys.exit(1)
-
-    success = submit_episode(audio_type, audio_url, title, duration)
-    sys.exit(0 if success else 1)
+    sys.exit(main())

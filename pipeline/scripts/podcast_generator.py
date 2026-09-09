@@ -50,6 +50,8 @@ import subprocess
 import re
 import random
 
+from podcast_description import build_podcast_description, save_metadata
+
 # ── Paths ────────────────────────────────────────────────────────────────────
 SCRIPTS_DIR = "/home/user/workspace/molefm/scripts"
 AUDIO_DIR   = "/home/user/workspace/molefm/audio"
@@ -91,19 +93,6 @@ def get_sponsor(slot_index=0):
 
 
 
-SOURCE_URLS = {
-    "Le Nouvelliste": "https://lenouvelliste.com",
-    "Radio Métropole": "https://metropole.ht",
-    "Juno7": "https://juno7.ht",
-    "Haiti24": "https://haiti24.net",
-    "Rezo Nodwes": "https://rezonodwes.com",
-    "Haiti Liberté": "https://haitiliberte.com",
-    "Haiti Press Network": "https://hpnhaiti.com",
-    "Haitian Times": "https://haitiantimes.com",
-    "RFI Haïti": "https://www.rfi.fr/fr/tag/haïti",
-    "BBC Afrique": "https://www.bbc.com/afrique",
-}
-
 # ── Data loading ─────────────────────────────────────────────────────────────
 
 def load_recent_newscasts(n=6):
@@ -126,8 +115,11 @@ def extract_stories_from_scripts(script_paths):
                 if seg.get("segment") != "NEWS_MAIN":
                     continue
                 text = seg.get("text", "")
-                for m in re.finditer(r"Titre \d+ : (.+?)(?=Titre \d+|$)", text, re.DOTALL):
-                    raw = m.group(1).strip()
+                for m in re.finditer(r"Titre (\d+) : (.+?)(?=Titre \d+|$)", text, re.DOTALL):
+                    raw = m.group(2).strip()
+                    references = data.get("source_backed_stories", [])
+                    index = int(m.group(1)) - 1
+                    supplied = references[index] if isinstance(references, list) and 0 <= index < len(references) and isinstance(references[index], dict) else {}
                     key = raw[:50].lower()
                     if key not in seen:
                         seen.add(key)
@@ -140,25 +132,20 @@ def extract_stories_from_scripts(script_paths):
                             "text": clean_text or raw,
                             "full_text": raw,
                             "source_attr": source_str,
-                            "verification": "CONFIRMED" if source_str and " et " in source_str else "SINGLE-SOURCE",
+                            "source": supplied.get("source", supplied.get("source_name", "")),
+                            "all_sources": supplied.get("all_sources", []),
+                            "title": supplied.get("title", ""),
+                            "link": supplied.get("link", ""),
+                            "article_url": supplied.get("article_url", ""),
+                            "url": supplied.get("url", ""),
+                            "source_url": supplied.get("source_url", ""),
+                            "source_references": supplied.get("source_references", []),
+                            "verification": supplied.get("verification", "UNSPECIFIED"),
                         })
         except Exception as e:
             print(f"  [WARN] Could not parse {path}: {e}")
     return stories[:12]
 
-
-def _podcast_source_names(stories):
-    """Extract unique source names from story attribution strings."""
-    names = []
-    for story in stories:
-        if not isinstance(story, dict):
-            continue
-        attr = story.get("source_attr", "")
-        for name in re.split(r"\s+et\s+|,|;|/", attr):
-            name = name.strip()
-            if name and name not in names:
-                names.append(name)
-    return names
 
 def extract_weather_from_scripts(script_paths):
     for path in reversed(script_paths):
@@ -571,6 +558,35 @@ def score_and_log_episode(out_path, turns, slot_label, duration_mins):
 
 # ── Main runner ───────────────────────────────────────────────────────────────
 
+def publish_podcast_episode(out_path, stories, slot_label, now, mins, secs):
+    """Persist one description and pass it through the existing publication steps."""
+    title = f"Mole FM Podcast FR — {slot_label.capitalize()} — {now.strftime('%d %B %Y')}"
+    duration = mins * 60 + secs
+    description = build_podcast_description(stories, now.strftime('%d %B %Y'), duration)
+    metadata = save_metadata(out_path, title, description, stories, duration, now.isoformat())
+    scripts = os.path.dirname(os.path.abspath(__file__))
+    print("  [Publishing] Uploading podcast to GitHub + molefm.com...")
+    try:
+        upload = subprocess.run(["python3", os.path.join(scripts, "github_uploader.py"), "podcast", out_path],
+                                capture_output=True, text=True)
+        if upload.returncode != 0 or not upload.stdout.strip():
+            print("  [GitHub] Upload unsuccessful; source metadata retained locally")
+            return "", title
+        url = upload.stdout.strip().splitlines()[-1].strip()
+        submitted = subprocess.run(["python3", os.path.join(scripts, "molefm_submitter.py"), "podcast", url, title,
+                                    str(duration), "--metadata-file", metadata], capture_output=True, text=True)
+        print(submitted.stdout.strip())
+        if submitted.returncode != 0:
+            print("  [molefm.com] Episode publication not confirmed; metadata retained and RSS proceeds independently")
+        rss = subprocess.run(["python3", os.path.join(scripts, "generate_rss.py")],
+                             capture_output=True, text=True, timeout=120)
+        print("  [RSS] Feed updated" if rss.returncode == 0 else "  [RSS] Update unsuccessful; source metadata retained")
+        return url, title
+    except Exception:
+        print("  [WARN] Publication interrupted; source metadata retained locally")
+        return "", title
+
+
 def run(lang="fr", slot_label=None, slot_index=None):
     os.makedirs(PODCAST_DIR, exist_ok=True)
     os.makedirs(RESEARCH_DIR, exist_ok=True)
@@ -647,56 +663,8 @@ def run(lang="fr", slot_label=None, slot_index=None):
         print(f"  Podcast saved: {out_path}")
         print(f"  Duration: {mins}m{secs:02d}s | Turns: {len(turns)} | Target: 18\u201322 min")
 
-        # Upload to GitHub + submit to molefm.com
-        print("  [Publishing] Uploading podcast to GitHub + molefm.com...")
-        try:
-            import subprocess as _sp
-            _ep_title = f"Mole FM Podcast FR \u2014 {slot_label.capitalize()} \u2014 {now.strftime('%d %B %Y')}"
-            _source_names = _podcast_source_names(stories)
-            _source_lines = "\n".join(
-                f"  • {sn} ({SOURCE_URLS.get(sn, 'https://www.molefm.com')})"
-                for sn in _source_names
-            ) if _source_names else "  • Sources vérifiées (voir molefm.com)"
-            _desc = (
-                f"Émission quotidienne Mole FM — {now.strftime('%d %B %Y')}.\n"
-                f"Analyse approfondie des actualités d'Haïti avec Denise et Henri.\n"
-                f"Format : The Daily × BBC Global News × Hugo Décrypte.\n"
-                f"Durée : {mins}m{secs:02d}s\n\n"
-                f"Sources & Références :\n{_source_lines}\n\n"
-                f"Mole FM 94.5 — La radio haïtienne qui informe. molefm.com"
-            )
-            _upload_result = _sp.run(
-                ["python3", "/home/user/workspace/molefm/scripts/github_uploader.py",
-                 "podcast", out_path],
-                capture_output=True, text=True
-            )
-            if _upload_result.returncode == 0:
-                _github_url = _upload_result.stdout.strip().splitlines()[-1].strip()
-                print(f"  [GitHub] \u2713 {_github_url}")
-                _submit_result = _sp.run(
-                    ["python3", "/home/user/workspace/molefm/scripts/molefm_submitter.py",
-                     "podcast", _github_url, _ep_title,
-                     str((mins * 60) + secs)],
-                    capture_output=True, text=True
-                )
-                print(_submit_result.stdout.strip())
-
-                # Regenerate RSS feed with new episode
-                try:
-                    _rss_result = _sp.run(
-                        ["python3", "/home/user/workspace/molefm/scripts/generate_rss.py"],
-                        capture_output=True, text=True, timeout=120
-                    )
-                    if _rss_result.returncode == 0:
-                        print("  [RSS] ✓ Feed updated")
-                    else:
-                        print(f"  [RSS] Non-fatal: {_rss_result.stderr.strip()[:100]}")
-                except Exception as _re:
-                    print(f"  [RSS] Non-fatal: {_re}")
-            else:
-                print(f"  [GitHub] Non-fatal upload error: {_upload_result.stderr.strip()[:200]}")
-        except Exception as _e:
-            print(f"  [WARN] Publish step failed (non-fatal): {_e}")
+        # Persist attribution before either publication destination consumes it.
+        _github_url, _ep_title = publish_podcast_episode(out_path, stories, slot_label, now, mins, secs)
 
         # Trigger broadcast automation — interrupt En Direct for this podcast
         try:
