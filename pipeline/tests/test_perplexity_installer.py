@@ -29,7 +29,7 @@ class InstallerTests(unittest.TestCase):
     def test_install_backup_preservation_and_idempotence(self):
         result = installer.install(self.stage, self.runtime, True)
         self.assertEqual(result["state"], "installed")
-        self.assertEqual(len(result["changed"]), 6)
+        self.assertEqual(len(result["changed"]), 8)
         self.assertEqual((Path(result["backup"]) / "build_reader.py").read_text(), "# owner version\n")
         self.assertEqual((self.runtime / "config/settings.json").read_text(), '{"keep":true}')
         self.assertEqual((self.scripts / "run_pipeline.py").read_text(), "# existing schedule entry point\n")

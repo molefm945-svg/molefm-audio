@@ -14,17 +14,20 @@ import sys
 import tempfile
 import urllib.request
 
-REVISION = "280d27653d9985d3f065ed9ee5c39244482174fb"
+REVISION = "2b8c6decf9f90c6929086fcb79ad8f1190a8e577"
 BASE_URL = f"https://raw.githubusercontent.com/molefm945-svg/molefm-audio/{REVISION}/pipeline/"
 HASHES = {
     "scripts/build_reader.py": "9fd17225b07097d7abe1f1b1f607ac4b7a069f64a27a683b82aa9ab7e301ea14",
     "scripts/reader_guardrails.py": "0a0041e60ecceb4a8a737a361f83e17e81042f80f741979b4788e2646a3b49b2",
-    "scripts/podcast_generator.py": "354341f2147ad19dbfb3aa6c13334b4d4f265067159b7d32c233aed0122f3892",
+    "scripts/podcast_generator.py": "2bb02d8c2c3394d266d0cdf047236b91684b6dc69ade5779fe3dfbf7a262a3ba",
     "scripts/podcast_description.py": "5e73f6e6875ff045de4673496d07dddf826df23867eb459bc9293c7a3a7576a8",
     "scripts/molefm_submitter.py": "754c76ecf67699281b3b062cc3aa118cb000eafbfab3a93edb72ff4b79135c18",
     "scripts/generate_rss.py": "8d1f547eadf2c8071b4ca5756ad073c9ea6ef25c4e66019112945d3fb99d2634",
     "tests/test_reader_guardrails.py": "d47dddc7992f67ffe908a5b73915911f33b62124467a61865b11959feaee1bfe",
     "tests/test_podcast_attribution.py": "091ca7cd20438b139c61cc3221ad2376946292997e580c13097eba72098b27d4",
+    "scripts/azure_speech.py": "7d0d3ad6232d0f5a6c31ff96934652a33c3dd2c31eabc3f2661e0107eadffe7f",
+    "scripts/tts_generator.py": "53381cfa300f82e838f1bc441ae3459ad8bf895976e9fdf4d22adb84d4e1ea38",
+    "tests/test_azure_speech.py": "13a14da1fa3da8ce35d42cbbd905d89474d03e93641f9c00b06b0c47e9fddc12"
 }
 
 
@@ -50,7 +53,7 @@ def stage_files(stage, source_tree=None):
 def validate_stage(stage):
     # These pinned suites mock generation, network, browser and publishing calls.
     environment = {"PATH": os.defpath, "PYTHONIOENCODING": "utf-8"}
-    for suite in ("test_reader_guardrails.py", "test_podcast_attribution.py"):
+    for suite in ("test_reader_guardrails.py", "test_podcast_attribution.py", "test_azure_speech.py"):
         subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", suite],
                        cwd=stage, env=environment, check=True, timeout=120)
 
