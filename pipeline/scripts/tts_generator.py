@@ -85,13 +85,14 @@ def synth(text, segment_name, output_path, max_retries=1):
 
 def add_silence(ms, output_path):
     """Generate silence with ffmpeg."""
-    subprocess.run([
+    result = subprocess.run([
         "ffmpeg", "-y", "-f", "lavfi",
         "-i", f"anullsrc=r=24000:cl=mono",
         "-t", str(ms / 1000),
         "-acodec", "libmp3lame", "-b:a", "64k",
         output_path
     ], capture_output=True)
+    return result.returncode == 0 and os.path.isfile(output_path)
 
 
 def concat_mp3s(files, output_path):
@@ -143,19 +144,23 @@ def process_script(script_path):
     for i, seg in enumerate(script["segments"]):
         name = seg["segment"]
         text = seg["text"].strip()
-        if len(text) < 5:
-            continue
+        if not text:
+            print("  [ERROR] Empty segment; bulletin held.")
+            return None
 
         seg_path = os.path.join(seg_dir, f"{i:02d}_{name}.mp3")
         print(f"    [{name}]")
         ok = synth(text, name, seg_path)
-        if ok:
-            files.append(seg_path)
-            # Pause between segments (longer after station ID, shorter between news)
-            pause_ms = 1200 if name in ("STATION_ID", "INTRO") else 700
-            sil = os.path.join(seg_dir, f"{i:02d}_pause.mp3")
-            add_silence(pause_ms, sil)
-            files.append(sil)
+        if not ok:
+            print("  [ERROR] Narration failed; incomplete bulletin held.")
+            return None
+        files.append(seg_path)
+        pause_ms = 1200 if name in ("STATION_ID", "INTRO") else 700
+        sil = os.path.join(seg_dir, f"{i:02d}_pause.mp3")
+        if not add_silence(pause_ms, sil):
+            print("  [ERROR] Segment assembly failed; bulletin held.")
+            return None
+        files.append(sil)
 
     if not files:
         print("  [ERROR] No audio generated.")
@@ -191,7 +196,7 @@ def update_playlist(audio_path):
 
 
 def run():
-    print(f"\n=== Mole FM TTS (edge-tts / French / FREE) === "
+    print(f"\n=== Mole FM TTS (Azure Speech / French) === "
           f"{datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}")
     os.makedirs(AUDIO_DIR, exist_ok=True)
 
@@ -199,7 +204,7 @@ def run():
     if audio:
         update_playlist(audio)
         print(f"\n  Audio : {audio}")
-        print(f"  Cost  : $0.00")
+        print("  Cost  : Azure metered usage; consult the usage ledger and billing.")
         return audio
     print("\n  [FAILED]")
     return None

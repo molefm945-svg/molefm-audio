@@ -11,10 +11,22 @@ import json
 import os
 from pathlib import Path
 import re
+import ssl
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
 VOICES = {"fr-FR-DeniseNeural", "fr-FR-HenriNeural", "fr-CA-ThierryNeural", "fr-CA-SylvieNeural"}
+
+
+def tls_context():
+    """Honor an operator-configured proxy CA without disabling TLS verification."""
+    context = ssl.create_default_context()
+    for name in ("SSL_CERT_FILE", "REQUESTS_CA_BUNDLE", "CURL_CA_BUNDLE"):
+        bundle = os.environ.get(name, "").strip()
+        if bundle:
+            # Invalid/missing bundles fail before reserving usage or making a call.
+            context.load_verify_locations(cafile=bundle)
+    return context
 
 
 def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
@@ -40,6 +52,7 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
     limit = int(os.environ.get("MOLEFM_AZURE_MONTHLY_CHARACTERS", "1000000"))
     if not 1 <= limit <= 1000000:
         raise ValueError("Worker allowance must be between 1 and 1000000 characters")
+    context = tls_context()
     ledger = Path(os.environ["MOLEFM_AZURE_USAGE_FILE"])
     ledger.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     month = now.strftime("%Y-%m")
@@ -68,7 +81,7 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
                       "X-Microsoft-OutputFormat": "audio-24khz-96kbitrate-mono-mp3",
                       "User-Agent": "MoleFM-Broadcast"})
     try:
-        with urlopen(request, timeout=60) as response:
+        with urlopen(request, timeout=60, context=context) as response:
             audio = response.read(16000001)
     except Exception:
         raise RuntimeError("Azure synthesis failed; allowance retained; no automatic retry") from None

@@ -2,6 +2,7 @@ import datetime as dt
 import io
 import json
 import os
+import ssl
 from pathlib import Path
 import sys
 import tempfile
@@ -87,6 +88,27 @@ class AzureSpeechTests(unittest.TestCase):
         os.environ.pop("AZURE_SPEECH_KEY_FILE", None)
         with self.assertRaises(KeyError): self.run_synthesis()
         request.assert_not_called()
+
+    @patch("azure_speech.urlopen")
+    def test_missing_proxy_ca_fails_before_usage_reservation(self, request):
+        with patch.dict(os.environ, {"REQUESTS_CA_BUNDLE": str(self.root / "missing.pem")}):
+            with self.assertRaises(FileNotFoundError): self.run_synthesis()
+        request.assert_not_called()
+        self.assertFalse(self.ledger.exists())
+
+    @patch("azure_speech.urlopen")
+    def test_request_always_verifies_tls(self, request):
+        request.return_value = io.BytesIO(b"ID3" + b"a" * 1200)
+        self.run_synthesis()
+        context = request.call_args.kwargs["context"]
+        self.assertTrue(context.check_hostname)
+        self.assertEqual(context.verify_mode, ssl.CERT_REQUIRED)
+
+    @patch("azure_speech.ssl.create_default_context")
+    def test_configured_proxy_bundle_is_loaded(self, make_context):
+        with patch.dict(os.environ, {"REQUESTS_CA_BUNDLE": "/operator/proxy.pem"}, clear=True):
+            azure_speech.tls_context()
+        make_context.return_value.load_verify_locations.assert_called_once_with(cafile="/operator/proxy.pem")
 
 
 if __name__ == "__main__":
