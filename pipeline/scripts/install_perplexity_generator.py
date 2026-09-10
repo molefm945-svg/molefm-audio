@@ -14,9 +14,10 @@ import sys
 import tempfile
 import urllib.request
 
-REVISION = "2b8c6decf9f90c6929086fcb79ad8f1190a8e577"
+REVISION = "9ed2b3a579bb0a790427f2abf4946937befa313e"
 BASE_URL = f"https://raw.githubusercontent.com/molefm945-svg/molefm-audio/{REVISION}/pipeline/"
 HASHES = {
+    "tests/test_tts_completeness.py": "714028bd55fd1e8c99e8493036325473713544110701a1da2911c81e3c0d412f",
     "scripts/build_reader.py": "9fd17225b07097d7abe1f1b1f607ac4b7a069f64a27a683b82aa9ab7e301ea14",
     "scripts/reader_guardrails.py": "0a0041e60ecceb4a8a737a361f83e17e81042f80f741979b4788e2646a3b49b2",
     "scripts/podcast_generator.py": "2bb02d8c2c3394d266d0cdf047236b91684b6dc69ade5779fe3dfbf7a262a3ba",
@@ -25,9 +26,9 @@ HASHES = {
     "scripts/generate_rss.py": "8d1f547eadf2c8071b4ca5756ad073c9ea6ef25c4e66019112945d3fb99d2634",
     "tests/test_reader_guardrails.py": "d47dddc7992f67ffe908a5b73915911f33b62124467a61865b11959feaee1bfe",
     "tests/test_podcast_attribution.py": "091ca7cd20438b139c61cc3221ad2376946292997e580c13097eba72098b27d4",
-    "scripts/azure_speech.py": "7d0d3ad6232d0f5a6c31ff96934652a33c3dd2c31eabc3f2661e0107eadffe7f",
-    "scripts/tts_generator.py": "53381cfa300f82e838f1bc441ae3459ad8bf895976e9fdf4d22adb84d4e1ea38",
-    "tests/test_azure_speech.py": "13a14da1fa3da8ce35d42cbbd905d89474d03e93641f9c00b06b0c47e9fddc12"
+    "scripts/azure_speech.py": "d5005555309af7fe9bec7b68c5a4281c36e7ddd214c7fcc5a4ce999882d6d083",
+    "scripts/tts_generator.py": "070fa09ac507e46171e1f5bcb858f01649338e7e37046b8b6cb2c587e99aab35",
+    "tests/test_azure_speech.py": "5d1415adb26bebfb52134a2c55df104241f3816ac96c500d7c325d2b31e92b88"
 }
 
 
@@ -53,7 +54,7 @@ def stage_files(stage, source_tree=None):
 def validate_stage(stage):
     # These pinned suites mock generation, network, browser and publishing calls.
     environment = {"PATH": os.defpath, "PYTHONIOENCODING": "utf-8"}
-    for suite in ("test_reader_guardrails.py", "test_podcast_attribution.py", "test_azure_speech.py"):
+    for suite in ("test_reader_guardrails.py", "test_podcast_attribution.py", "test_azure_speech.py", "test_tts_completeness.py"):
         subprocess.run([sys.executable, "-m", "unittest", "discover", "-s", "tests", "-p", suite],
                        cwd=stage, env=environment, check=True, timeout=120)
 
