@@ -22,3 +22,11 @@ Verification on September 10: 48 offline tests passed. Installer staging indepen
 Runtime installation subsequently completed in Perplexity: exit 0, state installed, three changed scripts, and all eight destination hashes matched. The installer ran 42 offline tests and preserved a backup under the runtime root. GitHub CI passed at ac87ce0 (run 34503049862).
 
 Remaining activation work: securely connect private worker settings and complete the durable review-to-publication adapter. The Perplexity credential vault save returned FETCHER_CLOUDFLARE_403_ERROR; the credential was not confirmed saved. The unsaved secret field was cleared. No secret was placed in Computer chat. Updated Perplexity credit consumption could not be verified because settings requests were affected by the same provider security check. The existing held site workflow was not enabled. No new broadcast was published by these tests.
+
+## Credential vault follow-up — September 10
+
+After the owner completed Perplexity verification, the credential `Mole FM Azure Speech S0` was successfully saved with header authentication restricted to `eastus.tts.speech.microsoft.com`. The vault displayed the saved credential, and Computer subsequently reported finding it without another approval. No raw key was placed in chat or Git.
+
+A bounded runtime voice-catalog check did not complete: its proxy TLS certificate validation failed, an attempted proxy CA path was invalid, and Perplexity exhausted the account credits before returning an authenticated HTTP result. Do not disable certificate verification to work around this. Runtime authentication and automatic publication remain unverified.
+
+Cost readback: before the connection check, 93 credits remained and automatic refill was false. The previous installer increased task cumulative usage from 244.33 to 327.35 (83.02 credits). The connection attempt increased it to 437.18 (109.83 additional credits), then the UI required more credits. These are consumed platform credits, not new cash purchases. No credits were purchased or automatic refill enabled. No further Computer execution should be used for recurring broadcasts under the near-zero-cost requirement; use a deterministic existing host/runner instead, preserving content review and publication gates.
