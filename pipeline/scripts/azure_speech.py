@@ -12,6 +12,7 @@ import os
 from pathlib import Path
 import re
 import ssl
+import subprocess
 from urllib.request import Request, urlopen
 from xml.sax.saxutils import escape
 
@@ -62,7 +63,7 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
     limit = int(os.environ.get("MOLEFM_AZURE_MONTHLY_CHARACTERS", "1000000"))
     if not 1 <= limit <= 1000000:
         raise ValueError("Worker allowance must be between 1 and 1000000 characters")
-    context = tls_context()
+    context = tls_context() if auth_mode == "key" else None
     ledger = Path(os.environ["MOLEFM_AZURE_USAGE_FILE"])
     ledger.parent.mkdir(parents=True, exist_ok=True, mode=0o700)
     month = now.strftime("%Y-%m")
@@ -91,8 +92,22 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
                       "X-Microsoft-OutputFormat": "audio-24khz-96kbitrate-mono-mp3",
                       "User-Agent": "MoleFM-Broadcast"})
     try:
-        with urlopen(request, timeout=60, context=context) as response:
-            audio = response.read(16000001)
+        if auth_mode == "perplexity-proxy":
+            # curl uses the runtime system trust store; -q disables per-user
+            # curlrc overrides (including insecure TLS or automatic retries).
+            command = ["curl", "-q", "--fail", "--silent", "--show-error",
+                       "--max-time", "60", "--max-filesize", "16000000",
+                       "--proto", "=https", "--tlsv1.2", "--data-binary", "@-",
+                       "--header", "Content-Type: application/ssml+xml",
+                       "--header", "X-Microsoft-OutputFormat: audio-24khz-96kbitrate-mono-mp3",
+                       "--header", "User-Agent: MoleFM-Broadcast", request.full_url]
+            result = subprocess.run(command, input=ssml.encode(), capture_output=True, timeout=65)
+            if result.returncode:
+                raise RuntimeError("Proxy synthesis transport failed")
+            audio = result.stdout
+        else:
+            with urlopen(request, timeout=60, context=context) as response:
+                audio = response.read(16000001)
     except Exception:
         raise RuntimeError("Azure synthesis failed; allowance retained; no automatic retry") from None
     if not 1000 <= len(audio) <= 16000000 or not (audio[:3] == b"ID3" or (audio[0] == 255 and audio[1] & 224 == 224)):

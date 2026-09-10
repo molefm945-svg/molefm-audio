@@ -3,6 +3,7 @@ import io
 import json
 import os
 import ssl
+import subprocess
 from pathlib import Path
 import sys
 import tempfile
@@ -110,13 +111,28 @@ class AzureSpeechTests(unittest.TestCase):
             azure_speech.tls_context()
         make_context.return_value.load_verify_locations.assert_called_once_with(cafile="/operator/proxy.pem")
 
-    @patch("azure_speech.urlopen")
+    @patch("azure_speech.subprocess.run")
     def test_proxy_injects_credential_without_local_key(self, request):
-        request.return_value = io.BytesIO(b"ID3" + b"a" * 1200)
+        request.return_value = subprocess.CompletedProcess([], 0, b"ID3" + b"a" * 1200, b"")
         with patch.dict(os.environ, {"AZURE_SPEECH_AUTH_MODE": "perplexity-proxy", "HTTPS_PROXY": "http://127.0.0.1:1234"}):
             receipt = self.run_synthesis()
         self.assertEqual(receipt["authentication"], "perplexity-proxy")
-        self.assertFalse(any(k.lower() == "ocp-apim-subscription-key" for k in request.call_args.args[0].headers))
+        command = request.call_args.args[0]
+        self.assertEqual(command[:2], ["curl", "-q"])
+        self.assertNotIn("--insecure", command)
+        self.assertNotIn("--retry", command)
+        self.assertNotIn("test-key", " ".join(command))
+        self.assertNotIn("--location", command)
+
+    @patch("azure_speech.subprocess.run")
+    def test_proxy_failure_is_not_retried_or_published(self, request):
+        request.return_value = subprocess.CompletedProcess([], 60, b"", b"private diagnostic")
+        with patch.dict(os.environ, {"AZURE_SPEECH_AUTH_MODE": "perplexity-proxy", "HTTPS_PROXY": "http://127.0.0.1:1234"}):
+            with self.assertRaisesRegex(RuntimeError, "no automatic retry"):
+                self.run_synthesis()
+        request.assert_called_once()
+        self.assertFalse(self.output.exists())
+        self.assertEqual(sum(json.loads(self.ledger.read_text()).values()), 19)
 
     @patch("azure_speech.urlopen")
     def test_missing_proxy_fails_before_charge(self, request):
