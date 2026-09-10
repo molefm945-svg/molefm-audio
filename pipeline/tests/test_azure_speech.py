@@ -110,6 +110,27 @@ class AzureSpeechTests(unittest.TestCase):
             azure_speech.tls_context()
         make_context.return_value.load_verify_locations.assert_called_once_with(cafile="/operator/proxy.pem")
 
+    @patch("azure_speech.urlopen")
+    def test_proxy_injects_credential_without_local_key(self, request):
+        request.return_value = io.BytesIO(b"ID3" + b"a" * 1200)
+        with patch.dict(os.environ, {"AZURE_SPEECH_AUTH_MODE": "perplexity-proxy", "HTTPS_PROXY": "http://127.0.0.1:1234"}):
+            receipt = self.run_synthesis()
+        self.assertEqual(receipt["authentication"], "perplexity-proxy")
+        self.assertFalse(any(k.lower() == "ocp-apim-subscription-key" for k in request.call_args.args[0].headers))
+
+    @patch("azure_speech.urlopen")
+    def test_missing_proxy_fails_before_charge(self, request):
+        with patch.dict(os.environ, {"AZURE_SPEECH_AUTH_MODE": "perplexity-proxy", "HTTPS_PROXY": ""}):
+            with self.assertRaisesRegex(RuntimeError, "not attached"): self.run_synthesis()
+        request.assert_not_called()
+        self.assertFalse(self.ledger.exists())
+
+    @patch("azure_speech.urlopen")
+    def test_unknown_auth_mode_fails_closed(self, request):
+        with patch.dict(os.environ, {"AZURE_SPEECH_AUTH_MODE": "none"}):
+            with self.assertRaises(ValueError): self.run_synthesis()
+        request.assert_not_called()
+
 
 if __name__ == "__main__":
     unittest.main()

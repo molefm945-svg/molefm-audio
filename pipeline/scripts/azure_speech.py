@@ -41,11 +41,21 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
     region = os.environ["AZURE_SPEECH_REGION"]
     if not re.fullmatch(r"[a-z0-9]+", region):
         raise ValueError("Invalid Azure region")
-    key = os.environ.get("AZURE_SPEECH_KEY", "").strip()
-    if not key:
-        key = Path(os.environ["AZURE_SPEECH_KEY_FILE"]).read_text().strip()
-    if not key:
-        raise RuntimeError("Azure Speech credential missing")
+    auth_mode = os.environ.get("AZURE_SPEECH_AUTH_MODE", "key")
+    key = ""
+    if auth_mode == "perplexity-proxy":
+        # The platform attaches the named vault credential to this process.
+        # Never read its credential token or forward a local key in this mode.
+        if not os.environ.get("HTTPS_PROXY", "").strip():
+            raise RuntimeError("Perplexity credential proxy is not attached")
+    elif auth_mode == "key":
+        key = os.environ.get("AZURE_SPEECH_KEY", "").strip()
+        if not key:
+            key = Path(os.environ["AZURE_SPEECH_KEY_FILE"]).read_text().strip()
+        if not key:
+            raise RuntimeError("Azure Speech credential missing")
+    else:
+        raise ValueError("Unsupported Azure authentication mode")
     output = Path(output_path)
     if output.exists():
         raise FileExistsError("Refusing to overwrite existing narration")
@@ -76,7 +86,7 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
     ssml = (f'<speak version="1.0" xml:lang="{locale}"><voice name="{voice}">'
             f'<prosody rate="{rate}" volume="{volume}">{escape(text)}</prosody></voice></speak>')
     request = Request(f"https://{region}.tts.speech.microsoft.com/cognitiveservices/v1",
-                      data=ssml.encode(), headers={"Ocp-Apim-Subscription-Key": key,
+                      data=ssml.encode(), headers={**({"Ocp-Apim-Subscription-Key": key} if key else {}),
                       "Content-Type": "application/ssml+xml",
                       "X-Microsoft-OutputFormat": "audio-24khz-96kbitrate-mono-mp3",
                       "User-Agent": "MoleFM-Broadcast"})
@@ -89,7 +99,7 @@ def synthesize(text, voice, output_path, rate="+0%", volume="+0%"):
         raise RuntimeError("Azure returned invalid or oversized MP3 data")
     with output.open("xb") as stream:
         stream.write(audio)
-    receipt = {"provider": "azure-speech", "voice": voice, "region": region,
+    receipt = {"provider": "azure-speech", "authentication": auth_mode, "voice": voice, "region": region,
                "generated_at": now.isoformat(), "characters": len(text),
                "script_sha256": hashlib.sha256(text.encode()).hexdigest(),
                "audio_sha256": hashlib.sha256(audio).hexdigest(), "audio_bytes": len(audio)}
