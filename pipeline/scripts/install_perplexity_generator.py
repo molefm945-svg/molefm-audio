@@ -14,7 +14,7 @@ import sys
 import tempfile
 import urllib.request
 
-REVISION = "9ed2b3a579bb0a790427f2abf4946937befa313e"
+REVISION = "a2f59a52766c86a39d19776365fce5b067060f19"
 BASE_URL = f"https://raw.githubusercontent.com/molefm945-svg/molefm-audio/{REVISION}/pipeline/"
 HASHES = {
     "tests/test_tts_completeness.py": "714028bd55fd1e8c99e8493036325473713544110701a1da2911c81e3c0d412f",
@@ -26,9 +26,9 @@ HASHES = {
     "scripts/generate_rss.py": "8d1f547eadf2c8071b4ca5756ad073c9ea6ef25c4e66019112945d3fb99d2634",
     "tests/test_reader_guardrails.py": "d47dddc7992f67ffe908a5b73915911f33b62124467a61865b11959feaee1bfe",
     "tests/test_podcast_attribution.py": "091ca7cd20438b139c61cc3221ad2376946292997e580c13097eba72098b27d4",
-    "scripts/azure_speech.py": "d5005555309af7fe9bec7b68c5a4281c36e7ddd214c7fcc5a4ce999882d6d083",
+    "scripts/azure_speech.py": "256b39d627ef91351ab52a66b525d5697042e09c69d5ae4c285ca55da3c28941",
     "scripts/tts_generator.py": "070fa09ac507e46171e1f5bcb858f01649338e7e37046b8b6cb2c587e99aab35",
-    "tests/test_azure_speech.py": "5d1415adb26bebfb52134a2c55df104241f3816ac96c500d7c325d2b31e92b88"
+    "tests/test_azure_speech.py": "a05e88efad8decbb9c18186a0701eefaee9bf681c6e03ef81e0771596bdb4a39"
 }
 
 

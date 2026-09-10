@@ -36,3 +36,9 @@ Cost readback: before the connection check, 93 credits remained and automatic re
 The Azure provider now honors explicitly configured trusted proxy CA bundles through `SSL_CERT_FILE`, `REQUESTS_CA_BUNDLE`, or `CURL_CA_BUNDLE`, retaining certificate and hostname verification. Supply a genuine existing runtime CA file; never guess a path or disable verification. Missing/invalid configured files stop before consuming the local allowance. This code change is tested locally; the correct Perplexity CA path and a successful remote handshake are still unverified because Computer has no usable credits (-17 on current readback).
 
 Newscast assembly now stops on any failed narration/pause segment instead of assembling a partial bulletin. The legacy console no longer describes authenticated Azure generation as free Edge TTS. The installer is repinned to payload 9ed2b3a and includes the new completeness tests. No scheduler/publication gate is activated. Both Mac GitHub workers are currently online without Docker.
+
+## Credit-funded resume and proxy authentication
+
+After the owner added 2,000 Perplexity credits, the paused catalog request completed with HTTP 200 and Denise present in 778 voices. Expanded terminal output shows a curl request without an insecure flag. The vault attaches the Azure header through the process HTTPS proxy.
+
+Set `AZURE_SPEECH_AUTH_MODE=perplexity-proxy` only on a process with the named Azure vault credential attached. This mode requires HTTPS_PROXY and sends no raw local subscription key; all expiry, allowance, TLS and audio checks remain. The default `key` mode remains for the private Mac worker. Proxy mode is verified offline; actual synthesis must pass before declaring the runtime connected.
