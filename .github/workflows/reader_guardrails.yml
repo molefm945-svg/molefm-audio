@@ -13,6 +13,8 @@ on:
       - 'pipeline/scripts/molefm_submitter.py'
       - 'pipeline/scripts/generate_rss.py'
       - 'pipeline/tests/test_podcast_attribution.py'
+      - 'pipeline/scripts/install_perplexity_generator.py'
+      - 'pipeline/tests/test_perplexity_installer.py'
       - 'pipeline/config/sponsors.json'
       - '.github/workflows/reader_guardrails.yml'
   push:
@@ -27,6 +29,8 @@ on:
       - 'pipeline/scripts/molefm_submitter.py'
       - 'pipeline/scripts/generate_rss.py'
       - 'pipeline/tests/test_podcast_attribution.py'
+      - 'pipeline/scripts/install_perplexity_generator.py'
+      - 'pipeline/tests/test_perplexity_installer.py'
       - 'pipeline/config/sponsors.json'
       - '.github/workflows/reader_guardrails.yml'
 
@@ -54,6 +58,9 @@ jobs:
 
       - name: Test episode source notes through publishing and RSS offline
         run: python3 -m unittest discover -s pipeline/tests -p 'test_podcast_attribution.py' -v
+
+      - name: Test bounded Perplexity installation and rollback offline
+        run: python3 -m unittest discover -s pipeline/tests -p 'test_perplexity_installer.py' -v
 
       - name: Render and validate the actual reader template without TTS
         run: python3 pipeline/scripts/reader_guardrails.py --render-fixture "$RUNNER_TEMP/molefm-reader/index.html"
