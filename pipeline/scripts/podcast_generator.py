@@ -430,9 +430,9 @@ def build_fr_podcast_script(stories, weather_text, sports_text, slot_label, date
 # -- TTS synthesis ----------------------------------------------------------
 
 async def _synth_edge(text, voice, output_path):
-    import edge_tts
-    communicate = edge_tts.Communicate(text, voice)
-    await communicate.save(output_path)
+    # Retain the internal helper name for callers; all synthesis now uses Azure.
+    from azure_speech import synthesize
+    synthesize(text, voice, output_path)
 
 def synth_turn(text, voice, output_path):
     asyncio.run(_synth_edge(text, voice, output_path))
@@ -440,7 +440,7 @@ def synth_turn(text, voice, output_path):
         size = os.path.getsize(output_path)
         print(f"    [OK] {os.path.basename(output_path)} — {size//1024} KB")
     else:
-        raise RuntimeError(f"edge-tts produced no output: {output_path}")
+        raise RuntimeError(f"Azure Speech produced no output: {output_path}")
 
 def add_silence(ms, output_path):
     subprocess.run([
